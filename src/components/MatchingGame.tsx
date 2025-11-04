@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CheckCircle2, XCircle } from "lucide-react";
@@ -14,11 +14,15 @@ interface MatchingGameProps {
 }
 
 const MatchingGame = ({ items, onComplete }: MatchingGameProps) => {
+  const shuffledItems = useMemo(() => {
+    return [...items].sort(() => Math.random() - 0.5);
+  }, [items]);
+  
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [matchedPairs, setMatchedPairs] = useState<number[]>([]);
   const [attempts, setAttempts] = useState(0);
 
-  const handleItemClick = (item: typeof items[0]) => {
+  const handleItemClick = (item: typeof shuffledItems[0]) => {
     if (matchedPairs.includes(item.id) || selectedItems.includes(item.id)) {
       return;
     }
@@ -29,8 +33,8 @@ const MatchingGame = ({ items, onComplete }: MatchingGameProps) => {
     if (newSelected.length === 2) {
       setAttempts(attempts + 1);
       const [first, second] = newSelected;
-      const firstItem = items.find(i => i.id === first);
-      const secondItem = items.find(i => i.id === second);
+      const firstItem = shuffledItems.find(i => i.id === first);
+      const secondItem = shuffledItems.find(i => i.id === second);
 
       if (firstItem?.matchId === secondItem?.matchId) {
         // Match found!
@@ -42,7 +46,7 @@ const MatchingGame = ({ items, onComplete }: MatchingGameProps) => {
         setTimeout(() => {
           setSelectedItems([]);
           // Check if all pairs are matched
-          if (matchedPairs.length + 2 === items.length) {
+          if (matchedPairs.length + 2 === shuffledItems.length) {
             onComplete?.();
           }
         }, 1000);
@@ -60,7 +64,7 @@ const MatchingGame = ({ items, onComplete }: MatchingGameProps) => {
 
   const isSelected = (id: number) => selectedItems.includes(id);
   const isMatched = (id: number) => matchedPairs.includes(id);
-  const allMatched = matchedPairs.length === items.length;
+  const allMatched = matchedPairs.length === shuffledItems.length;
 
   return (
     <div className="space-y-6">
@@ -69,12 +73,12 @@ const MatchingGame = ({ items, onComplete }: MatchingGameProps) => {
           Attempts: <span className="font-semibold text-foreground">{attempts}</span>
         </div>
         <div className="text-sm text-muted-foreground">
-          Matched: <span className="font-semibold text-foreground">{matchedPairs.length / 2}</span> / {items.length / 2}
+          Matched: <span className="font-semibold text-foreground">{matchedPairs.length / 2}</span> / {shuffledItems.length / 2}
         </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {items.map((item) => (
+        {shuffledItems.map((item) => (
           <Card
             key={item.id}
             onClick={() => handleItemClick(item)}
