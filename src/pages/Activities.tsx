@@ -136,9 +136,9 @@ const matchingLessons = [
   },
   {
     id: 3,
-    title: "Same Size",
-    description: "Match objects with the same size",
-    icon: "📏",
+    title: "Same, But Different",
+    description: "Match fruits that are the same type",
+    icon: "🍎",
     duration: "10 min",
     path: "/activity/matching-3",
     unlocked: true
