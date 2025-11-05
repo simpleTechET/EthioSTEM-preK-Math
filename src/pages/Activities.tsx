@@ -150,7 +150,7 @@ const matchingLessons = [
     icon: "🧩",
     duration: "10 min",
     path: "/activity/matching-4",
-    unlocked: false  // Will implement next
+    unlocked: true  // Changed from false to true
   }
 ];
 
