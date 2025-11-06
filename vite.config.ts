@@ -42,7 +42,7 @@ export default defineConfig(({ mode }) => ({
     // Optimize chunk size
     chunkSizeWarningLimit: 1000,
     // Minify output
-    minify: 'eslint',
+    minify: 'esbuild',
   },
   
   // Optimize dependencies
