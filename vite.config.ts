@@ -43,11 +43,6 @@ export default defineConfig(({ mode }) => ({
     chunkSizeWarningLimit: 1000,
     // Minify output
     minify: 'eslint',
-    terserOptions: {
-      compress: {
-        drop_console: mode === 'production',
-      },
-    },
   },
   
   // Optimize dependencies
