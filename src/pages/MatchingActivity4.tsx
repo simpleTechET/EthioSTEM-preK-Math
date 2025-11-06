@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Star, BookOpen, Users, Lightbulb, CheckCircle2 } from "lucide-react";
@@ -13,7 +13,7 @@ import sockImg from "@/assets/sock.png";
 import shoeImg from "@/assets/shoe.png";
 
 const MatchingActivity4 = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [showGame, setShowGame] = useState(false);
   const [showBodyParts, setShowBodyParts] = useState(true);
   const [currentSelection, setCurrentSelection] = useState(null);
@@ -373,9 +373,10 @@ const MatchingActivity4 = () => {
 
                   <Button 
                     size="lg" 
-                    onClick={() => navigate('/activities')}
+                    onClick={() => window.location.href = '/activities'}
                     className="bg-purple-600 hover:bg-purple-700"
                   >
+                    {/* onClick={() => navigate('/activities')} */}
                     Continue to Next Topic
                   </Button>
                 </CardContent>
