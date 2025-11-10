@@ -6,12 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 // Import images - crayons and markers
-import redCrayonImg from "@/assets/ball-red.png"; // Using red ball as crayon
-import blueCrayonImg from "@/assets/bear-blue.png"; // Using blue bear as crayon
-import yellowMarkerImg from "@/assets/duck-yellow.png"; // Using yellow duck as marker
-import orangeImg from "@/assets/orange.png";
-import appleImg from "@/assets/apple.png";
-import bananaImg from "@/assets/banana.png";
+import redCrayonImg from "@/assets/crayon-red.png";
+import blueCrayonImg from "@/assets/crayon-blue.png";
+import greenCrayonImg from "@/assets/crayon-green.png";
+import yellowMarkerImg from "@/assets/marker-yellow.png";
+import orangeMarkerImg from "@/assets/marker-orange.png";
+import purpleMarkerImg from "@/assets/marker-purple.png";
 
 interface SortingItem {
   id: number;
@@ -30,9 +30,9 @@ const SortingActivity6 = () => {
     { id: 1, name: "Red Crayon", image: redCrayonImg, group: "crayons" as const },
     { id: 2, name: "Yellow Marker", image: yellowMarkerImg, group: "markers" as const },
     { id: 3, name: "Blue Crayon", image: blueCrayonImg, group: "crayons" as const },
-    { id: 4, name: "Orange", image: orangeImg, group: "markers" as const },
-    { id: 5, name: "Apple", image: appleImg, group: "markers" as const },
-    { id: 6, name: "Banana", image: bananaImg, group: "crayons" as const },
+    { id: 4, name: "Orange Marker", image: orangeMarkerImg, group: "markers" as const },
+    { id: 5, name: "Purple Marker", image: purpleMarkerImg, group: "markers" as const },
+    { id: 6, name: "Green Crayon", image: greenCrayonImg, group: "crayons" as const },
   ].sort(() => Math.random() - 0.5));
 
   const handleItemClick = (item: SortingItem) => {
