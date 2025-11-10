@@ -117,55 +117,6 @@ const MatchingActivity1 = () => {
             </Card>
 
             {/* Vocabulary */}
-            <Card className="mb-8">
-              <CardHeader>
-                <CardTitle className="text-xl">Key Words</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="p-4 bg-muted rounded-lg">
-                    <h4 className="font-bold text-primary mb-1">Exactly the same</h4>
-                    <p className="text-sm text-muted-foreground">Two things that look identical in every way</p>
-                  </div>
-                  <div className="p-4 bg-muted rounded-lg">
-                    <h4 className="font-bold text-primary mb-1">Match</h4>
-                    <p className="text-sm text-muted-foreground">When two things are the same or go together</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Start Button */}
-            <div className="text-center">
-              <Button 
-                size="lg" 
-                onClick={() => setShowGame(true)}
-                className="text-lg px-8 py-6 shadow-playful hover:scale-105 transition-all"
-              >
-                <BookOpen className="w-5 h-5 mr-2" />
-                Start Activity
-              </Button>
-            </div>
-          </>
-        ) : (
-          <>
-            {/* Game Instructions */}
-            <Card className="mb-8 bg-primary/5 border-2 border-primary/20">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-4">
-                  <div className="text-4xl">🎯</div>
-                  <div>
-                    <h3 className="font-bold text-lg mb-2 text-foreground">How to Play:</h3>
-                    <ol className="space-y-1 text-foreground">
-                      <li>1. Click on an object</li>
-                      <li>2. Click on another object that is exactly the same</li>
-                      <li>3. If they match, you'll see a checkmark!</li>
-                      <li>4. Match all the pairs to complete the activity</li>
-                    </ol>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
 
             {/* Game */}
             <MatchingGame items={shuffledGameItems} onComplete={handleComplete} />
