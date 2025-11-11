@@ -78,7 +78,7 @@ const SortingActivity6 = () => {
       toast.success("Perfect! 🌟", {
         description: "You sorted everything correctly into two groups!",
       });
-      setTimeout(() => navigate("/activities"), 2000);
+      setTimeout(() => navigate("/activity/sorting-7"), 2000);
     } else {
       toast.error("Not quite! 🤔", {
         description: "Try sorting all items into the correct groups.",

@@ -12,7 +12,7 @@ import MatchingActivity3 from "./pages/MatchingActivity3";
 import MatchingActivity4 from "./pages/MatchingActivity4";
 import SortingActivity5 from "./pages/SortingActivity5";
 import SortingActivity6 from "./pages/SortingActivity6";
-
+import SortingActivity7 from "./pages/SortingActivity7";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +33,7 @@ const App = () => (
           <Route path="/activity/matching-4" element={<MatchingActivity4 />} />
           <Route path="/activity/sorting-5" element={<SortingActivity5 />} />
           <Route path="/activity/sorting-6" element={<SortingActivity6 />} />
+          <Route path="/activity/sorting-7" element={<SortingActivity7 />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -201,7 +201,9 @@ const sortingLessons = [
     title: "Two Different Ways",
     description: "Sort the same objects in different ways",
     icon: "🔄",
-    duration: "12 min"
+    duration: "12 min",
+    path: "/activity/sorting-7",
+    unlocked: true
   }
 ];
 
