@@ -9,11 +9,11 @@ import SortingGame from "@/components/SortingGame";
 import appleImg from "@/assets/apple.png";
 import bananaImg from "@/assets/banana.png";
 import orangeImg from "@/assets/orange.png";
-import cupImg from "@/assets/cup.png";
-import pencilImg from "@/assets/pencil.png";
-import paperImg from "@/assets/paper.png";
-import sockImg from "@/assets/sock.png";
-import shoeImg from "@/assets/shoe.png";
+import cupImg from "@/assets/cup.jpeg";
+import pencilImg from "@/assets/pencil.jpeg";
+import paperImg from "@/assets/paper.jpeg";
+import sockImg from "@/assets/sock.jpeg";
+import shoeImg from "@/assets/shoe.jpeg";
 
 const SortingActivity5 = () => {
   const [showGame, setShowGame] = useState(false);

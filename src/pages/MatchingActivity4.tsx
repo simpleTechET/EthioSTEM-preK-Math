@@ -3,14 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, BookOpen, Star, Users, Lightbulb, CheckCircle2 } from "lucide-react";
-import cupImg from "@/assets/cup.png";
-import strawImg from "@/assets/straw.png";
-import paperImg from "@/assets/paper.png";
-import pencilImg from "@/assets/pencil.png";
-import toothbrushImg from "@/assets/toothbrush.png";
-import toothpasteImg from "@/assets/toothpaste.png";
-import sockImg from "@/assets/sock.png";
-import shoeImg from "@/assets/shoe.png";
+import cupImg from "@/assets/cup.jpeg";
+import strawImg from "@/assets/straw.jpeg";
+import paperImg from "@/assets/paper.jpeg";
+import pencilImg from "@/assets/pencil.jpeg";
+import toothbrushImg from "@/assets/toothbrush.jpeg";
+import toothpasteImg from "@/assets/toothpaste.jpeg";
+import sockImg from "@/assets/sock.jpeg";
+import shoeImg from "@/assets/shoe.jpeg";
 
 const MatchingActivity4 = () => {
   const navigate = useNavigate();
