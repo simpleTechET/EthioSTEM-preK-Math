@@ -274,6 +274,15 @@ const countingLessons = [
     duration: "15 min",
     path: "/activity/counting-8",
     unlocked: true
+  },
+  {
+    id: 9,
+    title: "Count Up to 3",
+    description: "Arrange and count objects in different ways",
+    icon: "🔢",
+    duration: "15 min",
+    path: "/activity/counting-9",
+    unlocked: true
   }
 ];
 
