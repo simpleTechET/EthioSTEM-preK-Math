@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Redirecting...</title>
+    <link rel="icon" href="/ESTEM-preK-Math/favicon.ico">
+    <script>
+      // Single Page Apps for GitHub Pages
+      // MIT License
+      // https://github.com/rafgraph/spa-github-pages
+      const pathSegments = window.location.pathname.split('/');
+      const basePath = pathSegments.slice(0, pathSegments.length - 1).join('/');
+      const redirectTo = basePath + '/index.html';
+      sessionStorage.redirect = window.location.pathname + window.location.search;
+      window.location.replace(redirectTo);
+    </script>
+  </head>
+  <body>
+    <p>Redirecting...</p>
+  </body>
+</html>
