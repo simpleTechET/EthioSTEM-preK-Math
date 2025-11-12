@@ -54,23 +54,35 @@ const CountingActivity10 = () => {
       setShowPeekaboo(false);
     }, 2000);
   };
+const [lastAnswerCorrect, setLastAnswerCorrect] = useState<boolean | null>(null);
+const [showFeedback, setShowFeedback] = useState(false);
 
-  const handlePeekabooAnswer = (count: number) => {
-    if (count === peekabooSequences[currentPeekaboo]) {
-      toast.success("Great memory! 🎉", { description: `You remembered ${count} animal${count > 1 ? 's' : ''}!` });
+const handlePeekabooAnswer = (count: number) => {
+  const isCorrect = count === peekabooSequences[currentPeekaboo];
+  setLastAnswerCorrect(isCorrect);
+  setShowFeedback(true);
+
+  if (isCorrect) {
+    toast.success("Great memory! 🎉", { description: `You remembered ${count} animal${count > 1 ? 's' : ''}!` });
+    setTimeout(() => {
       if (currentPeekaboo < peekabooSequences.length - 1) {
         setCurrentPeekaboo(currentPeekaboo + 1);
         setPeekabooCount(null);
-        // Auto-start next peekaboo after delay
-        setTimeout(() => startPeekaboo(), 1000);
+        setShowFeedback(false);
+        startPeekaboo();
       } else {
         setCurrentStep('matching');
+        setShowFeedback(false);
       }
-    } else {
-      toast.error("Let's try again! 🤔", { description: "Look carefully next time!" });
+    }, 1500);
+  } else {
+    toast.error("Let's try again! 🤔", { description: "Look carefully next time!" });
+    setTimeout(() => {
       setPeekabooCount(null);
-    }
-  };
+      setShowFeedback(false);
+    }, 1500);
+  }
+};
 
   const handleGroupClick = (group: AnimalGroup) => {
     setSelectedGroup(group);
@@ -311,18 +323,38 @@ const CountingActivity10 = () => {
                     <p className="text-lg text-gray-700 mb-4">
                       How many animals did you see?
                     </p>
-                    <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
-                      {[1, 2, 3].map(number => (
-                        <Button
-                          key={number}
-                          onClick={() => handlePeekabooAnswer(number)}
-                          size="lg"
-                          className="h-20 text-2xl font-bold bg-white hover:bg-blue-100 border-2 border-blue-300 text-gray-800"
-                        >
-                          {number}
-                        </Button>
-                      ))}
-                    </div>
+                    <div className="grid grid-cols-3 gap-4 max-w-md mx-auto relative">
+  {[1, 2, 3].map(number => (
+    <div key={number} className="relative">
+      <Button
+        onClick={() => handlePeekabooAnswer(number)}
+        size="lg"
+        className={`h-20 text-2xl font-bold border-2 border-blue-300 text-gray-800 relative z-10 ${
+          showFeedback && number === peekabooCount 
+            ? lastAnswerCorrect 
+              ? 'bg-green-100 border-green-500' 
+              : 'bg-red-100 border-red-500'
+            : 'bg-white hover:bg-blue-100'
+        }`}
+      >
+        {number}
+      </Button>
+      {showFeedback && number === peekabooCount && (
+        <div className="absolute -top-2 -right-2 z-20">
+          {lastAnswerCorrect ? (
+            <div className="bg-green-500 text-white rounded-full p-1 animate-bounce">
+              <CheckCircle2 className="w-6 h-6" />
+            </div>
+          ) : (
+            <div className="bg-red-500 text-white rounded-full p-1 animate-bounce">
+              <span className="w-6 h-6 flex items-center justify-center font-bold">✕</span>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  ))}
+</div>
                     <p className="text-sm text-gray-600 mt-4">
                       Question {currentPeekaboo + 1} of {peekabooSequences.length}
                     </p>
