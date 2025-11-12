@@ -297,7 +297,7 @@ const CountingActivity9 = () => {
                           key={number}
                           onClick={() => handleNumberClick(number)}
                           size="lg"
-                          className="h-20 text-2xl font-bold bg-white hover:bg-green-100 border-2 border-green-300"
+                          className="h-20 text-2xl font-bold bg-white hover:bg-green-100 border-2 border-green-300 text-gray-800"
                         >
                           {number}
                         </Button>
