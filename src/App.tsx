@@ -47,6 +47,8 @@ const App = () => (
             <Route path="/activity/counting-8" element={<CountingActivity8 />} />
             <Route path="/activity/counting-9" element={<CountingActivity9 />} />
             <Route path="/activity/counting-10" element={<CountingActivity10 />} />
+            <Route path="/activity/counting-11" element={<CountingActivity11 />} />
+
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
