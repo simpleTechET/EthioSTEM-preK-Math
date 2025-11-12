@@ -21,7 +21,16 @@
     <link rel="modulepreload" crossorigin href="/ESTEM-preK-Math/assets/ui-vendor-C-ksHByf.js">
     <link rel="stylesheet" crossorigin href="/ESTEM-preK-Math/assets/index-oX02rKE2.css">
   </head>
-
+ <script>
+      // Handle redirect from 404.html
+      (function() {
+        const redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect !== window.location.href) {
+          history.replaceState(null, null, redirect);
+        }
+      })();
+    </script>
   <body>
     <div id="root"></div>
   </body>
