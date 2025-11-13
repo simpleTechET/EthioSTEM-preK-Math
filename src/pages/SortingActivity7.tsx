@@ -16,14 +16,14 @@ const SortingActivity7 = () => {
   const [isComplete, setIsComplete] = useState(false);
   const navigate = useNavigate();
 
-  // Bears that can be sorted by color OR size
+  // Bears that can be sorted by color OR size - shuffled to not group by color
   const bears = [
     { id: 1, name: "Big Blue Bear", image: bearBlueLarge, color: "blue", size: "big" },
-    { id: 2, name: "Big Red Bear", image: bearRedLarge, color: "red", size: "big" },
-    { id: 3, name: "Small Blue Bear", image: bearBlueSmall, color: "blue", size: "small" },
     { id: 4, name: "Big Red Bear", image: bearRedLarge, color: "red", size: "big" },
-    { id: 5, name: "Small Red Bear", image: bearRedSmall, color: "red", size: "small" },
-    { id: 6, name: "Big Blue Bear", image: bearBlueLarge, color: "blue", size: "big" },
+    { id: 3, name: "Small Blue Bear", image: bearBlueSmall, color: "blue", size: "small" },
+    { id: 5, name: "Big Red Bear", image: bearRedLarge, color: "red", size: "big" },
+    { id: 2, name: "Big Blue Bear", image: bearBlueLarge, color: "blue", size: "big" },
+    { id: 6, name: "Small Red Bear", image: bearRedSmall, color: "red", size: "small" },
   ];
 
   const handleItemClick = (bear: typeof bears[0]) => {
@@ -238,7 +238,7 @@ const SortingActivity7 = () => {
                       <img 
                         src={bear.image} 
                         alt={bear.name}
-                        className="w-24 h-24 object-contain"
+                        className={`object-contain transition-all ${bear.size === 'big' ? 'w-36 h-36' : 'w-12 h-12'}`}
                       />
                     </div>
                     {isComplete && isCorrect && (
