@@ -20,10 +20,10 @@ const SortingActivity7 = () => {
   const bears = [
     { id: 1, name: "Big Blue Bear", image: bearBlueLarge, color: "blue", size: "big" },
     { id: 2, name: "Big Red Bear", image: bearRedLarge, color: "red", size: "big" },
-    { id: 3, name: "Small Blue Bear", image: bearBlueLarge, color: "blue", size: "small" },
+    { id: 3, name: "Small Blue Bear", image: bearBlueSmall, color: "blue", size: "small" },
     { id: 4, name: "Big Red Bear", image: bearRedLarge, color: "red", size: "big" },
     { id: 5, name: "Small Red Bear", image: bearRedSmall, color: "red", size: "small" },
-    { id: 6, name: "Big Blue Bear", image: bearBlueSmall, color: "blue", size: "big" },
+    { id: 6, name: "Big Blue Bear", image: bearBlueLarge, color: "blue", size: "big" },
   ];
 
   const handleItemClick = (bear: typeof bears[0]) => {
