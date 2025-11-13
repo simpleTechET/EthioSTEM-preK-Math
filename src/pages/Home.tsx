@@ -59,7 +59,7 @@ const Home = () => {
         <h3 className="text-3xl font-bold text-center mb-12 text-foreground">Learning Topics</h3>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
           {topics.map((topic, index) => (
-            <Link to={`/topic/${topic.id}`} key={topic.id}>
+            <Link to={topic.path} key={topic.id}>
               <Card className="h-full hover:shadow-playful transition-all duration-300 hover:scale-105 cursor-pointer border-2 hover:border-primary">
                 <CardHeader>
                   <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${topic.gradient} flex items-center justify-center mb-4`}>
@@ -121,7 +121,8 @@ const topics = [
     description: "Learn to identify objects that are exactly the same",
     icon: "🎯",
     gradient: "from-primary to-success",
-    lessons: 4
+    lessons: 4,
+    path: "/topic/matching"
   },
   {
     id: "sorting",
@@ -129,7 +130,8 @@ const topics = [
     description: "Group objects by color, shape, size, and more",
     icon: "🔵",
     gradient: "from-secondary to-warning",
-    lessons: 3
+    lessons: 3,
+    path: "/topic/sorting"
   },
   {
     id: "counting-3",
@@ -137,7 +139,8 @@ const topics = [
     description: "Count up to 3 objects in different arrangements",
     icon: "1️⃣",
     gradient: "from-accent to-destructive",
-    lessons: 4
+    lessons: 4,
+    path: "/topic/counting-3"
   },
   {
     id: "numbers-3",
@@ -145,7 +148,8 @@ const topics = [
     description: "Match numerals with quantities up to 3",
     icon: "🔢",
     gradient: "from-info to-primary",
-    lessons: 3
+    lessons: 3,
+    path: "/topic/numbers-3"
   }
 ];
 

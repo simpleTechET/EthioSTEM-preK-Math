@@ -9,6 +9,10 @@ import { lazy, Suspense } from "react";
 const Home = lazy(() => import("./pages/Home"));
 const Activities = lazy(() => import("./pages/Activities"));
 const ParentGuide = lazy(() => import("./pages/ParentGuide"));
+const TopicMatching = lazy(() => import("./pages/TopicMatching"));
+const TopicSorting = lazy(() => import("./pages/TopicSorting"));
+const TopicCounting3 = lazy(() => import("./pages/TopicCounting3"));
+const TopicNumbers3 = lazy(() => import("./pages/TopicNumbers3"));
 const MatchingActivity1 = lazy(() => import("./pages/MatchingActivity1"));
 const MatchingActivity2 = lazy(() => import("./pages/MatchingActivity2"));
 const MatchingActivity3 = lazy(() => import("./pages/MatchingActivity3"));
@@ -37,6 +41,10 @@ const App = () => (
             <Route path="/" element={<Home />} />
             <Route path="/activities" element={<Activities />} />
             <Route path="/parent-guide" element={<ParentGuide />} />
+            <Route path="/topic/matching" element={<TopicMatching />} />
+            <Route path="/topic/sorting" element={<TopicSorting />} />
+            <Route path="/topic/counting-3" element={<TopicCounting3 />} />
+            <Route path="/topic/numbers-3" element={<TopicNumbers3 />} />
             <Route path="/activity/matching-1" element={<MatchingActivity1 />} />
             <Route path="/activity/matching-2" element={<MatchingActivity2 />} />
             <Route path="/activity/matching-3" element={<MatchingActivity3 />} />

@@ -22,9 +22,10 @@ const MatchingGame = ({ items, onComplete }: MatchingGameProps) => {
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [matchedPairs, setMatchedPairs] = useState<number[]>([]);
   const [attempts, setAttempts] = useState(0);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleItemClick = (item: typeof shuffledItems[0]) => {
-    if (matchedPairs.includes(item.id) || selectedItems.includes(item.id)) {
+    if (matchedPairs.includes(item.id) || selectedItems.includes(item.id) || isProcessing) {
       return;
     }
 
@@ -32,6 +33,7 @@ const MatchingGame = ({ items, onComplete }: MatchingGameProps) => {
     setSelectedItems(newSelected);
 
     if (newSelected.length === 2) {
+      setIsProcessing(true);
       setAttempts(attempts + 1);
       const [first, second] = newSelected;
       const firstItem = shuffledItems.find(i => i.id === first);
@@ -46,11 +48,12 @@ const MatchingGame = ({ items, onComplete }: MatchingGameProps) => {
         
         setTimeout(() => {
           setSelectedItems([]);
+          setIsProcessing(false);
           // Check if all pairs are matched
           if (matchedPairs.length + 2 === shuffledItems.length) {
             onComplete?.();
           }
-        }, 1000);
+        }, 800);
       } else {
         // No match
         toast.error("Not quite! Try again 💪", {
@@ -58,7 +61,8 @@ const MatchingGame = ({ items, onComplete }: MatchingGameProps) => {
         });
         setTimeout(() => {
           setSelectedItems([]);
-        }, 1500);
+          setIsProcessing(false);
+        }, 1200);
       }
     }
   };
