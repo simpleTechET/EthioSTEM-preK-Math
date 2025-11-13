@@ -61,6 +61,7 @@ const handlePeekabooAnswer = (count: number) => {
   const isCorrect = count === peekabooSequences[currentPeekaboo];
   setLastAnswerCorrect(isCorrect);
   setShowFeedback(true);
+  setPeekabooCount(count);
 
   if (isCorrect) {
     toast.success("Great memory! 🎉", { description: `You remembered ${count} animal${count > 1 ? 's' : ''}!` });
