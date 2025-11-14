@@ -3,7 +3,7 @@ import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Star, BookOpen, Users, Lightbulb, CheckCircle2, IceCube } from "lucide-react";
+import { ArrowLeft, Star, BookOpen, Users, Lightbulb, CheckCircle2, Cube } from "lucide-react"; // Changed IceCube to Cube
 import { toast } from "sonner";
 
 const CountingActivity14 = () => {
@@ -333,7 +333,7 @@ const CountingActivity14 = () => {
               <>
                 <Card className="p-6 bg-cyan-50 border-2 border-cyan-200">
                   <h3 className="text-xl font-bold mb-2 text-gray-800 flex items-center gap-2">
-                    <IceCube className="w-6 h-6" />
+                    <Cube className="w-6 h-6" /> {/* Changed from IceCube to Cube */}
                     Ice Cube Restaurant
                   </h3>
                   <p className="text-gray-700 mb-4">
