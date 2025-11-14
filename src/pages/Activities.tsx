@@ -301,6 +301,15 @@ const countingLessons = [
   duration: "12 min",
   path: "/activity/counting-11",
   unlocked: true
+},
+  {
+  id: 12,
+  title: "Match Numbers 1, 2, 3",
+  description: "Match numerals to quantities",
+  icon: "🔢",
+  duration: "12 min",
+  path: "/activity/counting-12",
+  unlocked: true
 }
 ];
 
