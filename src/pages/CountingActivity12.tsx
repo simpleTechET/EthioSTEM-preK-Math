@@ -304,7 +304,7 @@ const CountingActivity12 = () => {
                       size="lg"
                       className="text-4xl py-8 bg-white text-gray-800 hover:bg-blue-100"
                     >
-                      {num === 1 ? '☝️' : num === 2 ? '✌️' : '👌'}
+                      {num === 1 ? '☝️' : num === 2 ? '✌️' : '🤚'}
                     </Button>
                   ))}
                 </div>
@@ -490,16 +490,29 @@ const CountingActivity12 = () => {
                   </div>
                   
                   <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
-                    {[1, 2, 3].map(num => (
-                      <Button
-                        key={num}
-                        onClick={() => handlePartnerAnswer(num)}
-                        size="lg"
-                        className="h-20 text-3xl font-bold bg-white text-gray-800 hover:bg-purple-100 border-2 border-purple-300"
-                      >
-                        {num}
-                      </Button>
-                    ))}
+                    {[1, 2, 3].map(num => {
+                      const isCorrect = num === partnerItems[currentPartnerItem].count;
+                      const wasClicked = num === partnerAnswer;
+                      
+                      return (
+                        <Button
+                          key={num}
+                          onClick={() => handlePartnerAnswer(num)}
+                          size="lg"
+                          className={`h-20 text-3xl font-bold ${
+                            showPartnerFeedback && wasClicked
+                              ? isCorrect
+                                ? 'bg-green-100 border-4 border-green-500'
+                                : 'bg-red-100 border-4 border-red-500'
+                              : showPartnerFeedback && isCorrect
+                              ? 'bg-green-100 border-4 border-green-500'
+                              : 'bg-white text-gray-800 hover:bg-purple-100 border-2 border-purple-300'
+                          }`}
+                        >
+                          {num}
+                        </Button>
+                      );
+                    })}
                   </div>
                 </Card>
               </>
