@@ -2,8 +2,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Router } from "react-router-dom";
 import { lazy, Suspense } from "react";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 // Lazy load route components for better performance
 const Home = lazy(() => import("./pages/Home"));
@@ -36,10 +37,12 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+  <AuthProvider>
       <BrowserRouter basename="/EthioSTEM-preK-Math">
         <Suspense fallback={<div className="flex items-center justify-center min-h-screen">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
         </div>}>
+        {/* return ( */}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/activities" element={<Activities />} />
@@ -64,11 +67,15 @@ const App = () => (
             <Route path="/activity/counting-14" element={<CountingActivity14 />} />
 
             <Route path="*" element={<NotFound />} />
+            
           </Routes>
+{/* ); */}
         </Suspense>
       </BrowserRouter>
+  </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
+  
 );
 
 export default App;

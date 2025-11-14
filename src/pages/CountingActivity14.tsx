@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Star, BookOpen, Users, Lightbulb, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
 
 const CountingActivity14 = () => {
   const navigate = useNavigate();
+  const { user, updateProgress } = useAuth();
   const [showGame, setShowGame] = useState(false);
   const [currentStep, setCurrentStep] = useState<'warmup' | 'iceCubes' | 'numberGroups' | 'complete'>('warmup');
   const [selectedNumeral, setSelectedNumeral] = useState<number | null>(null);
@@ -74,24 +76,33 @@ const CountingActivity14 = () => {
   };
 
   const checkGroup = () => {
-    if (selectedNumeral === null) {
-      toast.error("Pick a number first!", { description: "Choose a numeral card to start." });
-      return;
-    }
+  if (selectedNumeral === null) {
+    toast.error("Pick a number first!", { description: "Choose a numeral card to start." });
+    return;
+  }
 
-    if (objectCount === selectedNumeral) {
-      toast.success("Perfect match! 🎉", { 
-        description: `You made exactly ${selectedNumeral} object${selectedNumeral > 1 ? 's' : ''}!` 
-      });
-      setTimeout(() => {
-        setCurrentStep('complete');
-      }, 2000);
-    } else {
-      toast.error("Not quite! 🤔", { 
-        description: `Count carefully to make exactly ${selectedNumeral} object${selectedNumeral > 1 ? 's' : ''}.` 
-      });
+  if (objectCount === selectedNumeral) {
+    toast.success("Perfect match! 🎉", { 
+      description: `You made exactly ${selectedNumeral} object${selectedNumeral > 1 ? 's' : ''}!` 
+    });
+    
+    // Track progress if user is logged in
+    if (user) {
+      const score = 10; // Perfect score
+      const maxScore = 10;
+      const timeSpent = 120; // Example: 2 minutes in seconds
+      updateProgress('counting-14', score, maxScore, timeSpent);
     }
-  };
+    
+    setTimeout(() => {
+      setCurrentStep('complete');
+    }, 2000);
+  } else {
+    toast.error("Not quite! 🤔", { 
+      description: `Count carefully to make exactly ${selectedNumeral} object${selectedNumeral > 1 ? 's' : ''}.` 
+    });
+  }
+};
 
   const resetGame = () => {
     setSelectedNumeral(null);
