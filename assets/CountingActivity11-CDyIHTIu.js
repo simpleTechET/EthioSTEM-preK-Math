@@ -1,4 +1,4 @@
-import{j as e}from"./ui-vendor-C-ksHByf.js";import{u as E,r as l}from"./react-vendor-X0Zsz5kA.js";import{B as i,C as a,a as N,b as y,d as v,c as H}from"./card-B-18wgto.js";import{c as $,u as x}from"./index-BOxiq0b8.js";import{A as z}from"./arrow-left-CD2u7X13.js";import{S as M}from"./star-C93bvVbO.js";import{U as D}from"./users-Dv3JXELq.js";import{L as W}from"./lightbulb-DjaOR_GZ.js";import{B as O}from"./book-open-DL3vsp9C.js";import{C as J}from"./circle-check-V8FBIhYe.js";/**
+import{j as e}from"./ui-vendor-C-ksHByf.js";import{u as E,r as l}from"./react-vendor-X0Zsz5kA.js";import{B as i,C as a,a as N,b as y,d as v,c as H}from"./card-CWUnnTPQ.js";import{c as $,u as x}from"./index-BuE_zJJA.js";import{A as z}from"./arrow-left-C4KDNq8J.js";import{S as M}from"./star-DZJDwn-I.js";import{U as D}from"./users-BquSU_8U.js";import{L as W}from"./lightbulb-DaE6FAyE.js";import{B as O}from"./book-open-zk8XbDVe.js";import{C as J}from"./circle-check-CAi0V439.js";/**
  * @license lucide-react v0.462.0 - ISC
  *
  * This source code is licensed under the ISC license.
