@@ -304,7 +304,7 @@ const CountingActivity12 = () => {
                       size="lg"
                       className="text-4xl py-8 bg-white text-gray-800 hover:bg-blue-100"
                     >
-                      {num === 1 ? '☝️' : num === 2 ? '✌️' : '🤚'}
+                      {num === 1 ? '☝️' : num === 2 ? '✌️' : '👌'}
                     </Button>
                   ))}
                 </div>
