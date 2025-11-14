@@ -4,7 +4,7 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/ESTEM-preK-Math/',
+  base: '/EthioSTEM-preK-Math/',
   
   server: {
     host: "::",
