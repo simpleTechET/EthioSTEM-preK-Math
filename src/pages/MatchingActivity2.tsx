@@ -30,8 +30,19 @@ const MatchingActivity2 = () => {
   }, []);
 
   const handleComplete = () => {
-    navigate("/activities");
-  };
+  markLessonComplete(2);
+  navigate("/activities");
+};
+
+// Add this helper function to save completion
+const markLessonComplete = (lessonId: number) => {
+  const saved = localStorage.getItem('ethiostem-completed-lessons');
+  const completed = saved ? JSON.parse(saved) : [];
+  if (!completed.includes(lessonId)) {
+    completed.push(lessonId);
+    localStorage.setItem('ethiostem-completed-lessons', JSON.stringify(completed));
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">

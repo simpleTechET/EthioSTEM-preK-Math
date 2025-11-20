@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Router } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom"; // Removed unused Router import
 import { lazy, Suspense } from "react";
 import { AuthProvider } from "@/contexts/AuthContext";
 
@@ -28,6 +28,9 @@ const CountingActivity11 = lazy(() => import("./pages/CountingActivity11"));
 const CountingActivity12 = lazy(() => import("./pages/CountingActivity12"));
 const CountingActivity13 = lazy(() => import("./pages/CountingActivity13"));
 const CountingActivity14 = lazy(() => import("./pages/CountingActivity14"));
+const SignUp = lazy(() => import("./pages/SignUp")); // Add this
+const SignIn = lazy(() => import("./pages/SignIn")); // Add this
+const Dashboard = lazy(() => import("./pages/Dashboard")); // Add this
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -66,16 +69,13 @@ const App = () => (
             <Route path="/activity/counting-13" element={<CountingActivity13 />} />
             <Route path="/activity/counting-14" element={<CountingActivity14 />} />
 
-            <Route path="*" element={<NotFound />} />
-            
-          </Routes>
-{/* ); */}
-        </Suspense>
-      </BrowserRouter>
-  </AuthProvider>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
-  
 );
 
 export default App;

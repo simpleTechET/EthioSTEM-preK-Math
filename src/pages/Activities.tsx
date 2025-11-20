@@ -1,9 +1,24 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Play, Lock } from "lucide-react";
+import { ArrowLeft, Play, Lock, CheckCircle2 } from "lucide-react";
 
 const Activities = () => {
+  const [completedLessons, setCompletedLessons] = useState<number[]>([]);
+
+  // Load completed lessons from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('ethiostem-completed-lessons');
+    if (saved) {
+      setCompletedLessons(JSON.parse(saved));
+    }
+  }, []);
+
+  const isLessonCompleted = (lessonId: number) => {
+    return completedLessons.includes(lessonId);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/20 to-muted">
       {/* Header */}
@@ -36,7 +51,7 @@ const Activities = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {matchingLessons.map((lesson) => (
               <Link to={lesson.path} key={lesson.id}>
-                <Card className="h-full hover:shadow-playful transition-all duration-300 hover:scale-105 cursor-pointer border-2 hover:border-primary">
+                <Card className="h-full hover:shadow-playful transition-all duration-300 hover:scale-105 cursor-pointer border-2 hover:border-primary relative">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">
@@ -57,6 +72,11 @@ const Activities = () => {
                       <span className="text-sm text-muted-foreground">{lesson.duration}</span>
                     </div>
                   </CardContent>
+                  {isLessonCompleted(lesson.id) && (
+                    <div className="absolute bottom-3 right-3">
+                      <CheckCircle2 className="w-6 h-6 text-green-600 fill-green-100" />
+                    </div>
+                  )}
                 </Card>
               </Link>
             ))}
@@ -78,7 +98,7 @@ const Activities = () => {
             {sortingLessons.map((lesson) => (
               lesson.path ? (
                 <Link to={lesson.path} key={lesson.id}>
-                  <Card className="h-full hover:shadow-playful transition-all duration-300 hover:scale-105 cursor-pointer border-2 hover:border-primary">
+                  <Card className="h-full hover:shadow-playful transition-all duration-300 hover:scale-105 cursor-pointer border-2 hover:border-primary relative">
                     <CardHeader className="pb-3">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-sm font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">
@@ -95,10 +115,15 @@ const Activities = () => {
                         <span className="text-sm text-muted-foreground">{lesson.duration}</span>
                       </div>
                     </CardContent>
+                    {isLessonCompleted(lesson.id) && (
+                      <div className="absolute bottom-3 right-3">
+                        <CheckCircle2 className="w-6 h-6 text-green-600 fill-green-100" />
+                      </div>
+                    )}
                   </Card>
                 </Link>
               ) : (
-                <Card key={lesson.id} className="opacity-60 cursor-not-allowed">
+                <Card key={lesson.id} className="opacity-60 cursor-not-allowed relative">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-semibold text-muted-foreground bg-muted px-3 py-1 rounded-full">
@@ -136,7 +161,7 @@ const Activities = () => {
             {countingLessons.map((lesson) => (
               lesson.path ? (
                 <Link to={lesson.path} key={lesson.id}>
-                  <Card className="h-full hover:shadow-playful transition-all duration-300 hover:scale-105 cursor-pointer border-2 hover:border-primary">
+                  <Card className="h-full hover:shadow-playful transition-all duration-300 hover:scale-105 cursor-pointer border-2 hover:border-primary relative">
                     <CardHeader className="pb-3">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-sm font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">
@@ -153,10 +178,15 @@ const Activities = () => {
                         <span className="text-sm text-muted-foreground">{lesson.duration}</span>
                       </div>
                     </CardContent>
+                    {isLessonCompleted(lesson.id) && (
+                      <div className="absolute bottom-3 right-3">
+                        <CheckCircle2 className="w-6 h-6 text-green-600 fill-green-100" />
+                      </div>
+                    )}
                   </Card>
                 </Link>
               ) : (
-                <Card key={lesson.id} className="opacity-60 cursor-not-allowed">
+                <Card key={lesson.id} className="opacity-60 cursor-not-allowed relative">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-semibold text-muted-foreground bg-muted px-3 py-1 rounded-full">
@@ -201,7 +231,7 @@ const matchingLessons = [
     id: 1,
     title: "Exactly the Same",
     description: "Match objects that are identical",
-    icon: "👯",
+    icon: "💯",
     duration: "10 min",
     path: "/activity/matching-1",
     unlocked: true
@@ -231,7 +261,7 @@ const matchingLessons = [
     icon: "🧩",
     duration: "10 min",
     path: "/activity/matching-4",
-    unlocked: true  // Changed from false to true
+    unlocked: true
   }
 ];
 
@@ -294,41 +324,41 @@ const countingLessons = [
     unlocked: true
   },
   {
-  id: 11,
-  title: "Counting Games",
-  description: "Play games with counting and moving",
-  icon: "🎮",
-  duration: "12 min",
-  path: "/activity/counting-11",
-  unlocked: true
-},
+    id: 11,
+    title: "Counting Games",
+    description: "Play games with counting and moving",
+    icon: "🎮",
+    duration: "12 min",
+    path: "/activity/counting-11",
+    unlocked: true
+  },
   {
-  id: 12,
-  title: "Match Numbers 1, 2, 3",
-  description: "Match numerals to quantities",
-  icon: "🔢",
-  duration: "12 min",
-  path: "/activity/counting-12",
-  unlocked: true
-},
+    id: 12,
+    title: "Match Numbers 1, 2, 3",
+    description: "Match numerals to quantities",
+    icon: "🔢",
+    duration: "12 min",
+    path: "/activity/counting-12",
+    unlocked: true
+  },
   {
-  id: 13,
-  title: "Make Groups & Match Numbers",
-  description: "Create groups and match to numerals 1-3",
-  icon: "🎲",
-  duration: "12 min",
-  path: "/activity/counting-13",
-  unlocked: true
-},
+    id: 13,
+    title: "Make Groups & Match Numbers",
+    description: "Create groups and match to numerals 1-3",
+    icon: "🎲",
+    duration: "12 min",
+    path: "/activity/counting-13",
+    unlocked: true
+  },
   {
-  id: 14,
-  title: "Numbers to Objects",
-  description: "Count objects to match numerals 1-3",
-  icon: "🧊",
-  duration: "12 min",
-  path: "/activity/counting-14",
-  unlocked: true
-}
+    id: 14,
+    title: "Numbers to Objects",
+    description: "Count objects to match numerals 1-3",
+    icon: "🧊",
+    duration: "12 min",
+    path: "/activity/counting-14",
+    unlocked: true
+  }
 ];
 
 export default Activities;

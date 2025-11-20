@@ -20,7 +20,22 @@ const CountingActivity9 = () => {
   const [fingerCount, setFingerCount] = useState<number | null>(null);
   const [selectedAnimal, setSelectedAnimal] = useState<CountingItem | null>(null);
   const [placedAnimals, setPlacedAnimals] = useState<CountingItem[]>([]);
+  const [completed, setCompleted] = useState(false);
 
+  const markLessonComplete = (lessonId: number) => {
+    const saved = localStorage.getItem('ethiostem-completed-lessons');
+    const completedLessons = saved ? JSON.parse(saved) : [];
+    if (!completedLessons.includes(lessonId)) {
+      completedLessons.push(lessonId);
+      localStorage.setItem('ethiostem-completed-lessons', JSON.stringify(completedLessons));
+    }
+  };
+
+  const handleComplete = () => {
+    markLessonComplete(9);
+    navigate("../activities");
+  };
+  
   // Animals with emojis - mixed counts for counting practice
   const animals = useMemo(() => [
     { id: 1, type: "horse", emoji: "🐎", count: 1 as const },
@@ -36,19 +51,29 @@ const CountingActivity9 = () => {
     [1, 2, 3, 2, 1, 3].sort(() => Math.random() - 0.5), 
   []);
   const [currentFingerQ, setCurrentFingerQ] = useState(0);
+  const [fingerFeedback, setFingerFeedback] = useState<'none' | 'correct' | 'wrong'>('none');
 
   const handleFingerAnswer = (count: number) => {
+    // show the selected count immediately
+    setFingerCount(count);
+
     if (count === fingerQuestions[currentFingerQ]) {
+      setFingerFeedback('correct');
       toast.success("Great! 🎉", { description: `That's ${count} finger${count > 1 ? 's' : ''}!` });
+      // advance immediately (no timeouts)
       if (currentFingerQ < fingerQuestions.length - 1) {
-        setCurrentFingerQ(currentFingerQ + 1);
+        setCurrentFingerQ((q) => q + 1);
         setFingerCount(null);
+        setFingerFeedback('none');
       } else {
         setCurrentStep('count');
+        setFingerCount(null);
+        setFingerFeedback('none');
       }
     } else {
+      // keep the selected button red until the user tries again
+      setFingerFeedback('wrong');
       toast.error("Try again! 🤔", { description: "Count your fingers carefully." });
-      setFingerCount(null);
     }
   };
 
@@ -66,12 +91,17 @@ const CountingActivity9 = () => {
       toast.success("Correct! 🎉", { 
         description: `Yes! There ${selectedAnimal.count === 1 ? 'is' : 'are'} ${selectedAnimal.count} ${selectedAnimal.type}${selectedAnimal.count > 1 ? 's' : ''}!` 
       });
-      setPlacedAnimals([...placedAnimals, selectedAnimal]);
+      
+      const newPlaced = [...placedAnimals, selectedAnimal];
+      setPlacedAnimals(newPlaced);
       setSelectedAnimal(null);
 
-      // Check if all animals are placed
-      if (placedAnimals.length + 1 === animals.length) {
-        setTimeout(() => setCurrentStep('complete'), 1000);
+      // If this was the last one, mark completion (no auto-route)
+      if (newPlaced.length === animals.length) {
+        setCurrentStep('complete');
+        setCompleted(true);
+        markLessonComplete(9); // record completion so /activities shows green mark
+        // do NOT call handleComplete() here to avoid auto-routing; the Continue Learning button calls it
       }
     } else {
       toast.error("Let's count again! 🤔", { 
@@ -89,7 +119,7 @@ const CountingActivity9 = () => {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <Button variant="outline" size="icon" onClick={() => navigate("/activities")}>
+          <Button variant="outline" size="icon" onClick={() => navigate("../activities")}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
@@ -210,7 +240,11 @@ const CountingActivity9 = () => {
                       key={num}
                       onClick={() => handleFingerAnswer(num)}
                       size="lg"
-                      className={`text-4xl py-8 ${fingerCount === num ? 'bg-blue-600' : 'bg-white text-gray-800 hover:bg-blue-100'}`}
+                      className={`text-4xl py-8 ${
+                        fingerCount === num
+                          ? (fingerFeedback === 'wrong' ? 'bg-red-500 text-white' : 'bg-blue-600 text-white')
+                          : 'bg-white text-gray-800 hover:bg-blue-100'
+                      }`}
                     >
                       {num === 1 ? '☝️' : num === 2 ? '✌️' : '👌'}
                     </Button>
@@ -222,8 +256,8 @@ const CountingActivity9 = () => {
               </Card>
             )}
 
-            {/* Main Counting Game */}
-            {currentStep === 'count' && (
+            {/* Main Counting Game (show while counting; render completion card under the game when complete) */}
+            {(currentStep === 'count' || currentStep === 'complete') && (
               <>
                 <Card className="p-6 bg-green-50 border-2 border-green-200">
                   <h3 className="text-xl font-bold mb-2 text-gray-800">
@@ -259,8 +293,7 @@ const CountingActivity9 = () => {
                             : isSelected
                             ? 'border-4 border-blue-500 scale-105 bg-blue-50'
                             : 'hover:scale-105 hover:border-green-300 border-2'
-                          }
-                        `}
+                          }`}
                       >
                         <div className="text-6xl mb-3">
                           {/* Show multiple emojis based on count */}
@@ -305,37 +338,39 @@ const CountingActivity9 = () => {
                     </div>
                   </Card>
                 )}
-              </>
-            )}
 
-            {/* Completion */}
-            {currentStep === 'complete' && (
-              <Card className="bg-gradient-to-br from-green-100 to-blue-100 border-4 border-green-400 p-8 text-center">
-                <div className="text-6xl mb-4">🎉</div>
-                <h3 className="text-3xl font-bold mb-3 text-gray-800">Excellent Counting!</h3>
-                <p className="text-lg text-gray-700 mb-4">
-                  You counted all the animal groups correctly! You're amazing at counting in lines and groups!
-                </p>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-                  {placedAnimals.map(animal => (
-                    <div key={animal.id} className="bg-white p-3 rounded-lg border">
-                      <div className="text-4xl mb-2">
-                        {Array(animal.count).fill(animal.emoji).map((emoji, i) => (
-                          <span key={i}>{emoji}</span>
+                {/* Completion card shown under the game when complete */}
+                {currentStep === 'complete' && (
+                  <div className="mt-6">
+                    <Card className="bg-gradient-to-br from-green-100 to-blue-100 border-4 border-green-400 p-8 text-center">
+                      <div className="text-6xl mb-4">🎉</div>
+                      <h3 className="text-3xl font-bold mb-3 text-gray-800">Excellent Counting!</h3>
+                      <p className="text-lg text-gray-700 mb-4">
+                        You counted all the animal groups correctly! You're amazing at counting in lines and groups!
+                      </p>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                        {placedAnimals.map(animal => (
+                          <div key={animal.id} className="bg-white p-3 rounded-lg border">
+                            <div className="text-4xl mb-2">
+                              {Array(animal.count).fill(animal.emoji).map((emoji, i) => (
+                                <span key={i}>{emoji}</span>
+                              ))}
+                            </div>
+                            <p className="text-sm text-gray-600">{animal.count} {animal.type}{animal.count > 1 ? 's' : ''}</p>
+                          </div>
                         ))}
                       </div>
-                      <p className="text-sm text-gray-600">{animal.count} {animal.type}{animal.count > 1 ? 's' : ''}</p>
-                    </div>
-                  ))}
-                </div>
-                <Button 
-                  size="lg"
-                  onClick={() => navigate('/activities')}
-                  className="bg-green-600 hover:bg-green-700"
-                >
-                  Continue Learning
-                </Button>
-              </Card>
+                      <Button 
+                        size="lg"
+                        onClick={handleComplete}
+                        className="bg-green-600 hover:bg-green-700"
+                      >
+                        Continue Learning
+                      </Button>
+                    </Card>
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}

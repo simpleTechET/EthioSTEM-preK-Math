@@ -18,8 +18,18 @@ import shoeImg from "@/assets/shoe.jpeg";
 
 const SortingActivity5 = () => {
   const [showGame, setShowGame] = useState(false);
+  const [completed, setCompleted] = useState(false);
   const navigate = useNavigate();
 
+  const markLessonComplete = (lessonId: number) => {
+    const saved = localStorage.getItem('ethiostem-completed-lessons');
+    const completedLessons = saved ? JSON.parse(saved) : [];
+    if (!completedLessons.includes(lessonId)) {
+      completedLessons.push(lessonId);
+      localStorage.setItem('ethiostem-completed-lessons', JSON.stringify(completedLessons));
+    }
+  };
+  
   // Shuffled items - some are food, some are not
   const items = useMemo(() => shuffleArray([
     { id: 1, name: "Apple", image: appleImg, belongsToGroup: true },
@@ -31,7 +41,7 @@ const SortingActivity5 = () => {
     { id: 7, name: "Sock", image: sockImg, belongsToGroup: false },
     { id: 8, name: "Shoe", image: shoeImg, belongsToGroup: false },
   ]), []);
-
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-4">
       <div className="max-w-6xl mx-auto">
@@ -169,18 +179,43 @@ const SortingActivity5 = () => {
             </div>
           </div>
         ) : (
-          <SortingGame
-            items={items}
-            groupName="Food"
-            instruction="Let's make a group of FOOD!"
-            onComplete={() => {
-              setTimeout(() => navigate("/activity/sorting-6"), 2000);
-            }}
-          />
-        )}
+          <>
+            {/* keep the game visible, show completion card under the game when done */}
+            <SortingGame
+              items={items}
+              groupName="Food"
+              instruction="Let's make a group of FOOD!"
+              onComplete={() => {
+                markLessonComplete(5);
+                setCompleted(true);
+              }}
+            />
+
+            {completed && (
+              <div className="mt-6">
+                <Card className="bg-gradient-to-br from-blue-100 to-purple-100 border-4 border-blue-300 shadow-xl">
+                  <CardContent className="p-8 text-center">
+                    <div className="text-6xl mb-4">🎉</div>
+                    <h3 className="text-3xl font-bold mb-3 text-gray-800">Great Job!</h3>
+                    <p className="text-lg text-gray-700 mb-6">
+                      You made the Food group. Well done!
+                    </p>
+                    <Button
+                      size="lg"
+                      onClick={() => navigate("/activities")}
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
+                      Continue Learning
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+          </>
+         )}
       </div>
     </div>
   );
 };
-
+  
 export default SortingActivity5;

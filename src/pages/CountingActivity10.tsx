@@ -21,6 +21,16 @@ const CountingActivity10 = () => {
   const [peekabooCount, setPeekabooCount] = useState<number | null>(null);
   const [selectedGroup, setSelectedGroup] = useState<AnimalGroup | null>(null);
   const [matchedPairs, setMatchedPairs] = useState<number[]>([]);
+  const [completed, setCompleted] = useState(false);
+
+  const markLessonComplete = (lessonId: number) => {
+    const saved = localStorage.getItem('ethiostem-completed-lessons');
+    const completedLessons = saved ? JSON.parse(saved) : [];
+    if (!completedLessons.includes(lessonId)) {
+      completedLessons.push(lessonId);
+      localStorage.setItem('ethiostem-completed-lessons', JSON.stringify(completedLessons));
+    }
+  };
 
   // Peek-a-boo sequences
   const peekabooSequences = useMemo(() => 
@@ -96,11 +106,15 @@ const handlePeekabooAnswer = (count: number) => {
       toast.success("Perfect match! 🎉", { 
         description: `${selectedGroup.count} ${selectedGroup.type} matches ${dotCount} dots!` 
       });
-      setMatchedPairs([...matchedPairs, selectedGroup.id]);
+      const newMatched = [...matchedPairs, selectedGroup.id];
+      setMatchedPairs(newMatched);
       setSelectedGroup(null);
 
-      if (matchedPairs.length + 1 === animalGroups.length) {
-        setTimeout(() => setCurrentStep('complete'), 1000);
+      // if that was the last match, mark lesson complete and show completion (no auto-route)
+      if (newMatched.length === animalGroups.length) {
+        setCurrentStep('complete');
+        setCompleted(true);
+        markLessonComplete(10); // lesson 10 completed
       }
     } else {
       toast.error("Not quite! 🤔", { 
@@ -454,11 +468,15 @@ const handlePeekabooAnswer = (count: number) => {
                 </div>
                 <Button 
                   size="lg"
-                  onClick={() => navigate('/activities')}
-                  className="bg-green-600 hover:bg-green-700"
-                >
-                  Continue Learning
-                </Button>
+                  onClick={() => {
+                    // ensure it's marked (in case user presses Continue without completion being recorded)
+                    if (!completed) markLessonComplete(10);
+                    navigate('/activities');
+                  }}
+                   className="bg-green-600 hover:bg-green-700"
+                 >
+                   Continue Learning
+                 </Button>
               </Card>
             )}
           </div>

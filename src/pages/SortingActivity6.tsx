@@ -24,9 +24,19 @@ interface SortingItem {
 const SortingActivity6 = () => {
   const [showGame, setShowGame] = useState(false);
   const navigate = useNavigate();
+  const [completed, setCompleted] = useState(false);
   const [draggedItem, setDraggedItem] = useState<SortingItem | null>(null);
   const [crayonGroup, setCrayonGroup] = useState<SortingItem[]>([]);
   const [markerGroup, setMarkerGroup] = useState<SortingItem[]>([]);
+ 
+  const markLessonComplete = (lessonId: number) => {
+    const saved = localStorage.getItem('ethiostem-completed-lessons');
+    const completedLessons = saved ? JSON.parse(saved) : [];
+    if (!completedLessons.includes(lessonId)) {
+      completedLessons.push(lessonId);
+      localStorage.setItem('ethiostem-completed-lessons', JSON.stringify(completedLessons));
+    }
+  };
   const initialItems = useMemo(() => shuffleArray([
     { id: 1, name: "Red Crayon", image: redCrayonImg, group: "crayons" as const },
     { id: 2, name: "Yellow Marker", image: yellowMarkerImg, group: "markers" as const },
@@ -80,7 +90,9 @@ const SortingActivity6 = () => {
       toast.success("Perfect! 🌟", {
         description: "You sorted everything correctly into two groups!",
       });
-      setTimeout(() => navigate("/activity/sorting-7"), 2000);
+      // mark lesson complete and show completion card instead of auto-routing
+      markLessonComplete(6);
+      setCompleted(true);
     } else {
       toast.error("Not quite! 🤔", {
         description: "Try sorting all items into the correct groups.",
@@ -331,7 +343,7 @@ const SortingActivity6 = () => {
             </div>
 
             {/* Check Button */}
-            {isComplete && (
+            {isComplete && !completed && (
               <div className="text-center">
                 <Button 
                   onClick={handleCheckAnswer}
@@ -342,11 +354,33 @@ const SortingActivity6 = () => {
                 </Button>
               </div>
             )}
+
+            {/* Completion Card shown under the game when completed */}
+            {completed && (
+              <div className="mt-6">
+                <Card className="bg-gradient-to-br from-blue-100 to-purple-100 border-4 border-blue-300 shadow-xl">
+                  <CardContent className="p-8 text-center">
+                    <div className="text-6xl mb-4">🎉</div>
+                    <h3 className="text-3xl font-bold mb-3 text-gray-800">Excellent Work!</h3>
+                    <p className="text-lg text-gray-700 mb-6">
+                      You sorted everything into the correct groups. Great job!
+                    </p>
+                    <Button
+                      size="lg"
+                      onClick={() => navigate("/activities")}
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
+                      Continue Learning
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
           </div>
         )}
       </div>
     </div>
   );
 };
-
+  
 export default SortingActivity6;

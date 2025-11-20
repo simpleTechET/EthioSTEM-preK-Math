@@ -30,6 +30,20 @@ const CountingActivity8 = () => {
 
   const currentQ = questions[currentQuestion];
 
+  const markLessonComplete = (lessonId: number) => {
+    const saved = localStorage.getItem('ethiostem-completed-lessons');
+    const completed = saved ? JSON.parse(saved) : [];
+    if (!completed.includes(lessonId)) {
+      completed.push(lessonId);
+      localStorage.setItem('ethiostem-completed-lessons', JSON.stringify(completed));
+    }
+  };
+
+  const handleComplete = () => {
+    markLessonComplete(8);
+    navigate("/activities");
+  };
+  
   // Shuffled answer options for each question
   const answerOptions = useMemo(() => {
     return shuffleArray<CountingOption>([
@@ -41,33 +55,33 @@ const CountingActivity8 = () => {
 
   const handleAnswerClick = (answer: number) => {
     setSelectedAnswer(answer);
-  };
+    const isCorrect = answer === currentQ.correctAnswer;
 
-  const handleCheckAnswer = () => {
-    if (selectedAnswer === null) return;
-
-    if (selectedAnswer === currentQ.correctAnswer) {
+    if (isCorrect) {
       toast.success("Perfect! 🎉", {
         description: `Yes! There ${currentQ.correctAnswer === 1 ? 'is' : 'are'} ${currentQ.correctAnswer} bear${currentQ.correctAnswer > 1 ? 's' : ''}!`,
       });
 
       if (currentQuestion < questions.length - 1) {
+        // advance automatically to the next set after a short delay so the toast can be read
         setTimeout(() => {
-          setCurrentQuestion(currentQuestion + 1);
+          setCurrentQuestion((q) => q + 1);
           setSelectedAnswer(null);
         }, 1500);
       } else {
+        // end of questions: mark complete but do not auto-route
         setIsComplete(true);
-        setTimeout(() => navigate("/activities"), 3000);
+        markLessonComplete(8);
       }
     } else {
+      // incorrect -> stay on the same set, leave the selected choice red
       toast.error("Not quite! 💭", {
         description: "Try counting again. Touch each bear as you count!",
       });
-      setSelectedAnswer(null);
+      // don't clear selectedAnswer so UI can show it as incorrect
     }
   };
-
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-4">
       <div className="max-w-6xl mx-auto">
@@ -281,35 +295,30 @@ const CountingActivity8 = () => {
                 How many bears are there?
               </h3>
               <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
-                {answerOptions.map((option) => (
-                  <Button
-                    key={option.value}
-                    onClick={() => handleAnswerClick(option.value)}
-                    variant={selectedAnswer === option.value ? "default" : "outline"}
-                    className={`
-                      h-24 text-3xl font-bold transition-all
-                      ${selectedAnswer === option.value ? 'scale-110 shadow-lg' : 'hover:scale-105'}
-                    `}
-                  >
-                    {option.label}
-                  </Button>
-                ))}
+                {answerOptions.map((option) => {
+                  const isSelected = selectedAnswer === option.value;
+                  const isCorrect = option.value === currentQ.correctAnswer;
+                  const selectedClass = isSelected
+                    ? (isCorrect ? 'bg-green-500 text-white' : 'bg-red-500 text-white')
+                    : 'bg-white text-gray-800 border border-gray-200';
+
+                  return (
+                    <button
+                      key={option.value}
+                      onClick={() => handleAnswerClick(option.value)}
+                      className={`
+                        h-24 text-3xl font-bold transition-all rounded-lg
+                        ${selectedClass}
+                        ${isSelected ? 'scale-110 shadow-lg' : 'hover:scale-105 hover:bg-transparent'}
+                      `}
+                    >
+                      {option.label}
+                    </button>
+                  );
+                })}
               </div>
             </Card>
-
-            {/* Check Button */}
-            {selectedAnswer !== null && !isComplete && (
-              <div className="text-center">
-                <Button 
-                  onClick={handleCheckAnswer}
-                  size="lg"
-                  className="bg-primary hover:bg-primary/90 text-lg px-8 py-6"
-                >
-                  Check My Answer
-                </Button>
-              </div>
-            )}
-
+  
             {/* Completion Message */}
             {isComplete && (
               <Card className="p-8 text-center bg-gradient-to-br from-success/10 to-primary/10 border-2 border-success animate-fade-in">
@@ -321,6 +330,11 @@ const CountingActivity8 = () => {
                 <div className="flex items-center justify-center gap-2 text-green-700">
                   <CheckCircle2 className="w-6 h-6" />
                   <span className="font-semibold">Lesson Complete</span>
+                </div>
+                <div className="mt-4">
+                  <Button size="lg" onClick={handleComplete} className="bg-blue-600 hover:bg-blue-700">
+                    Continue Learning
+                  </Button>
                 </div>
               </Card>
             )}

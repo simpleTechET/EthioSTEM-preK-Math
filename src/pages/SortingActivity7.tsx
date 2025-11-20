@@ -60,9 +60,10 @@ const SortingActivity7 = () => {
           setSelectedItems([]);
         }, 2000);
       } else {
+        // mark complete, show success and display completion UI (no auto-route)
         setIsComplete(true);
         toast.success("Amazing! You sorted two different ways! 🎉");
-        setTimeout(() => navigate("/activities"), 3000);
+        markLessonComplete(7);
       }
     } else {
       toast.error("Try again! 🤔");
@@ -73,7 +74,19 @@ const SortingActivity7 = () => {
   const correctCount = sortingRound === 1 
     ? bears.filter(b => b.color === "blue").length
     : bears.filter(b => b.size === "big").length;
+const markLessonComplete = (lessonId: number) => {
+    const saved = localStorage.getItem('ethiostem-completed-lessons');
+    const completed = saved ? JSON.parse(saved) : [];
+    if (!completed.includes(lessonId)) {
+      completed.push(lessonId);
+      localStorage.setItem('ethiostem-completed-lessons', JSON.stringify(completed));
+    }
+  };
 
+  const handleComplete = () => {
+    markLessonComplete(7);
+    navigate("../activities");
+};
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-4">
       <div className="max-w-6xl mx-auto">
@@ -258,6 +271,11 @@ const SortingActivity7 = () => {
                 <p className="text-muted-foreground mb-4">
                   You sorted the same bears in two different ways! First by color, then by size!
                 </p>
+                <div className="mt-4">
+                  <Button size="lg" onClick={handleComplete} className="bg-blue-600 hover:bg-blue-700">
+                    Continue Learning
+                  </Button>
+                </div>
               </Card>
             )}
           </div>
