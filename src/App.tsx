@@ -7,7 +7,7 @@ import { lazy, Suspense } from "react";
 import { AuthProvider } from "@/contexts/AuthContext";
 
 // Lazy load route components for better performance
-const Home = lazy(() => import("./pages/Home"));
+const Homepage = lazy(() => import("./pages/Homepage"));
 const Activities = lazy(() => import("./pages/Activities"));
 const ParentGuide = lazy(() => import("./pages/ParentGuide"));
 const TopicMatching = lazy(() => import("./pages/TopicMatching"));
@@ -44,7 +44,7 @@ const App = () => (
         </div>}>
         {/* return ( */}
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Homepage />} />
             <Route path="/activities" element={<Activities />} />
             <Route path="/parent-guide" element={<ParentGuide />} />
             <Route path="/topic/matching" element={<TopicMatching />} />
