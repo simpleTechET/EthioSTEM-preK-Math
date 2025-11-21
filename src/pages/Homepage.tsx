@@ -14,7 +14,7 @@ const Homepage = () => {
               <img 
                 src="/EthioSTEM-preK-Math/logo.png" 
                 alt="Ethiopian STEM Academy" 
-                className="w-32 h-32 object-contain"
+                className="w-32 h-32 object-cover"
               />
               <div>
                 <h1 className="text-xl font-bold text-foreground">EthioSTEM Learning</h1>
