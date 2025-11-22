@@ -29,15 +29,22 @@ const PremiumSignup = () => {
   };
 
   const handleSubmit = () => {
-  // Save to localStorage
+  // Save premium status and student name
   localStorage.setItem('ethiostem-premium', 'true');
   localStorage.setItem('ethiostem-student-name', studentName);
   
-  if (previewUrl) {
-    localStorage.setItem('ethiostem-student-photo', previewUrl);
+  // Save the photo as base64
+  if (uploadedFile && uploadType === 'photo') {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result as string;
+      localStorage.setItem('ethiostem-student-photo', base64String);
+      setStep('complete');
+    };
+    reader.readAsDataURL(uploadedFile);
+  } else {
+    setStep('complete');
   }
-  
-  setStep('complete');
 };
 
   if (step === 'features') {
