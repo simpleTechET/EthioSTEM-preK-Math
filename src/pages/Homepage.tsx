@@ -286,7 +286,7 @@ const Homepage = () => {
         </div>
       </section>
 
-     {/* CTA Section */}
+{/* CTA Section */}
 <section className="py-20">
   <div className="container mx-auto px-4">
     <Card className="bg-gradient-to-r from-primary to-secondary border-0 text-white max-w-4xl mx-auto">
@@ -309,13 +309,19 @@ const Homepage = () => {
           </Link>
         </div>
         
-        {/* Premium CTA */}
+        {/* Premium CTA - ADD THIS */}
         <div className="mt-8 pt-8 border-t border-background/20">
-          <p className="text-background/80 mb-4">Want personalized AI-powered learning?</p>
+          <p className="text-background/90 mb-4 text-lg">
+            🌟 Want a personalized AI study companion that speaks to your child?
+          </p>
           <Link to="/premium/signup">
-            <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-2 border-background text-background hover:bg-background/20">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="text-lg px-8 py-6 border-2 border-background text-background hover:bg-background/20 shadow-lg"
+            >
               <Sparkles className="w-5 h-5 mr-2" />
-              Try Premium (Coming Soon)
+              Join Premium Waitlist (Free)
             </Button>
           </Link>
         </div>
