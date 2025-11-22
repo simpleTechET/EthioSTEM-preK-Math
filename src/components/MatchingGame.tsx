@@ -72,7 +72,7 @@ const MatchingGame = ({ items, onComplete }: MatchingGameProps) => {
         // No match
         // toast.error("Not quite! Try again 💪", {
         //   description: "Look carefully - are they exactly the same?",
-        });
+        // });
 
         // Show AI companion correction
         setCompanionContext('The student tried to match objects but they were different. Encourage them to look more carefully at the colors, shapes, and sizes.');
