@@ -32,6 +32,8 @@ const MidModuleAssessment = lazy(() => import("./pages/MidModuleAssessment"));
 const SignUp = lazy(() => import("./pages/SignUp")); // Add this
 const SignIn = lazy(() => import("./pages/SignIn")); // Add this
 const Dashboard = lazy(() => import("./pages/Dashboard")); // Add this
+const PremiumSignup = lazy(() => import("./pages/PremiumSignup"));
+
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -49,6 +51,7 @@ const App = () => (
         {/* return ( */}
           <Routes>
             <Route path="/" element={<Homepage />} />
+            <Route path="/premium/signup" element={<PremiumSignup />} />
             <Route path="/activities" element={<Activities />} />
             <Route path="/parent-guide" element={<ParentGuide />} />
             <Route path="/topic/matching" element={<TopicMatching />} />
