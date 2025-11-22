@@ -11,6 +11,11 @@ import orangeImg from "@/assets/orange.png";
 
 const MatchingActivity1 = () => {
   const [showGame, setShowGame] = useState(false);
+  const [showCompanion, setShowCompanion] = useState(false);
+  const [companionContext, setCompanionContext] = useState('');
+  const [companionType, setCompanionType] = useState<'encouragement' | 'correction' | 'celebration' | 'focus'>('encouragement');
+  const [studentName] = useState(localStorage.getItem('ethiostem-student-name') || 'Student');
+
   const navigate = useNavigate();
 
   const gameItems = [
