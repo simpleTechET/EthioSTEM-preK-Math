@@ -1,8 +1,8 @@
 from http.server import BaseHTTPRequestHandler
 import json
-import os
 import urllib.request
 import urllib.error
+import os
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
@@ -19,59 +19,53 @@ class handler(BaseHTTPRequestHandler):
         post_data = self.rfile.read(content_length)
         data = json.loads(post_data.decode('utf-8'))
 
-        # Get data from request
         student_name = data.get('studentName', 'Student')
         context = data.get('context', '')
         message_type = data.get('type', 'encouragement')
 
-        # Create prompt based on type
+        # Create prompt
         prompts = {
-            'encouragement': f"You are {student_name}'s friendly AI study companion. {context} Give them a short, warm, encouraging message (2-3 sentences max).",
-            'correction': f"You are {student_name}'s patient AI study companion. {context} Gently help them understand their mistake with a kind explanation (2-3 sentences max).",
-            'celebration': f"You are {student_name}'s enthusiastic AI study companion. {context} Celebrate their success warmly (2-3 sentences max).",
-            'focus': f"You are {student_name}'s supportive AI study companion. Help them refocus with a gentle reminder about staying on task (2-3 sentences max)."
+            'encouragement': f"Give {student_name} a short encouraging message: {context}",
+            'correction': f"Gently help {student_name} understand: {context}",
+            'celebration': f"Celebrate {student_name}'s success: {context}",
+            'focus': f"Help {student_name} stay focused: {context}"
         }
 
         prompt = prompts.get(message_type, prompts['encouragement'])
 
-        # Call Claude API
-        api_key = os.environ.get('ANTHROPIC_API_KEY')
+        # Use Hugging Face API (FREE)
+        api_key = os.environ.get('HUGGINGFACE_API_KEY', 'hf_demo')  # Demo key for testing
         
-        if not api_key:
-            response = {
-                'message': f"Great job, {student_name}! Keep going!",
-                'error': 'API key not configured'
-            }
-            self.wfile.write(json.dumps(response).encode())
-            return
+        # Use a free conversational model
+        model = "microsoft/DialoGPT-medium"
+        api_url = f"https://api-inference.huggingface.co/models/{model}"
 
-        # Prepare Claude API request
         request_data = {
-            'model': 'claude-sonnet-4-20250514',
-            'max_tokens': 150,
-            'messages': [
-                {
-                    'role': 'user',
-                    'content': prompt
-                }
-            ]
+            "inputs": prompt,
+            "parameters": {
+                "max_length": 100,
+                "temperature": 0.8
+            }
         }
 
-        # Make request to Claude API
         req = urllib.request.Request(
-            'https://api.anthropic.com/v1/messages',
+            api_url,
             data=json.dumps(request_data).encode('utf-8'),
             headers={
-                'x-api-key': api_key,
-                'anthropic-version': '2023-06-01',
-                'content-type': 'application/json'
+                'Authorization': f'Bearer {api_key}',
+                'Content-Type': 'application/json'
             }
         )
 
         try:
             with urllib.request.urlopen(req) as response:
                 result = json.loads(response.read().decode('utf-8'))
-                message = result['content'][0]['text']
+                
+                # Extract response
+                if isinstance(result, list) and len(result) > 0:
+                    message = result[0].get('generated_text', f"Great job, {student_name}!")
+                else:
+                    message = f"You're doing wonderful, {student_name}!"
                 
                 response_data = {
                     'message': message,
@@ -79,15 +73,17 @@ class handler(BaseHTTPRequestHandler):
                 }
                 
                 self.wfile.write(json.dumps(response_data).encode())
-        except urllib.error.HTTPError as e:
-            error_response = {
-                'message': f"You're doing great, {student_name}!",
-                'error': f'API error: {e.code}'
-            }
-            self.wfile.write(json.dumps(error_response).encode())
         except Exception as e:
+            # Fallback messages if API fails
+            fallback_messages = {
+                'encouragement': f"You're doing great, {student_name}! Keep trying!",
+                'correction': f"That's okay, {student_name}! Let's try again together.",
+                'celebration': f"Amazing work, {student_name}! You did it!",
+                'focus': f"Let's focus, {student_name}. You can do this!"
+            }
+            
             error_response = {
-                'message': f"Keep up the good work, {student_name}!",
+                'message': fallback_messages.get(message_type, f"Keep going, {student_name}!"),
                 'error': str(e)
             }
             self.wfile.write(json.dumps(error_response).encode())
