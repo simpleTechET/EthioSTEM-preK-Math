@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, BookOpen, Star } from "lucide-react";
+import AICompanion from '@/components/AICompanion';
 import MatchingGame from "@/components/MatchingGame";
 import appleImg from "@/assets/apple.png";
 import bananaImg from "@/assets/banana.png";
