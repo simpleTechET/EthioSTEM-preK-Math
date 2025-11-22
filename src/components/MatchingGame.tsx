@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { shuffleArray } from "@/lib/utils";
+import { usePremium } from '@/contexts/PremiumContext';
 import AICompanion from "@/components/AICompanion";
 
 interface MatchingGameProps {
@@ -20,7 +21,9 @@ const MatchingGame = ({ items, onComplete }: MatchingGameProps) => {
   const shuffledItems = useMemo(() => {
     return shuffleArray(items);
   }, [items]);
-  
+
+  const { isPremium, studentPhoto } = usePremium();
+
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [matchedPairs, setMatchedPairs] = useState<number[]>([]);
   const [attempts, setAttempts] = useState(0);
@@ -147,13 +150,16 @@ const MatchingGame = ({ items, onComplete }: MatchingGameProps) => {
       )}
 
       {/* AI Companion */}
-      <AICompanion
-        studentName={studentName}
-        context={companionContext}
-        type={companionType}
-        show={showCompanion}
-        onClose={() => setShowCompanion(false)}
-      />
+      {isPremium && (
+  <AICompanion
+    studentName={studentName}
+    studentPhoto={studentPhoto || undefined}
+    context={companionContext}
+    type={companionType}
+    show={showCompanion}
+    onClose={() => setShowCompanion(false)}
+  />
+)}
     </div>
   );
 };
