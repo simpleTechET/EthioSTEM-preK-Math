@@ -427,6 +427,7 @@ const countingLessons = [
       "Answer 'how many' questions about groups of 4-5",
       "Connect counting to real-world contexts"
     ],
+    path: "/activity/counting-16",
     unlocked: true
   }
 ];
