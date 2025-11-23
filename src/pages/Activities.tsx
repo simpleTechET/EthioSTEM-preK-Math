@@ -429,6 +429,25 @@ const countingLessons = [
     ],
     path: "/activity/counting-16",
     unlocked: true
+  },
+  {
+    id: 17,
+    title: "Piano Finger Counting",
+    topic: "Topic E: How Many Questions with 4 or 5 Objects", 
+    standards: ["PK.CC.1", "PK.CC.4"],
+    objective: "Count fingers on the left hand from 1 to 5 using the Math Way",
+    description: "Play the piano and count your fingers the Math Way!",
+    icon: "🎹",
+    color: "pink",
+    difficulty: "intermediate",
+    duration: "15-20 min",
+    learningGoals: [
+      "Count fingers systematically from pinky to thumb",
+      "Develop finger coordination for counting",
+      "Prepare for number path and number line concepts"
+    ],
+    path: "/activity/counting-17",
+    unlocked: true
   }
 ];
 
