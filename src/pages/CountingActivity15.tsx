@@ -19,6 +19,7 @@ const CountingActivity15 = () => {
   const [chaChaStep, setChaChaStep] = useState(0);
   const [isScattered, setIsScattered] = useState(true);
   const [practiceCount, setPracticeCount] = useState(0);
+  const [userAnswer, setUserAnswer] = useState<string>('');
 
   // Peekaboo sequences showing 2 and 1 embedded in 3
   const peekabooSequences = useMemo(() => [2, 1, 3, 2, 1, 3], []);
@@ -323,85 +324,142 @@ const CountingActivity15 = () => {
               </Card>
             )}
 
-            {/* Scattered Configuration */}
-            {currentStep === 'scattered' && (
-              <Card className="p-6 bg-cyan-50 border-2 border-cyan-200">
-                <h3 className="text-xl font-bold mb-4 text-gray-800 text-center">
-                  🐠 Fish Playing Tag! (Scattered)
-                </h3>
-                
-                <div className="relative bg-gradient-to-b from-blue-200 to-blue-400 rounded-xl border-4 border-blue-500 h-96 mb-6 overflow-hidden">
-                  {/* Underwater decorations */}
-                  <div className="absolute bottom-0 left-4 text-6xl">🪨</div>
-                  <div className="absolute bottom-0 right-8 text-6xl">🌿</div>
-                  <div className="absolute top-4 right-4 text-4xl opacity-50">☁️</div>
-                  
-                  {/* Scattered fish */}
-                  {scatteredPositions.map((pos, index) => (
-                    <div
-                      key={index}
-                      className="absolute text-5xl animate-pulse"
-                      style={{ 
-                        top: `${pos.top}%`, 
-                        left: `${pos.left}%`,
-                        animationDelay: `${index * 200}ms`
-                      }}
-                    >
-                      🐠
-                    </div>
-                  ))}
-                </div>
+            // Replace the Scattered Configuration section:
+{currentStep === 'scattered' && (
+  <Card className="p-6 bg-cyan-50 border-2 border-cyan-200">
+    <h3 className="text-xl font-bold mb-4 text-gray-800 text-center">
+      🐠 Fish Playing Tag! (Scattered)
+    </h3>
+    
+    <div className="relative bg-gradient-to-b from-blue-200 to-blue-400 rounded-xl border-4 border-blue-500 h-96 mb-6 overflow-hidden">
+      {/* Underwater decorations */}
+      <div className="absolute bottom-0 left-4 text-6xl">🪨</div>
+      <div className="absolute bottom-0 right-8 text-6xl">🌿</div>
+      <div className="absolute top-4 right-4 text-4xl opacity-50">☁️</div>
+      
+      {/* Scattered fish */}
+      {scatteredPositions.map((pos, index) => (
+        <div
+          key={index}
+          className="absolute text-5xl animate-pulse"
+          style={{ 
+            top: `${pos.top}%`, 
+            left: `${pos.left}%`,
+            animationDelay: `${index * 200}ms`
+          }}
+        >
+          🐠
+        </div>
+      ))}
+    </div>
 
-                <p className="text-center text-lg text-gray-700 mb-4">
-                  Count the fish playing tag! Point to each one as you count.
-                </p>
+    <p className="text-center text-lg text-gray-700 mb-4">
+      Count the fish playing tag! Point to each one as you count.
+    </p>
 
-                <div className="text-center text-3xl font-bold text-blue-700 mb-4">
-                  How many fish? ___
-                </div>
+    <div className="text-center mb-6">
+      <label className="text-2xl font-bold text-blue-700 mb-4 block">
+        How many fish?
+      </label>
+      <input
+        type="number"
+        min="0"
+        max="10"
+        value={userAnswer}
+        onChange={(e) => setUserAnswer(e.target.value)}
+        className="w-32 h-20 text-4xl text-center font-bold border-4 border-blue-400 rounded-lg focus:border-blue-600 focus:outline-none"
+        placeholder="?"
+      />
+    </div>
 
-                <Button onClick={handleScatteredCount} size="lg" className="w-full bg-cyan-600 hover:bg-cyan-700">
-                  There are {fishCount} fish!
-                </Button>
-              </Card>
-            )}
+    <Button 
+      onClick={() => {
+        const answer = parseInt(userAnswer);
+        if (answer === fishCount) {
+          toast.success("Correct! 🎉", { description: `There are ${fishCount} fish playing tag!` });
+          setUserAnswer('');
+          setTimeout(() => setCurrentStep('lineup'), 1500);
+        } else {
+          toast.error("Try again! 🤔", { description: "Count carefully, point to each fish!" });
+        }
+      }}
+      disabled={!userAnswer}
+      size="lg" 
+      className="w-full bg-cyan-600 hover:bg-cyan-700"
+    >
+      Check My Answer
+    </Button>
+  </Card>
+)}
 
-            {/* Linear Configuration */}
-            {currentStep === 'lineup' && (
-              <Card className="p-6 bg-indigo-50 border-2 border-indigo-200">
-                <h3 className="text-xl font-bold mb-4 text-gray-800 text-center">
-                  🦈 Shark Coming! Fish Line Up! (Linear)
-                </h3>
-                
-                <div className="relative bg-gradient-to-b from-blue-200 to-blue-400 rounded-xl border-4 border-blue-500 p-8 mb-6">
-                  {/* Shark */}
-                  <div className="absolute top-4 right-4 text-6xl animate-bounce">🦈</div>
-                  
-                  {/* Window/Portal */}
-                  <div className="bg-cyan-300 border-4 border-gray-600 rounded-lg p-6 flex items-center justify-center gap-3">
-                    {Array(fishCount).fill('🐠').map((fish, index) => (
-                      <span key={index} className="text-5xl">{fish}</span>
-                    ))}
-                  </div>
-                  
-                  <p className="text-center text-sm text-white mt-4 font-bold">
-                    → Swimming through the window to escape! →
-                  </p>
-                </div>
+           {currentStep === 'lineup' && (
+  <Card className="p-6 bg-indigo-50 border-2 border-indigo-200">
+    <h3 className="text-xl font-bold mb-4 text-gray-800 text-center">
+      🦈 Shark Coming! Fish Line Up! (Linear)
+    </h3>
+    
+    <div className="relative bg-gradient-to-b from-blue-200 to-blue-400 rounded-xl border-4 border-blue-500 p-8 mb-6">
+      {/* Shark */}
+      <div className="absolute top-4 right-4 text-6xl animate-bounce">🦈</div>
+      
+      {/* Window/Portal */}
+      <div className="bg-cyan-300 border-4 border-gray-600 rounded-lg p-6 flex items-center justify-center gap-3">
+        {Array(fishCount).fill('🐠').map((fish, index) => (
+          <span key={index} className="text-5xl">{fish}</span>
+        ))}
+      </div>
+      
+      <p className="text-center text-sm text-white mt-4 font-bold">
+        → Swimming through the window to escape! →
+      </p>
+    </div>
 
-                <p className="text-center text-lg text-gray-700 mb-4">
-                  Count the fish in the line! Did the number change?
-                </p>
+    <p className="text-center text-lg text-gray-700 mb-4">
+      Count the fish in the line! Did the number change?
+    </p>
 
-                <div className="text-center text-3xl font-bold text-indigo-700 mb-4">
-                  Still ___ fish!
-                </div>
+    <div className="text-center mb-6">
+      <label className="text-2xl font-bold text-indigo-700 mb-4 block">
+        Still ___ fish!
+      </label>
+      <input
+        type="number"
+        min="0"
+        max="10"
+        value={userAnswer}
+        onChange={(e) => setUserAnswer(e.target.value)}
+        className="w-32 h-20 text-4xl text-center font-bold border-4 border-indigo-400 rounded-lg focus:border-indigo-600 focus:outline-none"
+        placeholder="?"
+      />
+    </div>
 
-                <Button onClick={handleLineupCount} size="lg" className="w-full bg-indigo-600 hover:bg-indigo-700">
-                  Still {fishCount} fish!
-                </Button>
-              </Card>
-            )}
+    <Button 
+      onClick={() => {
+        const answer = parseInt(userAnswer);
+        if (answer === fishCount) {
+          toast.success("Perfect! 🎉", { description: `Still ${fishCount} fish, just in a line!` });
+          setUserAnswer('');
+          if (fishCount === 4) {
+            setTimeout(() => {
+              setFishCount(5);
+              setIsScattered(true);
+              setCurrentStep('scattered');
+            }, 1500);
+          } else {
+            setTimeout(() => setCurrentStep('practice'), 1500);
+          }
+        } else {
+          toast.error("Try again! 🤔", { description: "Count carefully!" });
+        }
+      }}
+      disabled={!userAnswer}
+      size="lg" 
+      className="w-full bg-indigo-600 hover:bg-indigo-700"
+    >
+      Check My Answer
+    </Button>
+  </Card>
+)}
 
             {/* Practice */}
             {currentStep === 'practice' && (
