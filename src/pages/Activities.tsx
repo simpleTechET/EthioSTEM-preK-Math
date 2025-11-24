@@ -450,7 +450,7 @@ const countingLessons = [
     unlocked: true
   },
   {
-    id: "counting-18",
+    id: 18,
     title: "Toy Store Arrays",
     topic: "Topic E: How Many Questions with 4 or 5 Objects",
     standards: ["PK.CC.1", "PK.CC.3ab", "PK.CC.4"],
