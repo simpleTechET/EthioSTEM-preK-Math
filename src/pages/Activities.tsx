@@ -693,6 +693,15 @@ const topicELessons = [
     duration: "15-20 min",
     path: "/activity/counting-18",
     unlocked: true
+  },
+  {
+    id: 19,
+    title: "Number Partners Discovery",
+    description: "Break apart groups to find number partners hiding inside!",
+    icon: "🔍",
+    duration: "15-20 min", 
+    path: "/activity/counting-19",
+    unlocked: true
   }
 ];
 export default Activities;
