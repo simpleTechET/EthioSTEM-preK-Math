@@ -1,0 +1,1 @@
+const s="/EthioSTEM-preK-Math/assets/cup-C2ZbU_2c.jpeg",e="/EthioSTEM-preK-Math/assets/paper-DcfKrP53.jpeg",t="/EthioSTEM-preK-Math/assets/pencil-MN7Jr6xo.jpeg",p="/EthioSTEM-preK-Math/assets/sock-BD9AKvnk.jpeg",a="/EthioSTEM-preK-Math/assets/shoe-Cm92ZHio.jpeg";export{e as a,a as b,s as c,t as p,p as s};
