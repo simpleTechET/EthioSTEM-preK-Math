@@ -218,43 +218,122 @@ const CountingActivity16 = () => {
           <div className="space-y-6">
             {/* Dot Path Parking Lot Warm-up */}
             {currentStep === 'parking' && (
-              <Card className="p-6 bg-blue-50 border-2 border-blue-200">
-                <h3 className="text-xl font-bold mb-4 text-gray-800 text-center">
-                  🚗 Dot Path Parking Lot
-                </h3>
-                <p className="text-center text-gray-700 mb-4">
-                  Park each car in its own space! Practice counting to {parkingSpaces}.
-                </p>
-                
-                <div className="grid grid-cols-5 gap-4 max-w-2xl mx-auto mb-6">
-                  {Array(parkingSpaces).fill(0).map((_, index) => {
-                    const space = index + 1;
-                    const isParked = parkedCars.includes(space);
-                    return (
-                      <Card
-                        key={space}
-                        onClick={() => handleParkCar(space)}
-                        className={`
-                          text-center p-4 cursor-pointer transition-all
-                          ${isParked 
-                            ? 'bg-green-100 border-4 border-green-500' 
-                            : 'bg-white hover:bg-blue-50 border-2 border-blue-300'
-                          }
-                        `}
-                      >
-                        <div className="text-2xl font-bold text-gray-700 mb-2">{space}</div>
-                        <div className="text-3xl">{isParked ? '🚗' : '⭕'}</div>
-                        {isParked && <CheckCircle2 className="w-4 h-4 text-green-600 mx-auto mt-1" />}
-                      </Card>
-                    );
-                  })}
-                </div>
+  <>
+    <Card className="p-6 bg-green-50 border-2 border-green-200">
+      <h3 className="text-xl font-bold mb-2 text-gray-800 flex items-center gap-2">
+        🚗 {/* ← Changed from <Car className="w-6 h-6" /> to emoji */}
+        Dot Path Parking Lot
+      </h3>
+      <p className="text-gray-700 mb-4">
+        Park the cars! Each car gets its own numbered space. Watch the queue get shorter as you park them!
+      </p>
+      <div className="flex items-center gap-2 text-sm text-gray-600">
+        <div className="flex-1 bg-white p-2 rounded border">
+          Cars parked: {parkedCars.length} of {parkingSpaces}
+        </div>
+        <div className="flex-1 bg-white p-2 rounded border">
+          Cars waiting: {parkingSpaces - parkedCars.length}
+        </div>
+      </div>
+    </Card>
 
-                <p className="text-center text-sm text-gray-600">
-                  Cars parked: {parkedCars.length} of {parkingSpaces}
-                </p>
-              </Card>
-            )}
+    {/* Cars Waiting to Park (Queue) */}
+    <Card className="p-6 bg-blue-50 border-2 border-blue-200">
+      <h4 className="text-lg font-bold mb-4 text-gray-800 text-center">
+        🚗 Cars Waiting in Queue
+      </h4>
+      <div className="flex justify-center gap-4 min-h-[100px] items-center flex-wrap">
+        {Array(parkingSpaces).fill(0).map((_, index) => {
+          const isParked = index < parkedCars.length;
+          const carColor = ['red', 'blue', 'green', 'yellow', 'purple'][index % 5];
+          const carEmoji = ['🚗', '🚙', '🚐', '🚕', '🏎️'][index % 5];
+          
+          return (
+            <div
+              key={index}
+              className={`transition-all duration-500 ${
+                isParked ? 'opacity-20 scale-75' : 'opacity-100 scale-100'
+              }`}
+            >
+              <div className="text-center">
+                <div className="text-5xl mb-2">{carEmoji}</div>
+                <div className={`text-sm font-semibold ${
+                  isParked ? 'text-gray-400 line-through' : 'text-gray-700'
+                }`}>
+                  {carColor} car
+                </div>
+                {isParked && (
+                  <div className="text-xs text-green-600 font-bold mt-1">
+                    ✓ Parked
+                  </div>
+                )}
+                {!isParked && index === parkedCars.length && (
+                  <div className="text-xs text-blue-600 font-bold mt-1 animate-pulse">
+                    → Next to park
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <p className="text-sm text-gray-600 text-center mt-4">
+        {parkedCars.length === 0 
+          ? "Click any parking spot below to park the first car!" 
+          : parkedCars.length === parkingSpaces 
+          ? "All cars are parked! 🎉" 
+          : `Click a parking spot to park the next car!`
+        }
+      </p>
+    </Card>
+
+    {/* Parking Lot */}
+    <Card className="p-6 bg-gray-100 border-2 border-gray-300">
+      <h4 className="text-lg font-bold mb-4 text-gray-800 text-center">
+        🅿️ Parking Lot
+      </h4>
+      <div className="grid grid-cols-5 gap-4 max-w-2xl mx-auto">
+        {Array(parkingSpaces).fill(0).map((_, index) => {
+          const space = index + 1;
+          const isParked = parkedCars.includes(space);
+          const carIndex = parkedCars.indexOf(space);
+          const carEmoji = ['🚗', '🚙', '🚐', '🚕', '🏎️'][carIndex % 5];
+          
+          return (
+            <Card
+              key={space}
+              onClick={() => !isParked && handleParkCar(space)}
+              className={`
+                text-center p-4 cursor-pointer transition-all duration-300
+                ${isParked 
+                  ? 'bg-green-100 border-4 border-green-500' 
+                  : 'bg-white hover:bg-green-50 border-2 border-gray-400 hover:border-green-300 hover:scale-105'
+                }
+              `}
+            >
+              <div className="text-2xl font-bold text-gray-700 mb-2">
+                Spot {space}
+              </div>
+              <div className="h-16 flex items-center justify-center">
+                {isParked ? (
+                  <div className="animate-bounce">
+                    <div className="text-4xl">{carEmoji}</div>
+                    <div className="text-xs text-gray-600 mt-1">
+                      {['red', 'blue', 'green', 'yellow', 'purple'][carIndex % 5]}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-lg text-gray-400">Empty</div>
+                )}
+              </div>
+              {isParked && <CheckCircle2 className="w-5 h-5 text-green-600 mx-auto mt-2" />}
+            </Card>
+          );
+        })}
+      </div>
+    </Card>
+  </>
+)}
 
             {/* Number Cha-Cha */}
             {currentStep === 'chacha' && (

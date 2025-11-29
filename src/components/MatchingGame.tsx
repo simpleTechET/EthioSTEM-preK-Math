@@ -2,7 +2,6 @@ import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CheckCircle2 } from "lucide-react";
-import { toast } from "sonner";
 import { shuffleArray } from "@/lib/utils";
 import { usePremium } from '@/contexts/PremiumContext';
 import AICompanion from "@/components/AICompanion";
@@ -15,9 +14,10 @@ interface MatchingGameProps {
     size?: string;
   }[];
   onComplete?: () => void;
+  hideCompletionUI?: boolean; // ADD THIS NEW PROP
 }
 
-const MatchingGame = ({ items, onComplete }: MatchingGameProps) => {
+const MatchingGame = ({ items, onComplete, hideCompletionUI = false }: MatchingGameProps) => {
   const shuffledItems = useMemo(() => {
     return shuffleArray(items);
   }, [items]);
@@ -53,9 +53,6 @@ const MatchingGame = ({ items, onComplete }: MatchingGameProps) => {
       if (firstItem?.matchId === secondItem?.matchId) {
         // Match found!
         setMatchedPairs([...matchedPairs, first, second]);
-        // toast.success("Great match! 🎉", {
-        //   description: "You found two that are exactly the same!",
-        // });
 
         // Show AI companion celebration
         setCompanionContext('The student just matched two objects correctly!');
@@ -73,9 +70,6 @@ const MatchingGame = ({ items, onComplete }: MatchingGameProps) => {
         }, 800);
       } else {
         // No match
-        // toast.error("Not quite! Try again 💪", {
-        //   description: "Look carefully - are they exactly the same?",
-        // });
 
         // Show AI companion correction
         setCompanionContext('The student tried to match objects but they were different. Encourage them to look more carefully at the colors, shapes, and sizes.');
@@ -136,7 +130,8 @@ const MatchingGame = ({ items, onComplete }: MatchingGameProps) => {
         ))}
       </div>
 
-      {allMatched && (
+      {/* CONDITIONALLY RENDER THE COMPLETION UI */}
+      {allMatched && !hideCompletionUI && (
         <Card className="p-8 text-center bg-gradient-to-br from-success/10 to-primary/10 border-2 border-success">
           <div className="text-6xl mb-4">🎉</div>
           <h3 className="text-2xl font-bold mb-2 text-foreground">Amazing Job!</h3>
@@ -151,15 +146,15 @@ const MatchingGame = ({ items, onComplete }: MatchingGameProps) => {
 
       {/* AI Companion */}
       {isPremium && (
-  <AICompanion
-    studentName={studentName}
-    studentPhoto={studentPhoto || undefined}
-    context={companionContext}
-    type={companionType}
-    show={showCompanion}
-    onClose={() => setShowCompanion(false)}
-  />
-)}
+        <AICompanion
+          studentName={studentName}
+          studentPhoto={studentPhoto || undefined}
+          context={companionContext}
+          type={companionType}
+          show={showCompanion}
+          onClose={() => setShowCompanion(false)}
+        />
+      )}
     </div>
   );
 };

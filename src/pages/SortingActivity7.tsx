@@ -234,36 +234,36 @@ const markLessonComplete = (lessonId: number) => {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {bears.map((bear) => {
-                const isSelected = selectedItems.includes(bear.id);
-                const isCorrect = sortingRound === 1 ? bear.color === "blue" : bear.size === "big";
-                
-                return (
-                  <Card
-                    key={bear.id}
-                    onClick={() => !isComplete && handleItemClick(bear)}
-                    className={`
-                      relative aspect-square cursor-pointer transition-all duration-300
-                      ${isSelected ? 'border-primary border-4 scale-105 bg-primary/5' : 'hover:scale-105 hover:shadow-lg'}
-                    `}
-                  >
-                    <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
-                      <img 
-                        src={bear.image} 
-                        alt={bear.name}
-                        className={`object-contain transition-all ${bear.size === 'big' ? 'w-36 h-36' : 'w-24 h-24'}`}
-                      />
-                    </div>
-                    {isComplete && isCorrect && (
-                      <div className="absolute top-2 right-2">
-                        <CheckCircle2 className="w-8 h-8 text-success fill-success/20" />
-                      </div>
-                    )}
-                  </Card>
-                );
-              })}
-            </div>
-
+  {bears.map((bear) => {
+    const isSelected = selectedItems.includes(bear.id);
+    const isCorrect = sortingRound === 1 ? bear.color === "blue" : bear.size === "big";
+    
+    return (
+      <Card
+        key={bear.id}
+        onClick={() => !isComplete && handleItemClick(bear)}
+        className={`
+          relative cursor-pointer transition-all duration-300
+          ${isSelected ? 'border-primary border-4 scale-105 bg-primary/5' : 'hover:scale-105 hover:shadow-lg'}
+        `}
+        style={{ aspectRatio: '1', maxHeight: '160px' }}
+      >
+        <div className="absolute inset-0 flex flex-col items-center justify-center p-2">
+          <img 
+            src={bear.image} 
+            alt={bear.name}
+            className={`object-contain transition-all ${bear.size === 'big' ? 'w-36 h-36' : 'w-24 h-24'}`}
+          />
+        </div>
+        {isComplete && isCorrect && (
+          <div className="absolute top-2 right-2">
+            <CheckCircle2 className="w-8 h-8 text-success fill-success/20" />
+          </div>
+        )}
+      </Card>
+    );
+  })}
+</div>
             {isComplete && (
               <Card className="p-8 text-center bg-gradient-to-br from-success/10 to-primary/10 border-2 border-success">
                 <div className="text-6xl mb-4">🎉</div>

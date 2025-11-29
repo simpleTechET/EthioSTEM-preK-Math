@@ -367,6 +367,68 @@ const Activities = () => {
     ))}
   </div>
 </section>
+{/* Topic F: Matching 1 Numeral with up to 5 Objects */}
+<section className="mb-16">
+  <div className="flex items-center gap-3 mb-6">
+    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+      <span className="text-2xl">🔢</span>
+    </div>
+    <div>
+      <h2 className="text-2xl font-bold text-foreground">Topic F: Matching 1 Numeral with up to 5 Objects</h2>
+      <p className="text-muted-foreground">Connect quantities to written numerals 1-5</p>
+    </div>
+  </div>
+  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {topicFLessons.map((lesson) => (
+      lesson.path ? (
+        <Link to={lesson.path} key={lesson.id}>
+          <Card className="h-full hover:shadow-playful transition-all duration-300 hover:scale-105 cursor-pointer border-2 hover:border-purple-500 bg-gradient-to-br from-purple-50/50 to-pink-50/50 relative">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-semibold text-purple-700 bg-purple-100 px-3 py-1 rounded-full">
+                  Lesson {lesson.id}
+                </span>
+                <Play className="w-5 h-5 text-success" />
+              </div>
+              <CardTitle className="text-lg">{lesson.title}</CardTitle>
+              <CardDescription className="text-sm">{lesson.description}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center gap-2">
+                <span className="text-3xl">{lesson.icon}</span>
+                <span className="text-sm text-muted-foreground">{lesson.duration}</span>
+              </div>
+            </CardContent>
+            {isLessonCompleted(lesson.id) && (
+              <div className="absolute bottom-3 right-3">
+                <CheckCircle2 className="w-6 h-6 text-green-600 fill-green-100" />
+              </div>
+            )}
+          </Card>
+        </Link>
+      ) : (
+        <Card key={lesson.id} className="opacity-60 cursor-not-allowed relative bg-gradient-to-br from-purple-50/30 to-pink-50/30">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-semibold text-muted-foreground bg-muted px-3 py-1 rounded-full">
+                Lesson {lesson.id}
+              </span>
+              <Lock className="w-5 h-5 text-muted-foreground" />
+            </div>
+            <CardTitle className="text-lg text-muted-foreground">{lesson.title}</CardTitle>
+            <CardDescription className="text-sm">{lesson.description}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-2">
+              <span className="text-3xl">{lesson.icon}</span>
+              <span className="text-sm text-muted-foreground">{lesson.duration}</span>
+            </div>
+          </CardContent>
+        </Card>
+      )
+    ))}
+  </div>
+</section>
         {/* Coming Soon Section */}
         <section>
           <Card className="bg-gradient-to-br from-primary/5 to-accent/5 border-2 border-dashed">
@@ -379,39 +441,7 @@ const Activities = () => {
             </CardContent>
           </Card>
         </section>
-        {/* Assessment Section */}
-{/* <section className="mb-16">
-  <div className="flex items-center gap-3 mb-6">
-    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accent to-warning flex items-center justify-center">
-      <span className="text-2xl">📋</span>
-    </div>
-    <div>
-      <h2 className="text-2xl font-bold text-foreground">Assessment</h2>
-      <p className="text-muted-foreground">Track student progress and understanding</p>
-    </div>
-  </div>
-  <Link to="/assessment/mid-module-1">
-    <Card className="hover:shadow-playful transition-all duration-300 hover:scale-105 cursor-pointer border-2 hover:border-primary">
-      <CardHeader>
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">
-            For Teachers/Parents
-          </span>
-        </div>
-        <CardTitle className="text-xl">Mid-Module 1 Assessment</CardTitle>
-        <CardDescription>Evaluate student understanding of Topics A-D</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-2 text-sm text-muted-foreground">
-          <p>• Matching Objects</p>
-          <p>• Sorting</p>
-          <p>• Counting 1-3</p>
-          <p>• Matching Numerals to Quantities</p>
-        </div>
-      </CardContent>
-    </Card>
-  </Link>
-</section> */}
+        
       </div>
     </div>
   );
@@ -523,109 +553,6 @@ const countingLessons = [
     path: "/activity/counting-11",
     unlocked: true
   }
-  /* {
-    id: 12,
-    title: "Match Numbers 1, 2, 3",
-    description: "Match numerals to quantities",
-    icon: "🔢",
-    duration: "12 min",
-    path: "/activity/counting-12",
-    unlocked: true
-  },
-  {
-    id: 13,
-    title: "Make Groups & Match Numbers",
-    description: "Create groups and match to numerals 1-3",
-    icon: "🎲",
-    duration: "12 min",
-    path: "/activity/counting-13",
-    unlocked: true
-  },
-  {
-    id: 14,
-    title: "Numbers to Objects",
-    description: "Count objects to match numerals 1-3",
-    icon: "🧊",
-    duration: "12 min",
-    path: "/activity/counting-14",
-    unlocked: true
-  },
-   {
-    id: 15,
-    title: "Fishy Friends Counting",
-    topic: "Topic E: How Many Questions with 4 or 5 Objects",
-    standards: ["PK.CC.1", "PK.CC.3ab", "PK.CC.4"],
-    objective: "Arrange and count up to 5 objects in scattered and linear configurations",
-    description: "Help the fish play tag and line up to escape the shark!",
-    icon: "🐠",
-    color: "blue",
-    difficulty: "intermediate",
-    duration: "15-20 min",
-    learningGoals: [
-      "Count up to 5 objects in scattered configurations",
-      "Count up to 5 objects in linear configurations",
-      "Understand that quantity stays the same when objects are rearranged"
-    ],
-    path: "/activity/counting-15",
-    unlocked: true
-  },
-  {
-    id: 16, 
-    title: "Family Photo Counting",
-    topic: "Topic E: How Many Questions with 4 or 5 Objects",
-    standards: ["PK.CC.1", "PK.CC.3ab", "PK.CC.4"],
-    objective: "Count up to 5 objects in pictorial representations",
-    description: "Count family members in photos and tell how many!",
-    icon: "👨‍👩‍👧‍👦",
-    color: "purple",
-    difficulty: "intermediate",
-    duration: "15-20 min",
-    learningGoals: [
-      "Count objects in pictures",
-      "Answer 'how many' questions about groups of 4-5",
-      "Connect counting to real-world contexts"
-    ],
-    path: "/activity/counting-16",
-    unlocked: true
-  },
-  {
-    id: 17,
-    title: "Piano Finger Counting",
-    topic: "Topic E: How Many Questions with 4 or 5 Objects", 
-    standards: ["PK.CC.1", "PK.CC.4"],
-    objective: "Count fingers on the left hand from 1 to 5 using the Math Way",
-    description: "Play the piano and count your fingers the Math Way!",
-    icon: "🎹",
-    color: "pink",
-    difficulty: "intermediate",
-    duration: "15-20 min",
-    learningGoals: [
-      "Count fingers systematically from pinky to thumb",
-      "Develop finger coordination for counting",
-      "Prepare for number path and number line concepts"
-    ],
-    path: "/activity/counting-17",
-    unlocked: true
-  },
-  {
-    id: 18,
-    title: "Toy Store Arrays",
-    topic: "Topic E: How Many Questions with 4 or 5 Objects",
-    standards: ["PK.CC.1", "PK.CC.3ab", "PK.CC.4"],
-    objective: "Arrange and count 4 objects in an array configuration",
-    description: "Help organize toys in the toy store display!",
-    icon: "🧸",
-    color: "orange",
-    difficulty: "intermediate", 
-    duration: "15-20 min",
-    learningGoals: [
-      "Count objects in rectangular arrays",
-      "Understand different spatial arrangements",
-      "Find embedded numbers within groups"
-    ],
-     path: "/activity/counting-18",
-    unlocked: true
-  } */
 ];
 const topicDLessons = [
   {
@@ -723,4 +650,20 @@ const topicELessons = [
     unlocked: true
   }
 ];
+
+const topicFLessons = [
+  {
+  id: 21,
+  title: "Number Match Adventure",
+  description: "Count up to 4 objects and find the matching numeral!",
+  icon: "🔢",
+  duration: "15-20 min",
+  path: "/activity/matching-21",
+  unlocked: true,
+  standards: ["PK.CC.2", "PK.CC.3ab", "PK.CC.4"],
+  objective: "Count up to 4 objects and match the numerals",
+  type: "matching"
+}
+]
+
 export default Activities;

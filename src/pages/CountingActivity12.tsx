@@ -17,6 +17,15 @@ const CountingActivity12 = () => {
   const navigate = useNavigate();
   const [showGame, setShowGame] = useState(false);
   const [currentStep, setCurrentStep] = useState<'fingers' | 'peekaboo' | 'matching' | 'partner' | 'complete'>('fingers');
+  
+  const markLessonComplete = (lessonId: number) => {
+    const saved = localStorage.getItem('ethiostem-completed-lessons');
+    const completed = saved ? JSON.parse(saved) : [];
+    if (!completed.includes(lessonId)) {
+      completed.push(lessonId);
+      localStorage.setItem('ethiostem-completed-lessons', JSON.stringify(completed));
+    }
+  };
   const [selectedNumeral, setSelectedNumeral] = useState<number | null>(null);
   const [matchedPairs, setMatchedPairs] = useState<number[]>([]);
   const [currentPeekaboo, setCurrentPeekaboo] = useState(0);
@@ -50,6 +59,8 @@ const CountingActivity12 = () => {
   ].sort(() => Math.random() - 0.5), []);
 
   const [currentPartnerItem, setCurrentPartnerItem] = useState(0);
+  const [partnerAnswer, setPartnerAnswer] = useState<number | null>(null);
+  const [showPartnerFeedback, setShowPartnerFeedback] = useState(false);
 
   const handleFingerAnswer = (count: number) => {
     if (count === fingerQuestions[currentFingerQ]) {
@@ -128,17 +139,29 @@ const CountingActivity12 = () => {
 
   const handlePartnerAnswer = (numeral: number) => {
     const currentItem = partnerItems[currentPartnerItem];
+    setPartnerAnswer(numeral);
+    setShowPartnerFeedback(true);
+    
     if (numeral === currentItem.count) {
       toast.success("Correct! 🎉", { description: `Yes, there ${currentItem.count === 1 ? 'is' : 'are'} ${currentItem.count}!` });
       if (currentPartnerItem < partnerItems.length - 1) {
         setTimeout(() => {
           setCurrentPartnerItem(currentPartnerItem + 1);
-        }, 1000);
+          setPartnerAnswer(null);
+          setShowPartnerFeedback(false);
+        }, 1500);
       } else {
-        setTimeout(() => setCurrentStep('complete'), 1000);
+        setTimeout(() => {
+          setCurrentStep('complete');
+          markLessonComplete(12);
+        }, 1500);
       }
     } else {
       toast.error("Try counting again! 🤔", { description: "Count each object carefully." });
+      setTimeout(() => {
+        setPartnerAnswer(null);
+        setShowPartnerFeedback(false);
+      }, 1500);
     }
   };
 
@@ -304,7 +327,7 @@ const CountingActivity12 = () => {
                       size="lg"
                       className="text-4xl py-8 bg-white text-gray-800 hover:bg-blue-100"
                     >
-                      {num === 1 ? '☝️' : num === 2 ? '✌️' : '👌'}
+                      {num === 1 ? '☝️' : num === 2 ? '✌️' : '🤚'}
                     </Button>
                   ))}
                 </div>
@@ -541,7 +564,7 @@ const CountingActivity12 = () => {
                   onClick={() => navigate('/activities')}
                   className="bg-purple-600 hover:bg-purple-700"
                 >
-                  Continue Learning
+                  Back to Activities
                 </Button>
               </Card>
             )}

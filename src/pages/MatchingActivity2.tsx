@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
@@ -14,6 +14,7 @@ import duckLarge from "@/assets/duck-yellow-large.png";
 
 const MatchingActivity2 = () => {
   const [showGame, setShowGame] = useState(false);
+  const [gameComplete, setGameComplete] = useState(false); // ADD THIS LINE
   const navigate = useNavigate();
 
   const gameItems = [
@@ -29,20 +30,21 @@ const MatchingActivity2 = () => {
     return shuffleArray(gameItems);
   }, []);
 
-  const handleComplete = () => {
-  markLessonComplete(2);
-  navigate("/activities");
-};
+  // Helper function to save completion
+  const markLessonComplete = (lessonId) => { // REMOVE : number
+    const saved = localStorage.getItem('ethiostem-completed-lessons');
+    const completed = saved ? JSON.parse(saved) : [];
+    if (!completed.includes(lessonId)) {
+      completed.push(lessonId);
+      localStorage.setItem('ethiostem-completed-lessons', JSON.stringify(completed));
+    }
+  };
 
-// Add this helper function to save completion
-const markLessonComplete = (lessonId: number) => {
-  const saved = localStorage.getItem('ethiostem-completed-lessons');
-  const completed = saved ? JSON.parse(saved) : [];
-  if (!completed.includes(lessonId)) {
-    completed.push(lessonId);
-    localStorage.setItem('ethiostem-completed-lessons', JSON.stringify(completed));
-  }
-};
+  // Handle game completion
+  const handleGameComplete = () => {
+    markLessonComplete(2); // Mark lesson 2 as complete
+    setGameComplete(true);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
@@ -158,7 +160,30 @@ const markLessonComplete = (lessonId: number) => {
               </ol>
             </Card>
 
-            <MatchingGame items={shuffledGameItems} onComplete={handleComplete} />
+            <MatchingGame 
+              items={shuffledGameItems} 
+              onComplete={handleGameComplete}
+              hideCompletionUI={true}
+            />
+            
+            {gameComplete && (
+              <div className="mt-8 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-8 rounded-lg border-2 border-green-200 dark:border-green-800 text-center">
+                <div className="text-6xl mb-4">🎉</div>
+                <h3 className="text-3xl font-bold text-green-700 dark:text-green-300 mb-4">
+                  Fantastic Work!
+                </h3>
+                <p className="text-xl text-green-600 dark:text-green-400 mb-6">
+                  You've completed the matching activity!
+                </p>
+                <Button 
+      size="lg" 
+      className="text-lg px-8"
+      onClick={() => navigate("/activities")}
+    >
+      Continue Learning
+    </Button>
+  </div>
+)}
           </div>
         )}
       </main>

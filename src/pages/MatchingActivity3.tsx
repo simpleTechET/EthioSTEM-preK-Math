@@ -34,7 +34,7 @@ const MatchingActivity3 = () => {
 
   // keep a shuffled copy so original items (ids) remain stable
   const [shuffledItems, setShuffledItems] = useState(() => shuffleArray(items));
-  
+
   const handleItemClick = (item) => {
     if (matchedPairs.includes(item.id)) return;
 
@@ -42,7 +42,7 @@ const MatchingActivity3 = () => {
       setCurrentSelection(item);
     } else {
       setAttempts(attempts + 1);
-      
+
       if (currentSelection.type === item.type && currentSelection.id !== item.id) {
         // Match found!
         setMatchedPairs([...matchedPairs, currentSelection.id, item.id]);
@@ -67,14 +67,14 @@ const markLessonComplete = (lessonId: number) => {
 
   const handleComplete = () => {
     markLessonComplete(3); // Call it here with lesson 3
-    navigate("../activities");
+    navigate("/activities");
   };
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50 p-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <Button variant="outline" size="icon" onClick={() => window.history.back()}>
+          <Button variant="outline" size="icon" onClick={() => navigate("/activities")}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
@@ -100,7 +100,7 @@ const markLessonComplete = (lessonId: number) => {
               </CardHeader>
               <CardContent>
                 <p className="text-lg text-gray-700">
-                  Today, your child will learn to match 2 objects that are <span className="font-bold text-green-700">the same, but different</span> in one way. 
+                  Today, your child will learn to match 2 objects that are <span className="font-bold text-green-700">the same, but different</span> in one way.
                   For example: two apples that are the same fruit, but one is bigger!
                 </p>
               </CardContent>
@@ -186,8 +186,8 @@ const markLessonComplete = (lessonId: number) => {
 
             {/* Start Button */}
             <div className="text-center">
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 onClick={() => {
                   setShuffledItems(shuffleArray(items)); // reshuffle when starting
                   setShowGame(true);
@@ -234,7 +234,7 @@ const markLessonComplete = (lessonId: number) => {
               {shuffledItems.map((item) => {
                 const isMatched = matchedPairs.includes(item.id);
                 const isSelected = currentSelection?.id === item.id;
-                
+
                 return (
                   <Card
                     key={item.id}
@@ -243,11 +243,11 @@ const markLessonComplete = (lessonId: number) => {
                       cursor-pointer transition-all duration-300 hover:shadow-xl
                       ${isMatched ? 'opacity-50 border-4 border-green-500 bg-green-50' : 'hover:scale-105'}
                       ${isSelected ? 'border-4 border-blue-500 scale-105' : 'border-2'}
-                      ${item.size === 'large' ? 'aspect-square' : 'aspect-square'}
+                      h-32 w-32 mx-auto
                     `}
                   >
                     <div className="h-full flex flex-col items-center justify-center p-4">
-                      <div className={`${item.size === 'large' ? 'text-8xl' : 'text-6xl'} mb-2`}>
+                      <div className={`${item.size === 'large' ? 'text-7xl' : 'text-4xl'} mb-2`}>
                         {item.emoji}
                       </div>
                       <p className="text-sm text-center text-gray-600 font-medium">
@@ -280,8 +280,8 @@ const markLessonComplete = (lessonId: number) => {
                       </div>
                     ))}
                   </div>
-                  <Button 
-                    size="lg" 
+                  <Button
+                    size="lg"
                     onClick={handleComplete}
                     className="bg-green-600 hover:bg-green-700"
                   >

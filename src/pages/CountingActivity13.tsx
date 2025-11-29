@@ -45,7 +45,7 @@ const CountingActivity13 = () => {
   };
 
   const addPuffball = () => {
-    if (puffballCount < 3 && dieRoll !== null && puffballCount < dieRoll) {
+    if (puffballCount < 3) {
       setPuffballCount(puffballCount + 1);
     }
   };
@@ -57,7 +57,7 @@ const CountingActivity13 = () => {
   };
 
   const addStick = () => {
-    if (stickCount < 3 && dieRoll !== null && stickCount < dieRoll) {
+    if (stickCount < 3) {
       setStickCount(stickCount + 1);
     }
   };
@@ -380,7 +380,7 @@ const CountingActivity13 = () => {
                         -
                       </Button>
                       <span className="px-4 py-2 bg-white rounded border">{puffballCount}</span>
-                      <Button onClick={addPuffball} disabled={puffballCount === 3 || (dieRoll !== null && puffballCount >= dieRoll)} size="sm">
+                      <Button onClick={addPuffball} disabled={puffballCount === 3} size="sm">
                         +
                       </Button>
                     </div>
@@ -397,7 +397,7 @@ const CountingActivity13 = () => {
                         -
                       </Button>
                       <span className="px-4 py-2 bg-white rounded border">{stickCount}</span>
-                      <Button onClick={addStick} disabled={stickCount === 3 || (dieRoll !== null && stickCount >= dieRoll)} size="sm">
+                      <Button onClick={addStick} disabled={stickCount === 3} size="sm">
                         +
                       </Button>
                     </div>

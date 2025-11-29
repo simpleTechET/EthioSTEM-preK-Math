@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, BookOpen, Star } from "lucide-react";
@@ -15,8 +15,6 @@ const MatchingActivity1 = () => {
   const [companionContext, setCompanionContext] = useState('');
   const [companionType, setCompanionType] = useState<'encouragement' | 'correction' | 'celebration' | 'focus'>('encouragement');
   const [studentName] = useState(localStorage.getItem('ethiostem-student-name') || 'Student');
-
-  const navigate = useNavigate();
 
   const gameItems = [
     { id: 1, image: appleImg, matchId: 1 },
@@ -38,7 +36,6 @@ const MatchingActivity1 = () => {
 
   const handleComplete = () => {
   markLessonComplete(1); // Add this line to mark lesson 1 as complete
-  navigate("/activities");
 };
 
 // Add this helper function to save completion
@@ -56,9 +53,9 @@ const markLessonComplete = (lessonId: number) => {
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center gap-4">
           <Link to="/activities">
-            <Button variant="ghost" size="icon">
+            {/* <Button variant="ghost" size="icon"> */}
               <ArrowLeft className="w-5 h-5" />
-            </Button>
+            {/* </Button> */}
           </Link>
           <div>
             <div className="flex items-center gap-2">

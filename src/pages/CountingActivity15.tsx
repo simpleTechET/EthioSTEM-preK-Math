@@ -20,6 +20,12 @@ const CountingActivity15 = () => {
   const [isScattered, setIsScattered] = useState(true);
   const [practiceCount, setPracticeCount] = useState(0);
   const [userAnswer, setUserAnswer] = useState<string>('');
+  const [clickedFish, setClickedFish] = useState<number[]>([]);
+const [showCountInput, setShowCountInput] = useState(false);
+const [userCount, setUserCount] = useState<number | null>(null);
+const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
+const [currentFishCount, setCurrentFishCount] = useState(5);
+
 
   // Peekaboo sequences showing 2 and 1 embedded in 3
   const peekabooSequences = useMemo(() => [2, 1, 3, 2, 1, 3], []);
@@ -111,7 +117,45 @@ const CountingActivity15 = () => {
     { text: "1, 2, cha-cha-cha!", emoji: "🕺", instruction: "Count as you move!" },
     { text: "1, 2, 3, 4, 5!", emoji: "🎉", instruction: "Count all the way to 5!" }
   ];
+const handleFishClick = (index: number) => {
+  if (!clickedFish.includes(index) && feedback === null) {
+    setClickedFish([...clickedFish, index]);
+  }
+};
 
+const handleCountSubmit = (num: number) => {
+  setUserCount(num);
+  if (num === currentFishCount) {
+    setFeedback('correct');
+  } else {
+    setFeedback('incorrect');
+  }
+};
+
+const handleNextRound = () => {
+  setPracticeCount(practiceCount + 1);
+  if (practiceCount >= 3) {
+    setCurrentStep('complete');
+    markLessonComplete(15);
+  } else {
+    // Reset for next round with random fish count
+    setCurrentFishCount(Math.random() > 0.5 ? 4 : 5);
+    setClickedFish([]);
+    setShowCountInput(false);
+    setFeedback(null);
+    setUserCount(null);
+    setIsScattered(!isScattered); // Alternate between scattered and linear
+    toast.success("Great job! Let's try another round! 🎉");
+  }
+};
+const markLessonComplete = (lessonId: number) => {
+  const saved = localStorage.getItem('ethiostem-completed-lessons');
+  const completed = saved ? JSON.parse(saved) : [];
+  if (!completed.includes(lessonId)) {
+    completed.push(lessonId);
+    localStorage.setItem('ethiostem-completed-lessons', JSON.stringify(completed));
+  }
+};
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 via-cyan-50 to-blue-200 p-4">
       <div className="max-w-6xl mx-auto">
@@ -324,7 +368,6 @@ const CountingActivity15 = () => {
               </Card>
             )}
 
-            // Replace the Scattered Configuration section:
 {currentStep === 'scattered' && (
   <Card className="p-6 bg-cyan-50 border-2 border-cyan-200">
     <h3 className="text-xl font-bold mb-4 text-gray-800 text-center">
@@ -461,82 +504,160 @@ const CountingActivity15 = () => {
   </Card>
 )}
 
-            {/* Practice */}
-            {currentStep === 'practice' && (
-              <>
-                <Card className="p-6 bg-purple-50 border-2 border-purple-200">
-                  <h3 className="text-xl font-bold mb-2 text-gray-800 text-center">
-                    🎮 Your Turn to Practice!
-                  </h3>
-                  <p className="text-center text-gray-700 mb-4">
-                    Switch between scattered and linear. Count each time!
-                  </p>
-                  <div className="flex gap-4 justify-center">
-                    <Button onClick={handlePracticeScatter} className="bg-cyan-600">
-                      🐠 Scatter Fish (Play Tag)
-                    </Button>
-                    <Button onClick={handlePracticeLineup} className="bg-indigo-600">
-                      🦈 Line Up Fish (Escape)
-                    </Button>
-                  </div>
-                </Card>
+           {/* Practice */}
+{currentStep === 'practice' && (
+  <>
+    <Card className="p-6 bg-purple-50 border-2 border-purple-200">
+      <h3 className="text-xl font-bold mb-2 text-gray-800 text-center">
+        🎮 Your Turn to Practice!
+      </h3>
+      <p className="text-center text-gray-700 mb-4">
+        Switch between scattered and linear. Count each time and tell me how many!
+      </p>
+      <div className="flex gap-4 justify-center">
+        <Button onClick={handlePracticeScatter} className="bg-cyan-600">
+          🐠 Scatter Fish (Play Tag)
+        </Button>
+        <Button onClick={handlePracticeLineup} className="bg-indigo-600">
+          🦈 Line Up Fish (Escape)
+        </Button>
+      </div>
+    </Card>
 
-                <Card className="p-6 bg-white border-2 border-gray-200">
-                  <div className="relative bg-gradient-to-b from-blue-200 to-blue-400 rounded-xl border-4 border-blue-500 h-96 mb-4">
-                    {isScattered ? (
-                      <>
-                        {/* Decorations */}
-                        <div className="absolute bottom-0 left-4 text-6xl">🪨</div>
-                        <div className="absolute bottom-0 right-8 text-6xl">🌿</div>
-                        {/* Scattered fish */}
-                        {scatteredPositions.map((pos, index) => (
-                          <div
-                            key={index}
-                            className="absolute text-5xl"
-                            style={{ top: `${pos.top}%`, left: `${pos.left}%` }}
-                          >
-                            🐠
-                          </div>
-                        ))}
-                      </>
-                    ) : (
-                      <>
-                        {/* Shark */}
-                        <div className="absolute top-4 right-4 text-6xl">🦈</div>
-                        {/* Lined up fish */}
-                        <div className="absolute inset-0 flex items-center justify-center gap-3">
-                          {Array(5).fill('🐠').map((fish, index) => (
-                            <span key={index} className="text-5xl">{fish}</span>
-                          ))}
-                        </div>
-                      </>
-                    )}
-                  </div>
+    <Card className="p-6 bg-white border-2 border-gray-200">
+      <div className="relative bg-gradient-to-b from-blue-200 to-blue-400 rounded-xl border-4 border-blue-500 h-96 mb-4">
+        {isScattered ? (
+          <>
+            {/* Decorations */}
+            <div className="absolute bottom-0 left-4 text-6xl">🪨</div>
+            <div className="absolute bottom-0 right-8 text-6xl">🌿</div>
+            {/* Scattered fish */}
+            {scatteredPositions.slice(0, currentFishCount).map((pos, index) => (
+              <div
+                key={index}
+                className="absolute text-5xl cursor-pointer hover:scale-110 transition-transform"
+                style={{ top: `${pos.top}%`, left: `${pos.left}%` }}
+                onClick={() => handleFishClick(index)}
+              >
+                {clickedFish.includes(index) ? (
+                  <span className="relative">
+                    🐠
+                    <span className="absolute -top-2 -right-2 bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-xl font-bold">
+                      {clickedFish.indexOf(index) + 1}
+                    </span>
+                  </span>
+                ) : (
+                  '🐠'
+                )}
+              </div>
+            ))}
+          </>
+        ) : (
+          <>
+            {/* Shark */}
+            <div className="absolute top-4 right-4 text-6xl">🦈</div>
+            {/* Lined up fish */}
+            <div className="absolute inset-0 flex items-center justify-center gap-3">
+              {Array(currentFishCount).fill('🐠').map((fish, index) => (
+                <span 
+                  key={index} 
+                  className={`text-5xl cursor-pointer hover:scale-110 transition-transform ${
+                    clickedFish.includes(index) ? 'opacity-100' : 'opacity-100'
+                  }`}
+                  onClick={() => handleFishClick(index)}
+                >
+                  {clickedFish.includes(index) ? (
+                    <span className="relative">
+                      🐠
+                      <span className="absolute -top-2 -right-2 bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-xl font-bold">
+                        {clickedFish.indexOf(index) + 1}
+                      </span>
+                    </span>
+                  ) : (
+                    fish
+                  )}
+                </span>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
 
-                  <div className="text-center">
-                    <p className="text-lg text-gray-700 mb-4">
-                      {isScattered ? "Fish are playing tag! Count them!" : "Fish lined up! Count them!"}
-                    </p>
-                    <div className="text-3xl font-bold text-blue-700 mb-4">
-                      There are 5 fish!
-                    </div>
-                    <Button 
-                      onClick={() => {
-                        setPracticeCount(practiceCount + 1);
-                        if (practiceCount >= 3) {
-                          setCurrentStep('complete');
-                        } else {
-                          toast.success("Great counting! 🎉", { description: "Try switching the arrangement!" });
-                        }
-                      }}
-                      className="bg-purple-600 hover:bg-purple-700"
-                    >
-                      Count Complete! ({practiceCount + 1}/4)
-                    </Button>
-                  </div>
-                </Card>
-              </>
+      <div className="text-center space-y-4">
+        <p className="text-lg text-gray-700">
+          {isScattered ? "Fish are playing tag! Click each fish to count them!" : "Fish lined up! Click each fish to count them!"}
+        </p>
+        
+        {!showCountInput ? (
+          <Button 
+            onClick={() => setShowCountInput(true)}
+            disabled={clickedFish.length === 0}
+            className="bg-blue-600 hover:bg-blue-700"
+          >
+            I Finished Counting!
+          </Button>
+        ) : (
+          <div className="space-y-4">
+            <p className="text-lg font-semibold text-gray-800">How many fish did you count?</p>
+            <div className="flex gap-3 justify-center">
+              {[3, 4, 5, 6, 7].map(num => (
+                <Button
+                  key={num}
+                  onClick={() => handleCountSubmit(num)}
+                  variant={userCount === num ? "default" : "outline"}
+                  className="w-16 h-16 text-2xl font-bold"
+                  disabled={feedback !== null}
+                >
+                  {num}
+                </Button>
+              ))}
+            </div>
+            
+            {feedback && (
+              <div className={`p-4 rounded-lg ${
+                feedback === 'correct' 
+                  ? 'bg-green-100 text-green-700 border-2 border-green-300' 
+                  : 'bg-red-100 text-red-700 border-2 border-red-300'
+              }`}>
+                <p className="font-bold text-lg">
+                  {feedback === 'correct' 
+                    ? '✓ Perfect! You counted correctly!' 
+                    : '✗ Not quite. Try counting again by clicking each fish!'}
+                </p>
+                {feedback === 'correct' && (
+                  <Button 
+                    onClick={handleNextRound}
+                    className="mt-3 bg-purple-600 hover:bg-purple-700"
+                  >
+                    {practiceCount >= 3 ? 'Finish Activity' : 'Next Round'} ({practiceCount + 1}/4)
+                  </Button>
+                )}
+                {feedback === 'incorrect' && (
+                  <Button 
+                    onClick={() => {
+                      setClickedFish([]);
+                      setShowCountInput(false);
+                      setFeedback(null);
+                      setUserCount(null);
+                    }}
+                    className="mt-3"
+                    variant="outline"
+                  >
+                    Try Again
+                  </Button>
+                )}
+              </div>
             )}
+          </div>
+        )}
+        
+        <p className="text-sm text-gray-600">
+          Progress: {practiceCount}/4 rounds completed
+        </p>
+      </div>
+    </Card>
+  </>
+)}
 
             {/* Completion */}
             {currentStep === 'complete' && (

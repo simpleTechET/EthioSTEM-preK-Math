@@ -28,7 +28,13 @@ const CountingActivity8 = () => {
     { bears: 2, correctAnswer: 2 },
     { bears: 3, correctAnswer: 3 },
   ];
-
+// const answerOptions = useMemo(() => {
+//     return shuffleArray<CountingOption>([
+//       { value: 1, label: "1" },
+//       { value: 2, label: "2" },
+//       { value: 3, label: "3" },
+//     ]);
+//   }, [currentQuestion]);
   const currentQ = questions[currentQuestion];
 
   const markLessonComplete = (lessonId: number) => {
@@ -46,13 +52,11 @@ const CountingActivity8 = () => {
   };
   
   // Shuffled answer options for each question
-  const answerOptions = useMemo(() => {
-    return shuffleArray<CountingOption>([
-      { value: 1, label: "1" },
-      { value: 2, label: "2" },
-      { value: 3, label: "3" },
-    ]);
-  }, [currentQuestion]);
+  const answerOptions: CountingOption[] = [
+    { value: 1, label: "1" },
+    { value: 2, label: "2" },
+    { value: 3, label: "3" },
+  ];
 
   const handleAnswerClick = (answer: number) => {
     setSelectedAnswer(answer);

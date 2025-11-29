@@ -5,11 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Star, BookOpen, Users, Lightbulb, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
-import { useAuth } from "@/contexts/AuthContext";
 
 const CountingActivity14 = () => {
   const navigate = useNavigate();
-  const { user, updateProgress } = useAuth();
   const [showGame, setShowGame] = useState(false);
   const [currentStep, setCurrentStep] = useState<'warmup' | 'iceCubes' | 'numberGroups' | 'complete'>('warmup');
   const [selectedNumeral, setSelectedNumeral] = useState<number | null>(null);
@@ -56,7 +54,7 @@ const CountingActivity14 = () => {
   };
 
   const addObject = () => {
-    if (objectCount < 3 && selectedNumeral !== null && objectCount < selectedNumeral) {
+    if (objectCount < 5 && selectedNumeral !== null && objectCount < 5) {
       setObjectCount(objectCount + 1);
     }
   };
@@ -77,14 +75,6 @@ const CountingActivity14 = () => {
       toast.success("Perfect match! 🎉", { 
         description: `You made exactly ${selectedNumeral} object${selectedNumeral > 1 ? 's' : ''}!` 
       });
-      
-      // Track progress if user is logged in
-      if (user) {
-        const score = 10; // Perfect score
-        const maxScore = 10;
-        const timeSpent = 120; // Example: 2 minutes in seconds
-        updateProgress('counting-14', score, maxScore, timeSpent);
-      }
       
       setTimeout(() => {
         setCurrentStep('complete');
@@ -370,142 +360,143 @@ const CountingActivity14 = () => {
                     You're a restaurant worker! A customer orders a drink. Add exactly the right number of ice cubes!
                   </p>
                   
-                  {currentOrder !== null && (
-                    <div className="bg-white p-4 rounded-lg border-2 border-cyan-300 text-center mb-4">
-                      <h4 className="text-lg font-bold text-cyan-700 mb-2">Customer's Order:</h4>
-                      <div className="text-5xl font-bold text-gray-800 mb-2">
-                        {iceCubeOrders[currentOrder]}
-                      </div>
-                      <p className="text-sm text-gray-600">
-                        "I'd like {iceCubeOrders[currentOrder]} ice cube{iceCubeOrders[currentOrder] > 1 ? 's' : ''} please!"
-                      </p>
-                      <p className="text-xs text-gray-500 mt-2">
-                        Order {currentOrder + 1} of {iceCubeOrders.length}
-                      </p>
-                    </div>
-                  )}
-                </Card>
-
-                <Card className="p-6 bg-white border-2 border-gray-200 text-center">
-                  <h3 className="text-lg font-bold mb-4 text-gray-800">
-                    {currentOrder === null ? 'Ready to take orders?' : 'Fill the Glass'}
-                  </h3>
-                  
-                  {/* The Glass with Ice Cubes */}
-                  <div className="relative w-48 h-64 mx-auto mb-6">
-                    {/* Glass container */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-50/30 to-cyan-100/50 rounded-b-3xl border-4 border-cyan-300 backdrop-blur-sm">
-                      {/* Glass shine effect */}
-                      <div className="absolute top-4 left-4 w-8 h-16 bg-white/40 rounded-full blur-sm" />
-                    </div>
-                    
-                    {/* Glass rim */}
-                    <div className="absolute -top-2 left-0 right-0 h-4 bg-gradient-to-b from-cyan-200 to-transparent rounded-t-lg border-t-4 border-x-4 border-cyan-300" />
-                    
-                    {/* Ice cubes inside glass */}
-                    <div className="absolute bottom-4 left-0 right-0 flex flex-wrap justify-center items-end gap-2 px-4 pb-2">
-                      {Array(iceCubeCount).fill('🧊').map((cube, index) => (
-                        <span 
-                          key={index} 
-                          className="text-4xl drop-shadow-lg animate-bounce inline-block"
-                          style={{ 
-                            animationDelay: `${index * 100}ms`,
-                            animationDuration: '0.6s'
-                          }}
-                        >
-                          {cube}
-                        </span>
-                      ))}
-                      {iceCubeCount === 0 && (
-                        <span className="text-gray-400 text-sm absolute bottom-8">Empty glass</span>
-                      )}
-                    </div>
-                    
-                    {/* Water/liquid level */}
-                    {iceCubeCount > 0 && (
-                      <div 
-                        className="absolute bottom-0 left-0 right-0 bg-cyan-200/40 rounded-b-3xl transition-all duration-500"
-                        style={{ 
-                          height: `${Math.min(iceCubeCount * 25, 80)}%`,
-                          borderLeft: '4px solid #67e8f9',
-                          borderRight: '4px solid #67e8f9',
-                          borderBottom: '4px solid #67e8f9'
-                        }}
-                      />
-                    )}
-                  </div>
-
-                  {/* Counter Display */}
-                  <div className="bg-gray-100 p-4 rounded-lg border-2 border-gray-300 mb-4">
-                    <p className="text-sm text-gray-600 mb-2">Ice cubes in glass:</p>
-                    <div className="text-3xl font-bold text-cyan-700">{iceCubeCount}</div>
-                    <p className="text-xs text-gray-500 mt-2">
-                      Target: {currentOrder !== null ? iceCubeOrders[currentOrder] : 0} ice cube{currentOrder !== null && iceCubeOrders[currentOrder] > 1 ? 's' : ''}
-                    </p>
-                  </div>
-
+                  {/* lovable edit - side by side layout */}
                   {currentOrder === null ? (
-                    <Button 
-                      onClick={handleNextOrder}
-                      className="w-full bg-cyan-600 hover:bg-cyan-700"
-                      size="lg"
-                    >
-                      Start Taking Orders!
-                    </Button>
+                    <div className="text-center">
+                      <Button 
+                        onClick={handleNextOrder}
+                        className="w-full bg-cyan-600 hover:bg-cyan-700"
+                        size="lg"
+                      >
+                        Start Taking Orders!
+                      </Button>
+                    </div>
                   ) : (
-                    <>
-                      {/* Add/Remove Controls */}
-                      {!orderComplete && (
-                        <div className="flex gap-4 justify-center mb-4">
-                          <Button 
-                            onClick={() => {
-                              if (iceCubeCount > 0) {
-                                setIceCubeCount(iceCubeCount - 1);
-                              }
-                            }}
-                            disabled={iceCubeCount === 0}
-                            size="lg"
-                            className="w-16 h-16 text-2xl"
-                          >
-                            -
-                          </Button>
-                          <Button 
-                            onClick={() => {
-                              if (iceCubeCount < 5) {
-                                setIceCubeCount(iceCubeCount + 1);
-                              }
-                            }}
-                            disabled={iceCubeCount >= 5}
-                            size="lg"
-                            className="w-16 h-16 text-2xl"
-                          >
-                            +
-                          </Button>
+                    <div className="flex flex-col md:flex-row gap-4 items-start">
+                      <div className="flex-1 bg-white p-4 rounded-lg border-2 border-cyan-300 text-center">
+                        <h4 className="text-lg font-bold text-cyan-700 mb-2">Customer's Order:</h4>
+                        <div className="text-5xl font-bold text-gray-800 mb-2">
+                          {iceCubeOrders[currentOrder]}
                         </div>
-                      )}
+                        <p className="text-sm text-gray-600">
+                          "I'd like {iceCubeOrders[currentOrder]} ice cube{iceCubeOrders[currentOrder] > 1 ? 's' : ''} please!"
+                        </p>
+                        <p className="text-xs text-gray-500 mt-2">
+                          Order {currentOrder + 1} of {iceCubeOrders.length}
+                        </p>
+                      </div>
 
-                      {/* Serve Button */}
-                      {!orderComplete && (
-                        <Button 
-                          onClick={handleServeDrink}
-                          className="w-full bg-cyan-600 hover:bg-cyan-700"
-                          size="lg"
-                        >
-                          Serve the Drink
-                        </Button>
-                      )}
+                      <div className="flex-1 p-6 bg-white border-2 border-gray-200 text-center rounded-lg">
+                        <h3 className="text-lg font-bold mb-4 text-gray-800">
+                          Fill the Glass
+                        </h3>
+                        
+                        {/* The Glass with Ice Cubes */}
+                        <div className="relative w-48 h-64 mx-auto mb-6">
+                          {/* Glass container */}
+                          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-50/30 to-cyan-100/50 rounded-b-3xl border-4 border-cyan-300 backdrop-blur-sm">
+                            {/* Glass shine effect */}
+                            <div className="absolute top-4 left-4 w-8 h-16 bg-white/40 rounded-full blur-sm" />
+                          </div>
+                          
+                          {/* Glass rim */}
+                          <div className="absolute -top-2 left-0 right-0 h-4 bg-gradient-to-b from-cyan-200 to-transparent rounded-t-lg border-t-4 border-x-4 border-cyan-300" />
+                          
+                          {/* Ice cubes inside glass */}
+                          <div className="absolute bottom-4 left-0 right-0 flex flex-wrap justify-center items-end gap-2 px-4 pb-2">
+                            {Array(iceCubeCount).fill('🧊').map((cube, index) => (
+                              <span 
+                                key={index} 
+                                className="text-4xl drop-shadow-lg animate-bounce inline-block"
+                                style={{ 
+                                  animationDelay: `${index * 100}ms`,
+                                  animationDuration: '0.6s'
+                                }}
+                              >
+                                {cube}
+                              </span>
+                            ))}
+                            {iceCubeCount === 0 && (
+                              <span className="text-gray-400 text-sm absolute bottom-8">Empty glass</span>
+                            )}
+                          </div>
+                          
+                          {/* Water/liquid level */}
+                          {iceCubeCount > 0 && (
+                            <div 
+                              className="absolute bottom-0 left-0 right-0 bg-cyan-200/40 rounded-b-3xl transition-all duration-500"
+                              style={{ 
+                                height: `${Math.min(iceCubeCount * 25, 80)}%`,
+                                borderLeft: '4px solid #67e8f9',
+                                borderRight: '4px solid #67e8f9',
+                                borderBottom: '4px solid #67e8f9'
+                              }}
+                            />
+                          )}
+                        </div>
 
-                      {/* Next Order Button */}
-                      {orderComplete && (
-                        <Button 
-                          onClick={handleNextOrder}
-                          className="w-full bg-green-600 hover:bg-green-700"
-                          size="lg"
-                        >
-                          {currentOrder < iceCubeOrders.length - 1 ? 'Next Customer!' : 'Finish Restaurant Game!'}
-                        </Button>
-                      )}
-                    </>
+                        {/* Counter Display */}
+                        <div className="bg-gray-100 p-4 rounded-lg border-2 border-gray-300 mb-4">
+                          <p className="text-sm text-gray-600 mb-2">Ice cubes in glass:</p>
+                          <div className="text-3xl font-bold text-cyan-700">{iceCubeCount}</div>
+                          <p className="text-xs text-gray-500 mt-2">
+                            Target: {iceCubeOrders[currentOrder]} ice cube{iceCubeOrders[currentOrder] > 1 ? 's' : ''}
+                          </p>
+                        </div>
+
+                        {/* Add/Remove Controls */}
+                        {!orderComplete && (
+                          <div className="flex gap-4 justify-center mb-4">
+                            <Button 
+                              onClick={() => {
+                                if (iceCubeCount > 0) {
+                                  setIceCubeCount(iceCubeCount - 1);
+                                }
+                              }}
+                              disabled={iceCubeCount === 0}
+                              size="lg"
+                              className="w-16 h-16 text-2xl"
+                            >
+                              -
+                            </Button>
+                            <Button 
+                              onClick={() => {
+                                if (iceCubeCount < 5) {
+                                  setIceCubeCount(iceCubeCount + 1);
+                                }
+                              }}
+                              disabled={iceCubeCount >= 5}
+                              size="lg"
+                              className="w-16 h-16 text-2xl"
+                            >
+                              +
+                            </Button>
+                          </div>
+                        )}
+
+                        {/* Serve Button */}
+                        {!orderComplete && (
+                          <Button 
+                            onClick={handleServeDrink}
+                            className="w-full bg-cyan-600 hover:bg-cyan-700"
+                            size="lg"
+                          >
+                            Serve the Drink
+                          </Button>
+                        )}
+
+                        {/* Next Order Button */}
+                        {orderComplete && (
+                          <Button 
+                            onClick={handleNextOrder}
+                            className="w-full bg-green-600 hover:bg-green-700"
+                            size="lg"
+                          >
+                            {currentOrder < iceCubeOrders.length - 1 ? 'Next Customer!' : 'Finish Restaurant Game!'}
+                          </Button>
+                        )}
+                      </div>
+                    </div>
                   )}
                 </Card>
               </>
@@ -587,7 +578,7 @@ const CountingActivity14 = () => {
                       </div>
                       <Button 
                         onClick={addObject} 
-                        disabled={objectCount === 3 || (selectedNumeral !== null && objectCount >= selectedNumeral)} 
+                        disabled={objectCount >= 5} 
                         size="lg"
                       >
                         +
@@ -597,9 +588,9 @@ const CountingActivity14 = () => {
                     <p className="text-sm text-gray-600 text-center mb-4">
                       {selectedNumeral === null 
                         ? "Pick a number card first!"
-                        : objectCount === selectedNumeral
-                        ? "✓ Perfect match!"
-                        : `Make exactly ${selectedNumeral} object${selectedNumeral > 1 ? 's' : ''}`
+                        : `Make ${selectedNumeral} object${selectedNumeral > 1 ? 's' : ''}`
+                        // ? "✓ Perfect match!"
+                        // : `Make exactly ${selectedNumeral} object${selectedNumeral > 1 ? 's' : ''}`
                       }
                     </p>
 
