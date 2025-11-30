@@ -1,4 +1,5 @@
 // src/pages/CountingActivity17.tsx
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -6,46 +7,395 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ArrowLeft, Star, BookOpen, Users, Lightbulb, Music } from "lucide-react";
 import { toast } from "sonner";
 
+// PassGame Component
+const PassGame = ({ onComplete }: { onComplete: () => void }) => {
+  const [clickedDots, setClickedDots] = useState<number[]>([]);
+  const [roundsCompleted, setRoundsCompleted] = useState(0);
+  const [showFeedback, setShowFeedback] = useState(false);
+
+  const handleDotClick = (dotNum: number) => {
+    // Must click dots in order
+    if (dotNum === clickedDots.length + 1 && dotNum <= 4) {
+      const newClicked = [...clickedDots, dotNum];
+      setClickedDots(newClicked);
+      
+      if (newClicked.length === 4) {
+        setShowFeedback(true);
+      }
+    }
+  };
+
+  const handleNextRound = () => {
+    const newRounds = roundsCompleted + 1;
+    setRoundsCompleted(newRounds);
+    
+    if (newRounds >= 5) {
+      onComplete();
+    } else {
+      setClickedDots([]);
+      setShowFeedback(false);
+    }
+  };
+
+  return (
+    <Card className="p-6 bg-blue-50 border-2 border-blue-200">
+      <h3 className="text-xl font-bold mb-4 text-gray-800 text-center">
+        🎵 1, 2, 3, 4 Pass!
+      </h3>
+      
+      <div className="text-center mb-4">
+        <p className="text-sm text-muted-foreground">Round {roundsCompleted + 1} of 5</p>
+      </div>
+
+      <div className="bg-white p-8 rounded-lg border-2 border-blue-300 mb-6">
+        <p className="text-center text-gray-700 mb-6 font-semibold">
+          Touch each dot in order: 1, 2, 3, 4!
+        </p>
+        <div className="flex justify-center gap-8">
+          {[1, 2, 3, 4].map(num => (
+            <button
+              key={num}
+              onClick={() => handleDotClick(num)}
+              disabled={showFeedback}
+              className={`relative transition-all duration-300 ${
+                clickedDots.includes(num) ? 'scale-110' : 'hover:scale-105'
+              }`}
+            >
+              <div className={`w-20 h-20 rounded-full flex items-center justify-center text-4xl font-bold transition-all ${
+                clickedDots.includes(num)
+                  ? 'bg-blue-600 text-white shadow-lg'
+                  : 'bg-gray-300 text-gray-600'
+              }`}>
+                {num}
+              </div>
+              <div className="mt-2 text-3xl">
+                {clickedDots.includes(num) ? '✓' : '⚫'}
+              </div>
+              {clickedDots.includes(num) && (
+                <div className="absolute -top-2 -right-2 bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">
+                  {clickedDots.indexOf(num) + 1}
+                </div>
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <p className="text-center text-gray-600 mb-4 italic">
+        "1, 2, 3, 4, slide those dots across the floor!"
+      </p>
+
+      {showFeedback && (
+        <div className="bg-green-100 text-green-700 p-4 rounded-lg text-center mb-4">
+          <p className="font-bold text-lg">✓ Perfect! You counted 1, 2, 3, 4!</p>
+          <Button 
+            onClick={handleNextRound}
+            className="mt-3 bg-blue-600 hover:bg-blue-700"
+          >
+            {roundsCompleted >= 4 ? 'Continue to Hop-Hop' : 'Pass to Next Person!'}
+          </Button>
+        </div>
+      )}
+    </Card>
+  );
+};
+
+// HopHopGame Component
+const HopHopGame = ({ onComplete }: { onComplete: () => void }) => {
+  const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
+  const [hopsCompleted, setHopsCompleted] = useState(0);
+  const [roundsCompleted, setRoundsCompleted] = useState(0);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const handleNumberSelect = (num: number) => {
+    setSelectedNumber(num);
+    setHopsCompleted(0);
+    setShowSuccess(false);
+  };
+
+  const handleHop = () => {
+    if (selectedNumber && hopsCompleted < selectedNumber) {
+      const newHops = hopsCompleted + 1;
+      setHopsCompleted(newHops);
+      
+      if (newHops === selectedNumber) {
+        setShowSuccess(true);
+      }
+    }
+  };
+
+  const handleNextRound = () => {
+    const newRounds = roundsCompleted + 1;
+    setRoundsCompleted(newRounds);
+    
+    if (newRounds >= 4) {
+      onComplete();
+    } else {
+      setSelectedNumber(null);
+      setHopsCompleted(0);
+      setShowSuccess(false);
+    }
+  };
+
+  return (
+    <Card className="p-6 bg-green-50 border-2 border-green-200">
+      <h3 className="text-xl font-bold mb-4 text-gray-800 text-center">
+        🐰 Hop-Hop Game!
+      </h3>
+
+      <div className="text-center mb-4">
+        <p className="text-sm text-muted-foreground">Round {roundsCompleted + 1} of 4</p>
+      </div>
+      
+      {selectedNumber === null ? (
+        <div className="text-center">
+          <p className="text-lg text-gray-700 mb-6">
+            Pick a number card and hop that many times!
+          </p>
+          <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
+            {[1, 2, 3].map(num => (
+              <button
+                key={num}
+                onClick={() => handleNumberSelect(num)}
+                className="h-24 text-4xl font-bold bg-white text-gray-800 hover:bg-green-100 border-4 border-green-300 rounded-lg transition-all hover:scale-105 shadow-lg"
+              >
+                {num}
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="text-center">
+          <div className="bg-white p-6 rounded-lg border-4 border-green-400 mb-6">
+            <div className="text-6xl font-bold text-green-700 mb-4">{selectedNumber}</div>
+            <p className="text-lg text-gray-700">Hop {selectedNumber} time{selectedNumber > 1 ? 's' : ''}!</p>
+          </div>
+
+          <div className="mb-6">
+            <p className="text-lg text-gray-700 mb-4">Hops completed:</p>
+            <div className="flex justify-center gap-3 mb-6">
+              {Array(selectedNumber).fill(0).map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-16 h-16 rounded-full border-4 flex items-center justify-center text-3xl transition-all ${
+                    index < hopsCompleted 
+                      ? 'bg-green-500 border-green-600 text-white scale-110' 
+                      : 'bg-white border-gray-300'
+                  }`}
+                >
+                  {index < hopsCompleted ? '✓' : ''}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {!showSuccess ? (
+            <Button 
+              onClick={handleHop}
+              size="lg"
+              className="w-full bg-green-600 hover:bg-green-700 text-3xl py-10 font-bold"
+            >
+              HOP! 🐰
+            </Button>
+          ) : (
+            <div className="bg-green-100 text-green-700 p-6 rounded-lg">
+              <p className="font-bold text-2xl mb-4">✓ Perfect! You hopped {selectedNumber} times!</p>
+              <Button 
+                onClick={handleNextRound}
+                size="lg"
+                className="bg-green-600 hover:bg-green-700"
+              >
+                {roundsCompleted >= 3 ? 'Continue to Piano' : 'Next Round'}
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
+    </Card>
+  );
+};
+
+// PracticeDotToPiano Component
+const PracticeDotToPiano = ({ onComplete }: { onComplete: () => void }) => {
+  const [practiceRound, setPracticeRound] = useState(0);
+  const [activeKeys, setActiveKeys] = useState<number[]>([]);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
+
+  const dotCounts = [3, 2, 4, 5];
+  const currentDotCard = dotCounts[practiceRound];
+
+  const handlePianoKey = (keyNum: number) => {
+    // Must play keys in order (Math Way)
+    if (keyNum === activeKeys.length + 1 && activeKeys.length < 5) {
+      setActiveKeys([...activeKeys, keyNum]);
+    }
+  };
+
+  const handleCheck = () => {
+    setShowFeedback(true);
+    if (activeKeys.length === currentDotCard) {
+      setIsCorrect(true);
+    } else {
+      setIsCorrect(false);
+    }
+  };
+
+  const handleNext = () => {
+    if (practiceRound >= 3) {
+      onComplete();
+    } else {
+      setPracticeRound(practiceRound + 1);
+      setActiveKeys([]);
+      setShowFeedback(false);
+      setIsCorrect(false);
+    }
+  };
+
+  const handleReset = () => {
+    setActiveKeys([]);
+    setShowFeedback(false);
+    setIsCorrect(false);
+  };
+
+  return (
+    <Card className="p-6 bg-orange-50 border-2 border-orange-200">
+      <h3 className="text-xl font-bold mb-4 text-gray-800 text-center">
+        🎯 Practice: Match Dots to Piano Keys!
+      </h3>
+
+      <div className="text-center mb-6">
+        <p className="text-sm text-muted-foreground">Round {practiceRound + 1} of 4</p>
+      </div>
+      
+      <div className="grid md:grid-cols-2 gap-6 mb-6">
+        {/* Dot Card */}
+        <Card className="p-6 bg-white border-2 border-orange-300">
+          <h4 className="text-lg font-bold mb-4 text-center text-gray-800">Dot Card</h4>
+          <div className="bg-orange-50 p-8 rounded-lg border-2 border-orange-200 mb-4 min-h-[150px] flex items-center justify-center">
+            <div className="flex flex-wrap gap-4 justify-center">
+              {Array(currentDotCard).fill('⚫').map((dot, i) => (
+                <span key={i} className="text-5xl">{dot}</span>
+              ))}
+            </div>
+          </div>
+          <p className="text-center text-gray-700">
+            Count: <span className="text-3xl font-bold text-orange-700">{currentDotCard} dots</span>
+          </p>
+        </Card>
+
+        {/* Piano */}
+        <Card className="p-6 bg-white border-2 border-purple-300">
+          <h4 className="text-lg font-bold mb-4 text-center text-gray-800">Play {currentDotCard} Keys the Math Way</h4>
+          
+          {/* Finger Guide */}
+          <div className="flex justify-center gap-2 mb-4">
+            {[
+              { num: 1, emoji: '🤙' },
+              { num: 2, emoji: '🤟' },
+              { num: 3, emoji: '🖕' },
+              { num: 4, emoji: '☝️' },
+              { num: 5, emoji: '👍' }
+            ].map(finger => (
+              <div 
+                key={finger.num}
+                className={`text-center transition-all ${
+                  activeKeys.includes(finger.num) ? 'scale-110 opacity-100' : 'opacity-40'
+                }`}
+              >
+                <div className="text-2xl">{finger.emoji}</div>
+                <div className="text-xs font-bold">{finger.num}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="bg-gradient-to-b from-gray-800 to-gray-900 p-4 rounded-xl mb-4">
+            <div className="flex justify-center gap-1">
+              {[1, 2, 3, 4, 5].map(keyNum => (
+                <button
+                  key={keyNum}
+                  onClick={() => handlePianoKey(keyNum)}
+                  disabled={showFeedback}
+                  className={`
+                    w-14 h-32 rounded-b-lg transition-all border-2 border-gray-700
+                    ${activeKeys.includes(keyNum)
+                      ? 'bg-purple-400 shadow-lg shadow-purple-500/50 transform translate-y-1'
+                      : 'bg-white hover:bg-gray-100'
+                    }
+                  `}
+                >
+                  <div className="h-full flex items-end justify-center pb-2">
+                    <span className={`text-xl font-bold ${
+                      activeKeys.includes(keyNum) ? 'text-white' : 'text-gray-800'
+                    }`}>
+                      {keyNum}
+                    </span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+          
+          <p className="text-center text-gray-700 mb-4">
+            Keys played: <span className="text-2xl font-bold text-purple-700">{activeKeys.length}</span>
+          </p>
+          
+          <Button 
+            onClick={handleReset}
+            variant="outline"
+            className="w-full"
+            disabled={showFeedback && isCorrect}
+          >
+            Reset Piano
+          </Button>
+        </Card>
+      </div>
+
+      {!showFeedback ? (
+        <div className="text-center">
+          <Button
+            onClick={handleCheck}
+            disabled={activeKeys.length === 0}
+            size="lg"
+            className="bg-orange-600 hover:bg-orange-700 text-lg px-8"
+          >
+            Check My Match
+          </Button>
+        </div>
+      ) : (
+        <div className={`p-6 rounded-lg text-center ${
+          isCorrect
+            ? 'bg-green-100 text-green-700 border-2 border-green-300'
+            : 'bg-red-100 text-red-700 border-2 border-red-300'
+        }`}>
+          <p className="font-bold text-2xl mb-3">
+            {isCorrect
+              ? `✓ Perfect match! ${currentDotCard} dots = ${currentDotCard} piano keys!`
+              : `✗ Not quite! Try again. Count ${currentDotCard} dots, play ${currentDotCard} keys.`}
+          </p>
+          <Button 
+            onClick={isCorrect ? handleNext : handleReset}
+            size="lg"
+            className={isCorrect ? 'bg-green-600 hover:bg-green-700' : ''}
+            variant={isCorrect ? 'default' : 'outline'}
+          >
+            {isCorrect 
+              ? (practiceRound >= 3 ? 'Finish Activity' : 'Next Round')
+              : 'Try Again'}
+          </Button>
+        </div>
+      )}
+    </Card>
+  );
+};
+
+// Main CountingActivity17 Component
 const CountingActivity17 = () => {
   const navigate = useNavigate();
   const [showGame, setShowGame] = useState(false);
   const [currentStep, setCurrentStep] = useState<'warmup' | 'pass' | 'hophop' | 'piano' | 'practice' | 'complete'>('warmup');
-  const [passRound, setPassRound] = useState(0);
-  const [currentHop, setCurrentHop] = useState<number | null>(null);
-  const [hopsCompleted, setHopsCompleted] = useState(0);
   const [pianoCount, setPianoCount] = useState(0);
   const [activeKeys, setActiveKeys] = useState<number[]>([]);
-  const [currentDotCard, setCurrentDotCard] = useState(3);
-  const [practiceRound, setPracticeRound] = useState(0);
-
-  const hopNumbers = [1, 2, 3, 2, 1, 3, 2];
-
-  const handlePass = () => {
-    if (passRound < 5) {
-      toast.success("Pass! 🎉", { description: "1, 2, 3, 4, slide those dots across the floor!" });
-      setPassRound(passRound + 1);
-    } else {
-      setCurrentStep('hophop');
-    }
-  };
-
-  const handleHop = () => {
-    if (currentHop !== null) {
-      if (hopsCompleted < currentHop) {
-        setHopsCompleted(hopsCompleted + 1);
-      } else {
-        toast.success(`Perfect! ${currentHop} hops! 🎉`);
-        if (hopNumbers.length > 1) {
-          setTimeout(() => {
-            setCurrentHop(hopNumbers[Math.floor(Math.random() * hopNumbers.length)]);
-            setHopsCompleted(0);
-          }, 1000);
-        } else {
-          setTimeout(() => setCurrentStep('piano'), 1500);
-        }
-      }
-    }
-  };
 
   const handlePianoKey = (keyNum: number) => {
     if (keyNum === pianoCount + 1 && pianoCount < 5) {
@@ -69,23 +419,6 @@ const CountingActivity17 = () => {
   const resetPiano = () => {
     setPianoCount(0);
     setActiveKeys([]);
-  };
-
-  const handleDotCardPiano = () => {
-    if (activeKeys.length === currentDotCard) {
-      toast.success("Perfect match! 🎉", { description: `${currentDotCard} dots = ${currentDotCard} piano keys!` });
-      if (practiceRound < 3) {
-        setTimeout(() => {
-          setPracticeRound(practiceRound + 1);
-          setCurrentDotCard([2, 4, 5][practiceRound]);
-          resetPiano();
-        }, 1500);
-      } else {
-        setTimeout(() => setCurrentStep('complete'), 1500);
-      }
-    } else {
-      toast.error("Count again!", { description: `The card has ${currentDotCard} dots. Play ${currentDotCard} keys the Math Way.` });
-    }
   };
 
   return (
@@ -238,104 +571,11 @@ const CountingActivity17 = () => {
           </div>
         ) : (
           <div className="space-y-6">
-            {/* 1, 2, 3, 4 Pass Warm-up */}
-            {currentStep === 'pass' && (
-              <Card className="p-6 bg-blue-50 border-2 border-blue-200">
-                <h3 className="text-xl font-bold mb-4 text-gray-800 text-center">
-                  🎵 1, 2, 3, 4 Pass!
-                </h3>
-                
-                <div className="bg-white p-6 rounded-lg border-2 border-blue-300 mb-6">
-                  <div className="flex justify-center gap-8 mb-4">
-                    {[1, 2, 3, 4].map(num => (
-                      <div key={num} className="text-center">
-                        <div className="w-16 h-16 rounded-full bg-blue-600 text-white flex items-center justify-center text-3xl font-bold mb-2">
-                          {num}
-                        </div>
-                        <div className="text-2xl">⚫</div>
-                      </div>
-                    ))}
-                  </div>
-                  <p className="text-center text-gray-700 text-lg font-semibold">
-                    Touch each dot and count: 1, 2, 3, 4!
-                  </p>
-                </div>
+            {/* 1, 2, 3, 4 Pass Warm-up - REPLACED */}
+            {currentStep === 'pass' && <PassGame onComplete={() => setCurrentStep('hophop')} />}
 
-                <p className="text-center text-gray-600 mb-4">
-                  "1, 2, 3, 4, slide those dots across the floor!"
-                </p>
-
-                <Button onClick={handlePass} size="lg" className="w-full bg-blue-600 hover:bg-blue-700">
-                  Pass to Next Person! ({passRound}/5)
-                </Button>
-              </Card>
-            )}
-
-            {/* Hop-Hop Game */}
-            {currentStep === 'hophop' && (
-              <Card className="p-6 bg-green-50 border-2 border-green-200">
-                <h3 className="text-xl font-bold mb-4 text-gray-800 text-center">
-                  🐰 Hop-Hop Game!
-                </h3>
-                
-                {currentHop === null ? (
-                  <div className="text-center">
-                    <p className="text-lg text-gray-700 mb-6">
-                      Pick a number card and hop that many times!
-                    </p>
-                    <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
-                      {[1, 2, 3].map(num => (
-                        <Button
-                          key={num}
-                          onClick={() => {
-                            setCurrentHop(num);
-                            setHopsCompleted(0);
-                          }}
-                          size="lg"
-                          className="h-24 text-4xl font-bold bg-white text-gray-800 hover:bg-green-100 border-2 border-green-300"
-                        >
-                          {num}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center">
-                    <div className="bg-white p-6 rounded-lg border-4 border-green-400 mb-6">
-                      <div className="text-6xl font-bold text-green-700 mb-4">{currentHop}</div>
-                      <p className="text-lg text-gray-700">Hop {currentHop} times!</p>
-                    </div>
-
-                    <div className="mb-6">
-                      <p className="text-lg text-gray-700 mb-3">Hops completed:</p>
-                      <div className="flex justify-center gap-3">
-                        {Array(currentHop).fill(0).map((_, index) => (
-                          <div
-                            key={index}
-                            className={`w-12 h-12 rounded-full border-4 flex items-center justify-center text-2xl ${
-                              index < hopsCompleted 
-                                ? 'bg-green-500 border-green-600 text-white' 
-                                : 'bg-white border-gray-300'
-                            }`}
-                          >
-                            {index < hopsCompleted ? '✓' : ''}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <Button 
-                      onClick={handleHop}
-                      size="lg"
-                      disabled={hopsCompleted >= currentHop}
-                      className="w-full bg-green-600 hover:bg-green-700 text-2xl py-8"
-                    >
-                      {hopsCompleted >= currentHop ? '✓ Complete!' : 'HOP! 🐰'}
-                    </Button>
-                  </div>
-                )}
-              </Card>
-            )}
+            {/* Hop-Hop Game - REPLACED */}
+            {currentStep === 'hophop' && <HopHopGame onComplete={() => setCurrentStep('piano')} />}
 
             {/* Piano Counting */}
             {currentStep === 'piano' && (
@@ -419,89 +659,8 @@ const CountingActivity17 = () => {
               </Card>
             )}
 
-            {/* Practice with Dot Cards */}
-            {currentStep === 'practice' && (
-              <Card className="p-6 bg-orange-50 border-2 border-orange-200">
-                <h3 className="text-xl font-bold mb-4 text-gray-800 text-center">
-                  🎯 Practice: Match Dots to Piano Keys!
-                </h3>
-                
-                <div className="grid md:grid-cols-2 gap-6 mb-6">
-                  {/* Dot Card */}
-                  <Card className="p-6 bg-white border-2 border-orange-300">
-                    <h4 className="text-lg font-bold mb-4 text-center text-gray-800">Dot Card</h4>
-                    <div className="bg-orange-50 p-6 rounded-lg border-2 border-orange-200 mb-4">
-                      <div className="text-6xl text-center">
-                        {Array(currentDotCard).fill('⚫').map((dot, i) => (
-                          <span key={i}>{dot}</span>
-                        ))}
-                      </div>
-                    </div>
-                    <p className="text-center text-gray-700">
-                      Count: <span className="text-2xl font-bold text-orange-700">{currentDotCard} dots</span>
-                    </p>
-                  </Card>
-
-                  {/* Piano */}
-                  <Card className="p-6 bg-white border-2 border-purple-300">
-                    <h4 className="text-lg font-bold mb-4 text-center text-gray-800">Play on Piano</h4>
-                    <div className="bg-gradient-to-b from-gray-800 to-gray-900 p-4 rounded-xl mb-4">
-                      <div className="flex justify-center gap-1">
-                        {[1, 2, 3, 4, 5].map(keyNum => (
-                          <button
-                            key={keyNum}
-                            onClick={() => {
-                              if (keyNum === activeKeys.length + 1 && activeKeys.length < currentDotCard) {
-                                setActiveKeys([...activeKeys, keyNum]);
-                              }
-                            }}
-                            className={`
-                              w-14 h-32 rounded-b-lg transition-all
-                              ${activeKeys.includes(keyNum)
-                                ? 'bg-purple-400 shadow-lg'
-                                : 'bg-white hover:bg-gray-100'
-                              }
-                            `}
-                          >
-                            <span className={`text-xl font-bold ${
-                              activeKeys.includes(keyNum) ? 'text-white' : 'text-gray-800'
-                            }`}>
-                              {keyNum}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    <p className="text-center text-gray-700 text-sm mb-4">
-                      Keys played: {activeKeys.length}
-                    </p>
-                    <Button 
-                      onClick={() => {
-                        resetPiano();
-                      }}
-                      variant="outline"
-                      className="w-full"
-                    >
-                      Reset
-                    </Button>
-                  </Card>
-                </div>
-
-                <div className="text-center">
-                  <Button
-                    onClick={handleDotCardPiano}
-                    disabled={activeKeys.length === 0}
-                    size="lg"
-                    className="bg-orange-600 hover:bg-orange-700"
-                  >
-                    Check Match
-                  </Button>
-                  <p className="text-sm text-gray-600 mt-4">
-                    Round {practiceRound + 1} of 4
-                  </p>
-                </div>
-              </Card>
-            )}
+            {/* Practice with Dot Cards - REPLACED */}
+            {currentStep === 'practice' && <PracticeDotToPiano onComplete={() => setCurrentStep('complete')} />}
 
             {/* Completion */}
             {currentStep === 'complete' && (
