@@ -663,7 +663,16 @@ const topicFLessons = [
   standards: ["PK.CC.2", "PK.CC.3ab", "PK.CC.4"],
   objective: "Count up to 4 objects and match the numerals",
   type: "matching"
-}
+},
+ {
+    id: 22,
+    title: "Five Friends Matching", 
+    description: "Count up to 5 objects and match them with numerals!",
+    icon: "5️⃣",
+    duration: "15-20 min",
+    path: "/activity/matching-22",
+    unlocked: true
+  },
 ]
 
 export default Activities;

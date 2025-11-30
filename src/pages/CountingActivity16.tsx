@@ -6,6 +6,211 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ArrowLeft, Star, BookOpen, Users, Lightbulb, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 
+// FishSwimGame Component
+const FishSwimGame = ({ onComplete }: { onComplete: () => void }) => {
+  const [fishCount, setFishCount] = useState(4);
+  const [fishArrangement, setFishArrangement] = useState<'scattered' | 'line'>('scattered');
+  const [clickedFish, setClickedFish] = useState<number[]>([]);
+  const [showCountInput, setShowCountInput] = useState(false);
+  const [userCount, setUserCount] = useState<number | null>(null);
+  const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
+  const [roundsCompleted, setRoundsCompleted] = useState(0);
+
+  const scatteredPositions = {
+    4: [
+      { top: '20%', left: '15%' },
+      { top: '40%', left: '70%' },
+      { top: '60%', left: '30%' },
+      { top: '25%', left: '60%' }
+    ],
+    5: [
+      { top: '20%', left: '15%' },
+      { top: '40%', left: '70%' },
+      { top: '60%', left: '30%' },
+      { top: '25%', left: '60%' },
+      { top: '55%', left: '80%' }
+    ]
+  };
+
+  const handleFishClick = (index: number) => {
+    if (!clickedFish.includes(index) && feedback === null) {
+      setClickedFish([...clickedFish, index]);
+    }
+  };
+
+  const handleCountSubmit = (num: number) => {
+    setUserCount(num);
+    if (num === fishCount) {
+      setFeedback('correct');
+    } else {
+      setFeedback('incorrect');
+    }
+  };
+
+  const handleNextRound = () => {
+    const newRoundsCompleted = roundsCompleted + 1;
+    setRoundsCompleted(newRoundsCompleted);
+
+    // Progress through the rounds: 4 scattered -> 4 line -> 5 scattered -> 5 line -> complete
+    if (newRoundsCompleted >= 4) {
+      onComplete();
+    } else {
+      // Determine next configuration
+      if (fishCount === 4 && fishArrangement === 'scattered') {
+        setFishArrangement('line');
+      } else if (fishCount === 4 && fishArrangement === 'line') {
+        setFishCount(5);
+        setFishArrangement('scattered');
+      } else if (fishCount === 5 && fishArrangement === 'scattered') {
+        setFishArrangement('line');
+      }
+      
+      // Reset for next round
+      setClickedFish([]);
+      setShowCountInput(false);
+      setFeedback(null);
+      setUserCount(null);
+    }
+  };
+
+  const handleTryAgain = () => {
+    setClickedFish([]);
+    setShowCountInput(false);
+    setFeedback(null);
+    setUserCount(null);
+  };
+
+  return (
+    <Card className="p-6 bg-cyan-50 border-2 border-cyan-200">
+      <h3 className="text-xl font-bold mb-4 text-gray-800 text-center">
+        🐠 Fish Swimming Game
+      </h3>
+      
+      <div className="text-center mb-4">
+        <p className="text-sm text-muted-foreground">Round {roundsCompleted + 1} of 4</p>
+      </div>
+
+      <div className="relative bg-gradient-to-b from-blue-200 to-blue-400 rounded-xl border-4 border-blue-500 h-96 mb-6 overflow-hidden">
+        {/* Ocean decorations */}
+        <div className="absolute bottom-0 left-0 text-6xl opacity-70">🪨</div>
+        <div className="absolute bottom-0 right-0 text-6xl opacity-70">🌿</div>
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 text-white font-bold text-lg bg-blue-600/50 px-4 py-2 rounded-full">
+          {fishArrangement === 'scattered' ? '🌊 Fish swimming freely!' : '🍽️ Fish lining up for food!'}
+        </div>
+
+        {fishArrangement === 'scattered' ? (
+          <>
+            {scatteredPositions[fishCount as keyof typeof scatteredPositions].map((pos, index) => (
+              <button
+                key={index}
+                onClick={() => handleFishClick(index)}
+                disabled={feedback !== null}
+                className="absolute text-6xl cursor-pointer hover:scale-110 transition-transform"
+                style={{ top: pos.top, left: pos.left, transform: 'translate(-50%, -50%)' }}
+              >
+                🐠
+                {clickedFish.includes(index) && (
+                  <span className="absolute -top-2 -right-2 bg-green-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-xl font-bold border-2 border-white">
+                    {clickedFish.indexOf(index) + 1}
+                  </span>
+                )}
+              </button>
+            ))}
+          </>
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center gap-4">
+            {Array(fishCount).fill('🐠').map((fish, index) => (
+              <button
+                key={index}
+                onClick={() => handleFishClick(index)}
+                disabled={feedback !== null}
+                className="text-6xl cursor-pointer hover:scale-110 transition-transform relative"
+              >
+                {fish}
+                {clickedFish.includes(index) && (
+                  <span className="absolute -top-2 -right-2 bg-green-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-xl font-bold border-2 border-white">
+                    {clickedFish.indexOf(index) + 1}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="text-center space-y-4">
+        <p className="text-lg text-gray-700 font-semibold">
+          {fishArrangement === 'scattered' 
+            ? 'Click each fish to count them as they swim!'
+            : 'Click each fish in the line to count them!'}
+        </p>
+
+        {!showCountInput ? (
+          <Button 
+            onClick={() => setShowCountInput(true)}
+            disabled={clickedFish.length === 0}
+            className="bg-blue-600 hover:bg-blue-700"
+            size="lg"
+          >
+            I Finished Counting!
+          </Button>
+        ) : (
+          <div className="space-y-4">
+            <p className="text-lg font-semibold text-gray-800">How many fish did you count?</p>
+            <div className="flex gap-3 justify-center">
+              {[2, 3, 4, 5, 6].map(num => (
+                <Button
+                  key={num}
+                  onClick={() => handleCountSubmit(num)}
+                  variant={userCount === num ? "default" : "outline"}
+                  className="w-16 h-16 text-2xl font-bold"
+                  disabled={feedback !== null}
+                >
+                  {num}
+                </Button>
+              ))}
+            </div>
+            
+            {feedback && (
+              <div className={`p-4 rounded-lg ${
+                feedback === 'correct' 
+                  ? 'bg-green-100 text-green-700 border-2 border-green-300' 
+                  : 'bg-red-100 text-red-700 border-2 border-red-300'
+              }`}>
+                <p className="font-bold text-lg mb-2">
+                  {feedback === 'correct' 
+                    ? '✓ Perfect! You counted correctly!' 
+                    : '✗ Not quite. Try counting again by clicking each fish!'}
+                </p>
+                {feedback === 'correct' && (
+                  <p className="mb-3">
+                    There are {fishCount} fish whether they're {fishArrangement === 'scattered' ? 'swimming around' : 'in a line'}!
+                  </p>
+                )}
+                {feedback === 'correct' ? (
+                  <Button 
+                    onClick={handleNextRound}
+                    className="bg-cyan-600 hover:bg-cyan-700"
+                  >
+                    {roundsCompleted >= 3 ? 'Finish Fish Game' : 'Next Round'} 
+                  </Button>
+                ) : (
+                  <Button 
+                    onClick={handleTryAgain}
+                    variant="outline"
+                  >
+                    Try Again
+                  </Button>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </Card>
+  );
+};
+
 const CountingActivity16 = () => {
   const navigate = useNavigate();
   const [showGame, setShowGame] = useState(false);
@@ -13,8 +218,6 @@ const CountingActivity16 = () => {
   const [parkingSpaces, setParkingSpaces] = useState(5);
   const [parkedCars, setParkedCars] = useState<number[]>([]);
   const [chaChaStep, setChaChaStep] = useState(0);
-  const [fishInCircle, setFishInCircle] = useState(4);
-  const [fishArrangement, setFishArrangement] = useState<'scattered' | 'line'>('scattered');
   const [currentFamilyIndex, setCurrentFamilyIndex] = useState(0);
   const [selectedDots, setSelectedDots] = useState<number | null>(null);
   const [matchedFamilies, setMatchedFamilies] = useState<number[]>([]);
@@ -56,20 +259,6 @@ const CountingActivity16 = () => {
       setChaChaStep(chaChaStep + 1);
     } else {
       setCurrentStep('fishSwim');
-    }
-  };
-
-  const handleFishCount = () => {
-    toast.success("Great counting! 🎉");
-    if (fishArrangement === 'scattered') {
-      setFishArrangement('line');
-    } else {
-      if (fishInCircle === 4) {
-        setFishInCircle(5);
-        setFishArrangement('scattered');
-      } else {
-        setCurrentStep('matching');
-      }
     }
   };
 
@@ -218,122 +407,122 @@ const CountingActivity16 = () => {
           <div className="space-y-6">
             {/* Dot Path Parking Lot Warm-up */}
             {currentStep === 'parking' && (
-  <>
-    <Card className="p-6 bg-green-50 border-2 border-green-200">
-      <h3 className="text-xl font-bold mb-2 text-gray-800 flex items-center gap-2">
-        🚗 {/* ← Changed from <Car className="w-6 h-6" /> to emoji */}
-        Dot Path Parking Lot
-      </h3>
-      <p className="text-gray-700 mb-4">
-        Park the cars! Each car gets its own numbered space. Watch the queue get shorter as you park them!
-      </p>
-      <div className="flex items-center gap-2 text-sm text-gray-600">
-        <div className="flex-1 bg-white p-2 rounded border">
-          Cars parked: {parkedCars.length} of {parkingSpaces}
-        </div>
-        <div className="flex-1 bg-white p-2 rounded border">
-          Cars waiting: {parkingSpaces - parkedCars.length}
-        </div>
-      </div>
-    </Card>
-
-    {/* Cars Waiting to Park (Queue) */}
-    <Card className="p-6 bg-blue-50 border-2 border-blue-200">
-      <h4 className="text-lg font-bold mb-4 text-gray-800 text-center">
-        🚗 Cars Waiting in Queue
-      </h4>
-      <div className="flex justify-center gap-4 min-h-[100px] items-center flex-wrap">
-        {Array(parkingSpaces).fill(0).map((_, index) => {
-          const isParked = index < parkedCars.length;
-          const carColor = ['red', 'blue', 'green', 'yellow', 'purple'][index % 5];
-          const carEmoji = ['🚗', '🚙', '🚐', '🚕', '🏎️'][index % 5];
-          
-          return (
-            <div
-              key={index}
-              className={`transition-all duration-500 ${
-                isParked ? 'opacity-20 scale-75' : 'opacity-100 scale-100'
-              }`}
-            >
-              <div className="text-center">
-                <div className="text-5xl mb-2">{carEmoji}</div>
-                <div className={`text-sm font-semibold ${
-                  isParked ? 'text-gray-400 line-through' : 'text-gray-700'
-                }`}>
-                  {carColor} car
-                </div>
-                {isParked && (
-                  <div className="text-xs text-green-600 font-bold mt-1">
-                    ✓ Parked
-                  </div>
-                )}
-                {!isParked && index === parkedCars.length && (
-                  <div className="text-xs text-blue-600 font-bold mt-1 animate-pulse">
-                    → Next to park
-                  </div>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-      <p className="text-sm text-gray-600 text-center mt-4">
-        {parkedCars.length === 0 
-          ? "Click any parking spot below to park the first car!" 
-          : parkedCars.length === parkingSpaces 
-          ? "All cars are parked! 🎉" 
-          : `Click a parking spot to park the next car!`
-        }
-      </p>
-    </Card>
-
-    {/* Parking Lot */}
-    <Card className="p-6 bg-gray-100 border-2 border-gray-300">
-      <h4 className="text-lg font-bold mb-4 text-gray-800 text-center">
-        🅿️ Parking Lot
-      </h4>
-      <div className="grid grid-cols-5 gap-4 max-w-2xl mx-auto">
-        {Array(parkingSpaces).fill(0).map((_, index) => {
-          const space = index + 1;
-          const isParked = parkedCars.includes(space);
-          const carIndex = parkedCars.indexOf(space);
-          const carEmoji = ['🚗', '🚙', '🚐', '🚕', '🏎️'][carIndex % 5];
-          
-          return (
-            <Card
-              key={space}
-              onClick={() => !isParked && handleParkCar(space)}
-              className={`
-                text-center p-4 cursor-pointer transition-all duration-300
-                ${isParked 
-                  ? 'bg-green-100 border-4 border-green-500' 
-                  : 'bg-white hover:bg-green-50 border-2 border-gray-400 hover:border-green-300 hover:scale-105'
-                }
-              `}
-            >
-              <div className="text-2xl font-bold text-gray-700 mb-2">
-                Spot {space}
-              </div>
-              <div className="h-16 flex items-center justify-center">
-                {isParked ? (
-                  <div className="animate-bounce">
-                    <div className="text-4xl">{carEmoji}</div>
-                    <div className="text-xs text-gray-600 mt-1">
-                      {['red', 'blue', 'green', 'yellow', 'purple'][carIndex % 5]}
+              <>
+                <Card className="p-6 bg-green-50 border-2 border-green-200">
+                  <h3 className="text-xl font-bold mb-2 text-gray-800 flex items-center gap-2">
+                    🚗
+                    Dot Path Parking Lot
+                  </h3>
+                  <p className="text-gray-700 mb-4">
+                    Park the cars! Each car gets its own numbered space. Watch the queue get shorter as you park them!
+                  </p>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <div className="flex-1 bg-white p-2 rounded border">
+                      Cars parked: {parkedCars.length} of {parkingSpaces}
+                    </div>
+                    <div className="flex-1 bg-white p-2 rounded border">
+                      Cars waiting: {parkingSpaces - parkedCars.length}
                     </div>
                   </div>
-                ) : (
-                  <div className="text-lg text-gray-400">Empty</div>
-                )}
-              </div>
-              {isParked && <CheckCircle2 className="w-5 h-5 text-green-600 mx-auto mt-2" />}
-            </Card>
-          );
-        })}
-      </div>
-    </Card>
-  </>
-)}
+                </Card>
+
+                {/* Cars Waiting to Park (Queue) */}
+                <Card className="p-6 bg-blue-50 border-2 border-blue-200">
+                  <h4 className="text-lg font-bold mb-4 text-gray-800 text-center">
+                    🚗 Cars Waiting in Queue
+                  </h4>
+                  <div className="flex justify-center gap-4 min-h-[100px] items-center flex-wrap">
+                    {Array(parkingSpaces).fill(0).map((_, index) => {
+                      const isParked = index < parkedCars.length;
+                      const carColor = ['red', 'blue', 'green', 'yellow', 'purple'][index % 5];
+                      const carEmoji = ['🚗', '🚙', '🚐', '🚕', '🏎️'][index % 5];
+                      
+                      return (
+                        <div
+                          key={index}
+                          className={`transition-all duration-500 ${
+                            isParked ? 'opacity-20 scale-75' : 'opacity-100 scale-100'
+                          }`}
+                        >
+                          <div className="text-center">
+                            <div className="text-5xl mb-2">{carEmoji}</div>
+                            <div className={`text-sm font-semibold ${
+                              isParked ? 'text-gray-400 line-through' : 'text-gray-700'
+                            }`}>
+                              {carColor} car
+                            </div>
+                            {isParked && (
+                              <div className="text-xs text-green-600 font-bold mt-1">
+                                ✓ Parked
+                              </div>
+                            )}
+                            {!isParked && index === parkedCars.length && (
+                              <div className="text-xs text-blue-600 font-bold mt-1 animate-pulse">
+                                → Next to park
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <p className="text-sm text-gray-600 text-center mt-4">
+                    {parkedCars.length === 0 
+                      ? "Click any parking spot below to park the first car!" 
+                      : parkedCars.length === parkingSpaces 
+                      ? "All cars are parked! 🎉" 
+                      : `Click a parking spot to park the next car!`
+                    }
+                  </p>
+                </Card>
+
+                {/* Parking Lot */}
+                <Card className="p-6 bg-gray-100 border-2 border-gray-300">
+                  <h4 className="text-lg font-bold mb-4 text-gray-800 text-center">
+                    🅿️ Parking Lot
+                  </h4>
+                  <div className="grid grid-cols-5 gap-4 max-w-2xl mx-auto">
+                    {Array(parkingSpaces).fill(0).map((_, index) => {
+                      const space = index + 1;
+                      const isParked = parkedCars.includes(space);
+                      const carIndex = parkedCars.indexOf(space);
+                      const carEmoji = ['🚗', '🚙', '🚐', '🚕', '🏎️'][carIndex % 5];
+                      
+                      return (
+                        <Card
+                          key={space}
+                          onClick={() => !isParked && handleParkCar(space)}
+                          className={`
+                            text-center p-4 cursor-pointer transition-all duration-300
+                            ${isParked 
+                              ? 'bg-green-100 border-4 border-green-500' 
+                              : 'bg-white hover:bg-green-50 border-2 border-gray-400 hover:border-green-300 hover:scale-105'
+                            }
+                          `}
+                        >
+                          <div className="text-2xl font-bold text-gray-700 mb-2">
+                            Spot {space}
+                          </div>
+                          <div className="h-16 flex items-center justify-center">
+                            {isParked ? (
+                              <div className="animate-bounce">
+                                <div className="text-4xl">{carEmoji}</div>
+                                <div className="text-xs text-gray-600 mt-1">
+                                  {['red', 'blue', 'green', 'yellow', 'purple'][carIndex % 5]}
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="text-lg text-gray-400">Empty</div>
+                            )}
+                          </div>
+                          {isParked && <CheckCircle2 className="w-5 h-5 text-green-600 mx-auto mt-2" />}
+                        </Card>
+                      );
+                    })}
+                  </div>
+                </Card>
+              </>
+            )}
 
             {/* Number Cha-Cha */}
             {currentStep === 'chacha' && (
@@ -361,64 +550,9 @@ const CountingActivity16 = () => {
               </Card>
             )}
 
-            {/* Fish Swimming Application Problem */}
+            {/* Fish Swimming Application Problem - REPLACED */}
             {currentStep === 'fishSwim' && (
-              <Card className="p-6 bg-cyan-50 border-2 border-cyan-200">
-                <h3 className="text-xl font-bold mb-4 text-gray-800 text-center">
-                  🐠 Fish Swimming Game
-                </h3>
-                
-                <div className="relative bg-gradient-to-b from-blue-200 to-blue-400 rounded-xl border-4 border-blue-500 h-80 mb-6">
-                  {fishArrangement === 'scattered' ? (
-                    <>
-                      <p className="text-center text-white font-bold text-lg pt-4">Fish swimming freely!</p>
-                      {Array(fishInCircle).fill('🐠').map((fish, index) => {
-                        const positions = [
-                          { top: '20%', left: '15%' },
-                          { top: '40%', left: '70%' },
-                          { top: '60%', left: '30%' },
-                          { top: '25%', left: '60%' },
-                          { top: '55%', left: '80%' }
-                        ];
-                        return (
-                          <div
-                            key={index}
-                            className="absolute text-5xl"
-                            style={positions[index]}
-                          >
-                            {fish}
-                          </div>
-                        );
-                      })}
-                    </>
-                  ) : (
-                    <>
-                      <p className="text-center text-white font-bold text-lg pt-4">Fish lining up for food!</p>
-                      <div className="absolute inset-0 flex items-center justify-center gap-4">
-                        {Array(fishInCircle).fill('🐠').map((fish, index) => (
-                          <span key={index} className="text-5xl">{fish}</span>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </div>
-
-                <p className="text-center text-lg text-gray-700 mb-4">
-                  {fishArrangement === 'scattered' 
-                    ? 'Count the fish swimming around!'
-                    : 'Count the fish in the line!'}
-                </p>
-
-                <div className="text-center mb-4">
-                  <span className="text-3xl font-bold text-cyan-700">
-                    How many fish? {fishInCircle}
-                  </span>
-                </div>
-
-                <Button onClick={handleFishCount} size="lg" className="w-full bg-cyan-600 hover:bg-cyan-700">
-                  {fishArrangement === 'scattered' ? 'Count Complete!' : fishInCircle === 4 ? 'Try with 5 Fish!' : 'Move to Family Matching!'}
-                </Button>
-              </Card>
+              <FishSwimGame onComplete={() => setCurrentStep('matching')} />
             )}
 
             {/* Family Matching Activity */}
