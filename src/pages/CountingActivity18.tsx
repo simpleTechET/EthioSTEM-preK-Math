@@ -3,48 +3,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Star, BookOpen, Users, Lightbulb, Eye } from "lucide-react";
-import { toast } from "sonner";
+import { ArrowLeft, Star, BookOpen, Users, Lightbulb, Eye, Music } from "lucide-react";
 
 const CountingActivity18 = () => {
   const navigate = useNavigate();
   const [showGame, setShowGame] = useState(false);
   const [currentStep, setCurrentStep] = useState<'warmup' | 'peekaboo' | 'jive' | 'piano' | 'chicks' | 'practice' | 'complete'>('warmup');
-  const [peekabooConfig, setPeekabooConfig] = useState<'3-1' | '2-2' | '1-3' | '2-1-1'>('3-1');
-  const [showPeekaboo, setShowPeekaboo] = useState(false);
-  const [peekabooRound, setPeekabooRound] = useState(0);
   const [jiveStep, setJiveStep] = useState(0);
   const [pianoCount, setPianoCount] = useState(0);
-  const [chickConfig, setChickConfig] = useState<'scattered' | 'line' | 'array' | 'separated'>('scattered');
-  const [chickCount, setChickCount] = useState(4);
-  const [practiceRound, setPracticeRound] = useState(0);
-
-  const peekabooConfigs = [
-    { type: '3-1' as const, groups: [3, 1] },
-    { type: '2-2' as const, groups: [2, 2] },
-    { type: '1-3' as const, groups: [1, 3] },
-    { type: '2-1-1' as const, groups: [2, 1, 1] }
-  ];
-
-  const startPeekaboo = () => {
-    setShowPeekaboo(true);
-    setTimeout(() => {
-      setShowPeekaboo(false);
-    }, 2000);
-  };
-
-  const handlePeekabooAnswer = () => {
-    toast.success("Correct! 🎉", { description: "4 objects total!" });
-    if (peekabooRound < 3) {
-      setTimeout(() => {
-        setPeekabooRound(peekabooRound + 1);
-        setPeekabooConfig(peekabooConfigs[peekabooRound + 1].type);
-        startPeekaboo();
-      }, 1500);
-    } else {
-      setTimeout(() => setCurrentStep('jive'), 1500);
-    }
-  };
 
   const jiveChant = [
     { line: "1, 2,", action: "tie my shoe", emoji: "👟" },
@@ -65,26 +31,8 @@ const CountingActivity18 = () => {
     if (key === pianoCount + 1 && pianoCount < 5) {
       setPianoCount(pianoCount + 1);
       if (pianoCount + 1 === 5) {
-        toast.success("Perfect! You counted to 5 the Math Way! 🎹");
         setTimeout(() => setCurrentStep('chicks'), 1500);
       }
-    }
-  };
-
-  const handleChickArrangement = () => {
-    const sequence: Array<typeof chickConfig> = ['scattered', 'line', 'array', 'separated', 'array'];
-    const currentIndex = sequence.indexOf(chickConfig);
-    
-    if (currentIndex < sequence.length - 1) {
-      setChickConfig(sequence[currentIndex + 1]);
-      
-      if (sequence[currentIndex + 1] === 'array') {
-        toast.success("Pairs! 🐣", { description: "Each chick has a partner!" });
-      } else if (sequence[currentIndex + 1] === 'separated') {
-        toast.info("Pairs wandering! 👀", { description: "Two groups of 2!" });
-      }
-    } else {
-      setCurrentStep('practice');
     }
   };
 
@@ -236,46 +184,7 @@ const CountingActivity18 = () => {
         ) : (
           <div className="space-y-6">
             {/* Peek-a-Boo with Embedded Numbers */}
-            {currentStep === 'peekaboo' && (
-              <Card className="p-6 bg-green-50 border-2 border-green-200 text-center">
-                <h3 className="text-xl font-bold mb-4 text-gray-800 flex items-center justify-center gap-2">
-                  <Eye className="w-6 h-6" />
-                  Peek-a-Boo Counting!
-                </h3>
-                
-                {showPeekaboo ? (
-                  <div className="mb-6">
-                    <p className="text-lg text-gray-700 mb-4">Quick! Look at the objects!</p>
-                    <div className="flex justify-center gap-8 text-6xl mb-4">
-                      {peekabooConfigs[peekabooRound].groups.map((group, groupIndex) => (
-                        <div key={groupIndex} className="flex gap-2">
-                          {Array(group).fill('🐻').map((bear, i) => (
-                            <span key={i}>{bear}</span>
-                          ))}
-                        </div>
-                      ))}
-                    </div>
-                    <p className="text-sm text-gray-600">Notice the groups!</p>
-                  </div>
-                ) : (
-                  <div className="mb-6">
-                    <p className="text-lg text-gray-700 mb-4">How many objects in total?</p>
-                    <Button onClick={handlePeekabooAnswer} size="lg" className="text-3xl py-8 px-12">
-                      4
-                    </Button>
-                    <p className="text-sm text-gray-600 mt-4">
-                      Round {peekabooRound + 1} of 4
-                    </p>
-                  </div>
-                )}
-
-                {!showPeekaboo && peekabooRound === 0 && (
-                  <Button onClick={startPeekaboo} className="mt-4">
-                    Start Peek-a-Boo!
-                  </Button>
-                )}
-              </Card>
-            )}
+            {currentStep === 'peekaboo' && <PeekabooGame onComplete={() => setCurrentStep('jive')} />}
 
             {/* On 5 We Jive */}
             {currentStep === 'jive' && (
@@ -344,136 +253,10 @@ const CountingActivity18 = () => {
             )}
 
             {/* Baby Chicks Array Game */}
-            {currentStep === 'chicks' && (
-              <Card className="p-6 bg-yellow-50 border-2 border-yellow-200">
-                <h3 className="text-xl font-bold mb-4 text-gray-800 text-center">
-                  🐣 Help the Baby Chicks!
-                </h3>
-                
-                <div className="relative bg-gradient-to-b from-green-200 to-green-300 rounded-xl border-4 border-green-500 p-8 mb-6 min-h-[300px]">
-                  {/* Mother Hen */}
-                  <div className="text-center mb-6">
-                    <div className="text-6xl">🐔</div>
-                    <p className="text-sm text-gray-700 font-bold">Mother Hen</p>
-                  </div>
-
-                  {/* Baby Chicks in Different Configurations */}
-                  <div className="flex items-center justify-center">
-                    {chickConfig === 'scattered' && (
-                      <div className="relative w-full h-40">
-                        <div className="absolute top-4 left-8 text-5xl">🐣</div>
-                        <div className="absolute top-12 right-12 text-5xl">🐣</div>
-                        <div className="absolute bottom-8 left-20 text-5xl">🐣</div>
-                        <div className="absolute bottom-4 right-8 text-5xl">🐣</div>
-                      </div>
-                    )}
-
-                    {chickConfig === 'line' && (
-                      <div className="flex gap-3 text-5xl">
-                        <span>🐣</span><span>🐣</span><span>🐣</span><span>🐣</span>
-                      </div>
-                    )}
-
-                    {chickConfig === 'array' && (
-                      <div className="text-5xl">
-                        <div className="flex gap-8 justify-center mb-4">
-                          <span>🐣</span><span>🐣</span>
-                        </div>
-                        <div className="flex gap-8 justify-center">
-                          <span>🐣</span><span>🐣</span>
-                        </div>
-                      </div>
-                    )}
-
-                    {chickConfig === 'separated' && (
-                      <div className="flex gap-16 text-5xl">
-                        <div>
-                          <div className="flex gap-3">
-                            <span>🐣</span><span>🐣</span>
-                          </div>
-                          <p className="text-sm text-gray-700 text-center mt-2">Pair 1</p>
-                        </div>
-                        <div>
-                          <div className="flex gap-3">
-                            <span>🐣</span><span>🐣</span>
-                          </div>
-                          <p className="text-sm text-gray-700 text-center mt-2">Pair 2</p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="text-center mb-4">
-                  <p className="text-lg text-gray-700 mb-2">
-                    {chickConfig === 'scattered' && 'The chicks just hatched and are scattered!'}
-                    {chickConfig === 'line' && 'The chicks are following mommy in a line!'}
-                    {chickConfig === 'array' && 'The chicks are walking in pairs (2×2 array)!'}
-                    {chickConfig === 'separated' && 'Two pairs of chicks wandered off together!'}
-                  </p>
-                  <p className="text-2xl font-bold text-orange-700">
-                    How many chicks? <span className="text-4xl">{chickCount}</span>
-                  </p>
-                </div>
-
-                <Button 
-                  onClick={handleChickArrangement}
-                  size="lg"
-                  className="w-full bg-yellow-600 hover:bg-yellow-700"
-                >
-                  {chickConfig === 'scattered' ? 'Make a Line' : 
-                   chickConfig === 'line' ? 'Make Pairs' :
-                   chickConfig === 'array' ? 'Separate Pairs' :
-                   'Back to Array'}
-                </Button>
-              </Card>
-            )}
+            {currentStep === 'chicks' && <ChicksArrayGame onComplete={() => setCurrentStep('practice')} />}
 
             {/* Practice */}
-            {currentStep === 'practice' && (
-              <Card className="p-6 bg-orange-50 border-2 border-orange-200">
-                <h3 className="text-xl font-bold mb-4 text-gray-800 text-center">
-                  🎯 Practice Time: Add a 5th Chick!
-                </h3>
-                
-                <div className="bg-white p-6 rounded-lg border-2 border-orange-300 mb-6">
-                  <p className="text-lg text-gray-700 text-center mb-4">
-                    What happens when we add a 5th chick to our pairs?
-                  </p>
-                  
-                  <div className="text-5xl text-center mb-4">
-                    <div className="flex gap-8 justify-center mb-4">
-                      <span>🐣</span><span>🐣</span>
-                    </div>
-                    <div className="flex gap-8 justify-center mb-4">
-                      <span>🐣</span><span>🐣</span>
-                    </div>
-                    <div className="flex justify-center">
-                      <span className="animate-bounce">🐣</span>
-                    </div>
-                  </div>
-
-                  <p className="text-center text-gray-700">
-                    <strong>Problem:</strong> One chick doesn't have a partner! 😢
-                  </p>
-                </div>
-
-                <div className="bg-blue-50 p-4 rounded-lg border-2 border-blue-200 mb-4">
-                  <p className="text-sm text-gray-700 text-center">
-                    <strong>Important Discovery:</strong> We can't make pairs with 5 objects! 
-                    One will always be left out. But with 4 objects, we can make perfect pairs!
-                  </p>
-                </div>
-
-                <Button
-                  onClick={() => setCurrentStep('complete')}
-                  size="lg"
-                  className="w-full bg-orange-600 hover:bg-orange-700"
-                >
-                  Finish Lesson
-                </Button>
-              </Card>
-            )}
+            {currentStep === 'practice' && <PracticeArrayGame onComplete={() => setCurrentStep('complete')} />}
 
             {/* Completion */}
             {currentStep === 'complete' && (
@@ -525,6 +308,491 @@ const CountingActivity18 = () => {
         )}
       </div>
     </div>
+  );
+};
+
+// Peek-a-Boo Game Component
+const PeekabooGame = ({ onComplete }: { onComplete: () => void }) => {
+  const [currentRound, setCurrentRound] = useState(0);
+  const [showObjects, setShowObjects] = useState(false);
+  const [userAnswer, setUserAnswer] = useState<number | null>(null);
+  const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
+
+  const configurations = [
+    { groups: [3, 1], description: "3 and 1" },
+    { groups: [2, 2], description: "2 and 2" },
+    { groups: [1, 3], description: "1 and 3" },
+    { groups: [2, 1, 1], description: "2, 1, and 1" }
+  ];
+
+  const currentConfig = configurations[currentRound];
+
+  const startPeekaboo = () => {
+    setShowObjects(true);
+    setUserAnswer(null);
+    setFeedback(null);
+    setTimeout(() => {
+      setShowObjects(false);
+    }, 2000);
+  };
+
+  const handleAnswer = (answer: number) => {
+    setUserAnswer(answer);
+    if (answer === 4) {
+      setFeedback('correct');
+    } else {
+      setFeedback('incorrect');
+    }
+  };
+
+  const handleNextRound = () => {
+    const nextRound = currentRound + 1;
+    if (nextRound >= configurations.length) {
+      onComplete();
+    } else {
+      setCurrentRound(nextRound);
+      setShowObjects(false);
+      setUserAnswer(null);
+      setFeedback(null);
+    }
+  };
+
+  return (
+    <Card className="p-6 bg-green-50 border-2 border-green-200 text-center">
+      <h3 className="text-xl font-bold mb-4 text-gray-800 flex items-center justify-center gap-2">
+        <Eye className="w-6 h-6" />
+        Peek-a-Boo Counting!
+      </h3>
+
+      <div className="text-center mb-4">
+        <p className="text-sm text-muted-foreground">Round {currentRound + 1} of {configurations.length}</p>
+      </div>
+      
+      {!showObjects && !feedback ? (
+        <div className="space-y-4">
+          <p className="text-lg text-gray-700">Get ready to see some objects quickly!</p>
+          <Button onClick={startPeekaboo} size="lg" className="bg-green-600 hover:bg-green-700">
+            Show Me the Objects!
+          </Button>
+        </div>
+      ) : showObjects ? (
+        <div className="mb-6">
+          <p className="text-lg text-gray-700 mb-6 font-semibold">Quick! Look at the objects!</p>
+          <div className="flex justify-center gap-12 text-6xl mb-6 min-h-[120px] items-center">
+            {currentConfig.groups.map((group, groupIndex) => (
+              <div key={groupIndex} className="flex gap-3 p-4 bg-white rounded-lg border-4 border-green-300">
+                {Array(group).fill('🐻').map((bear, i) => (
+                  <span key={i}>{bear}</span>
+                ))}
+              </div>
+            ))}
+          </div>
+          <p className="text-sm text-gray-600 animate-pulse">Memorize the groups! ({currentConfig.description})</p>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          <p className="text-lg text-gray-700 font-semibold">How many bears did you see in total?</p>
+          
+          <div className="flex gap-4 justify-center">
+            {[2, 3, 4, 5, 6].map(num => (
+              <Button
+                key={num}
+                onClick={() => handleAnswer(num)}
+                variant={userAnswer === num ? "default" : "outline"}
+                className="w-16 h-16 text-2xl font-bold"
+                disabled={feedback !== null}
+              >
+                {num}
+              </Button>
+            ))}
+          </div>
+
+          {feedback && (
+            <div className={`p-6 rounded-lg ${
+              feedback === 'correct'
+                ? 'bg-green-100 text-green-700 border-2 border-green-300'
+                : 'bg-red-100 text-red-700 border-2 border-red-300'
+            }`}>
+              <p className="font-bold text-xl mb-3">
+                {feedback === 'correct'
+                  ? `✓ Correct! There were 4 bears total! (${currentConfig.description})`
+                  : '✗ Not quite! Look again when you try the next round.'}
+              </p>
+              <Button 
+                onClick={handleNextRound}
+                size="lg"
+                className={feedback === 'correct' ? 'bg-green-600 hover:bg-green-700' : ''}
+                variant={feedback === 'correct' ? 'default' : 'outline'}
+              >
+                {currentRound >= configurations.length - 1 ? 'Continue to Jive!' : 'Next Round'}
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
+    </Card>
+  );
+};
+
+// Chicks Array Game Component
+const ChicksArrayGame = ({ onComplete }: { onComplete: () => void }) => {
+  const [chickConfig, setChickConfig] = useState<'scattered' | 'line' | 'array' | 'separated'>('scattered');
+  const [clickedChicks, setClickedChicks] = useState<number[]>([]);
+  const [showCountInput, setShowCountInput] = useState(false);
+  const [userCount, setUserCount] = useState<number | null>(null);
+  const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
+  const [stageComplete, setStageComplete] = useState(false);
+
+  const sequence: Array<typeof chickConfig> = ['scattered', 'line', 'array', 'separated'];
+  const currentStageIndex = sequence.indexOf(chickConfig);
+
+  const handleChickClick = (index: number) => {
+    if (!clickedChicks.includes(index) && !stageComplete) {
+      setClickedChicks([...clickedChicks, index]);
+    }
+  };
+
+  const handleCountSubmit = (count: number) => {
+    setUserCount(count);
+    if (count === 4) {
+      setFeedback('correct');
+      setStageComplete(true);
+    } else {
+      setFeedback('incorrect');
+    }
+  };
+
+  const handleNextArrangement = () => {
+    if (currentStageIndex >= sequence.length - 1) {
+      onComplete();
+    } else {
+      setChickConfig(sequence[currentStageIndex + 1]);
+      setClickedChicks([]);
+      setShowCountInput(false);
+      setUserCount(null);
+      setFeedback(null);
+      setStageComplete(false);
+    }
+  };
+
+  const handleTryAgain = () => {
+    setClickedChicks([]);
+    setShowCountInput(false);
+    setUserCount(null);
+    setFeedback(null);
+  };
+
+  return (
+    <Card className="p-6 bg-yellow-50 border-2 border-yellow-200">
+      <h3 className="text-xl font-bold mb-4 text-gray-800 text-center">
+        🐣 Help the Baby Chicks!
+      </h3>
+
+      <div className="text-center mb-4">
+        <p className="text-sm text-muted-foreground">
+          Arrangement {currentStageIndex + 1} of {sequence.length}
+        </p>
+      </div>
+      
+      <div className="relative bg-gradient-to-b from-green-200 to-green-300 rounded-xl border-4 border-green-500 p-8 mb-6 min-h-[320px]">
+        {/* Mother Hen */}
+        <div className="text-center mb-6">
+          <div className="text-6xl">🐔</div>
+          <p className="text-sm text-gray-700 font-bold">Mother Hen</p>
+        </div>
+
+        {/* Baby Chicks - Clickable */}
+        <div className="flex items-center justify-center">
+          {chickConfig === 'scattered' && (
+            <div className="relative w-full h-48">
+              {[
+                { top: '10%', left: '15%' },
+                { top: '30%', right: '20%' },
+                { bottom: '20%', left: '25%' },
+                { bottom: '10%', right: '15%' }
+              ].map((pos, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleChickClick(idx)}
+                  disabled={stageComplete}
+                  className="absolute text-6xl cursor-pointer hover:scale-110 transition-transform"
+                  style={pos}
+                >
+                  🐣
+                  {clickedChicks.includes(idx) && (
+                    <span className="absolute -top-2 -right-2 bg-orange-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-xl font-bold border-2 border-white">
+                      {clickedChicks.indexOf(idx) + 1}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {chickConfig === 'line' && (
+            <div className="flex gap-4 text-6xl">
+              {[0, 1, 2, 3].map(idx => (
+                <button
+                  key={idx}
+                  onClick={() => handleChickClick(idx)}
+                  disabled={stageComplete}
+                  className="cursor-pointer hover:scale-110 transition-transform relative"
+                >
+                  🐣
+                  {clickedChicks.includes(idx) && (
+                    <span className="absolute -top-2 -right-2 bg-orange-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-xl font-bold border-2 border-white">
+                      {clickedChicks.indexOf(idx) + 1}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {chickConfig === 'array' && (
+            <div className="text-6xl">
+              <div className="flex gap-12 justify-center mb-6">
+                {[0, 1].map(idx => (
+                  <button
+                    key={idx}
+                    onClick={() => handleChickClick(idx)}
+                    disabled={stageComplete}
+                    className="cursor-pointer hover:scale-110 transition-transform relative"
+                  >
+                    🐣
+                    {clickedChicks.includes(idx) && (
+                      <span className="absolute -top-2 -right-2 bg-orange-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-xl font-bold border-2 border-white">
+                        {clickedChicks.indexOf(idx) + 1}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+              <div className="flex gap-12 justify-center">
+                {[2, 3].map(idx => (
+                  <button
+                    key={idx}
+                    onClick={() => handleChickClick(idx)}
+                    disabled={stageComplete}
+                    className="cursor-pointer hover:scale-110 transition-transform relative"
+                  >
+                    🐣
+                    {clickedChicks.includes(idx) && (
+                      <span className="absolute -top-2 -right-2 bg-orange-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-xl font-bold border-2 border-white">
+                        {clickedChicks.indexOf(idx) + 1}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {chickConfig === 'separated' && (
+            <div className="flex gap-20 text-6xl">
+              <div>
+                <div className="flex gap-4 mb-2">
+                  {[0, 1].map(idx => (
+                    <button
+                      key={idx}
+                      onClick={() => handleChickClick(idx)}
+                      disabled={stageComplete}
+                      className="cursor-pointer hover:scale-110 transition-transform relative"
+                    >
+                      🐣
+                      {clickedChicks.includes(idx) && (
+                        <span className="absolute -top-2 -right-2 bg-orange-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-xl font-bold border-2 border-white">
+                          {clickedChicks.indexOf(idx) + 1}
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-sm text-gray-700 text-center">Pair 1</p>
+              </div>
+              <div>
+                <div className="flex gap-4 mb-2">
+                  {[2, 3].map(idx => (
+                    <button
+                      key={idx}
+                      onClick={() => handleChickClick(idx)}
+                      disabled={stageComplete}
+                      className="cursor-pointer hover:scale-110 transition-transform relative"
+                    >
+                      🐣
+                      {clickedChicks.includes(idx) && (
+                        <span className="absolute -top-2 -right-2 bg-orange-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-xl font-bold border-2 border-white">
+                          {clickedChicks.indexOf(idx) + 1}
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-sm text-gray-700 text-center">Pair 2</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="text-center space-y-4">
+        <p className="text-lg text-gray-700 font-semibold">
+          {chickConfig === 'scattered' && 'The chicks just hatched and are scattered! Click each to count them!'}
+          {chickConfig === 'line' && 'The chicks are following mommy in a line! Click each to count!'}
+          {chickConfig === 'array' && 'The chicks are walking in pairs (2×2 array)! Click each to count!'}
+          {chickConfig === 'separated' && 'Two pairs of chicks wandered off! Click each to count them all!'}
+        </p>
+
+        {!showCountInput ? (
+          <Button 
+            onClick={() => setShowCountInput(true)}
+            disabled={clickedChicks.length === 0}
+            className="bg-yellow-600 hover:bg-yellow-700"
+            size="lg"
+          >
+            I Finished Counting!
+          </Button>
+        ) : (
+          <div className="space-y-4">
+            <p className="text-lg font-semibold">How many chicks did you count?</p>
+            <div className="flex gap-3 justify-center">
+              {[2, 3, 4, 5, 6].map(num => (
+                <Button
+                  key={num}
+                  onClick={() => handleCountSubmit(num)}
+                  variant={userCount === num ? "default" : "outline"}
+                  className="w-16 h-16 text-2xl font-bold"
+                  disabled={feedback !== null}
+                >
+                  {num}
+                </Button>
+              ))}
+            </div>
+
+            {feedback && (
+              <div className={`p-6 rounded-lg ${
+                feedback === 'correct'
+                  ? 'bg-green-100 text-green-700 border-2 border-green-300'
+                  : 'bg-red-100 text-red-700 border-2 border-red-300'
+              }`}>
+                <p className="font-bold text-xl mb-3">
+                  {feedback === 'correct'
+                    ? '✓ Perfect! There are 4 chicks in every arrangement!'
+                    : '✗ Not quite! Try counting again by clicking each chick.'}
+                </p>
+                {feedback === 'correct' && (
+                  <p className="mb-4">
+                    {chickConfig === 'array' && 'Notice: 2 rows × 2 columns = 4 chicks!'}
+                    {chickConfig === 'separated' && 'Notice: 2 pairs = 2 + 2 = 4 chicks!'}
+                  </p>
+                )}
+                <Button 
+                  onClick={feedback === 'correct' ? handleNextArrangement : handleTryAgain}
+                  size="lg"
+                  className={feedback === 'correct' ? 'bg-yellow-600 hover:bg-yellow-700' : ''}
+                  variant={feedback === 'correct' ? 'default' : 'outline'}
+                >
+                  {feedback === 'correct'
+                    ? (currentStageIndex >= sequence.length - 1 ? 'Continue to Practice' : 'Next Arrangement')
+                    : 'Try Again'}
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </Card>
+  );
+};
+
+// Practice Array Game Component
+const PracticeArrayGame = ({ onComplete }: { onComplete: () => void }) => {
+  const [showChicks, setShowChicks] = useState(false);
+  const [understood, setUnderstood] = useState(false);
+
+  return (
+    <Card className="p-6 bg-orange-50 border-2 border-orange-200">
+      <h3 className="text-xl font-bold mb-4 text-gray-800 text-center">
+        🎯 Practice: What About 5 Chicks?
+      </h3>
+      
+      <div className="bg-white p-6 rounded-lg border-2 border-orange-300 mb-6">
+        <p className="text-lg text-gray-700 text-center mb-6 font-semibold">
+          What happens when we try to make pairs with 5 chicks?
+        </p>
+        
+        {!showChicks ? (
+          <div className="text-center">
+            <Button 
+              onClick={() => setShowChicks(true)}
+              size="lg"
+              className="bg-orange-600 hover:bg-orange-700"
+            >
+              Show Me 5 Chicks!
+            </Button>
+          </div>
+        ) : (
+          <div className="text-6xl text-center space-y-4">
+            <div className="flex gap-12 justify-center">
+              <span>🐣</span><span>🐣</span>
+            </div>
+            <div className="flex gap-12 justify-center">
+              <span>🐣</span><span>🐣</span>
+            </div>
+            <div className="flex justify-center mt-6">
+              <span className="animate-bounce">🐣</span>
+            </div>
+            <p className="text-lg text-gray-700 mt-4">
+              <strong>Problem:</strong> One chick doesn't have a partner! 😢
+            </p>
+          </div>
+        )}
+      </div>
+
+      {showChicks && !understood && (
+        <div className="space-y-4">
+          <div className="bg-blue-50 p-6 rounded-lg border-2 border-blue-200">
+            <p className="text-gray-700 text-center font-semibold mb-4">
+              🤔 Can we make perfect pairs with 5 objects?
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Button
+                onClick={() => setUnderstood(true)}
+                size="lg"
+                variant="outline"
+                className="text-lg"
+              >
+                No, one is left out!
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {understood && (
+        <div className="space-y-4">
+          <div className="bg-green-100 p-6 rounded-lg border-2 border-green-300 text-center">
+            <p className="font-bold text-xl text-green-700 mb-4">
+              ✓ Correct! Great discovery!
+            </p>
+            <p className="text-gray-700 mb-4">
+              <strong>Important:</strong> We can't make pairs with 5 objects! One will always be left out.
+            </p>
+            <p className="text-gray-700">
+              But with <strong>4 objects</strong>, we can make <strong>2 perfect pairs</strong> (2×2 array)!
+            </p>
+          </div>
+          
+          <Button
+            onClick={onComplete}
+            size="lg"
+            className="w-full bg-orange-600 hover:bg-orange-700"
+          >
+            Finish Lesson
+          </Button>
+        </div>
+      )}
+    </Card>
   );
 };
 
