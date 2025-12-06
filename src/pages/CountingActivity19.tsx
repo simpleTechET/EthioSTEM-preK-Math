@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Eye, EyeOff, Music, ArrowLeft, Grid3x3, Building, Users } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const CountingActivity19 = () => {
+  const navigate = useNavigate();
   const [currentActivity, setCurrentActivity] = useState("intro");
   
   return (
@@ -223,15 +224,15 @@ const SortingActivity = () => {
   const [selectedAnimal, setSelectedAnimal] = useState<string | null>(null);
 
   const animals = [
-    { name: "Alligator", color: "red", type: "swim", emoji: "🐊", colorName: "Red" },
-    { name: "Bird", color: "blue", type: "fly", emoji: "🐦", colorName: "Blue" },
-    { name: "Fish", color: "yellow", type: "swim", emoji: "🐠", colorName: "Yellow" },
-    { name: "Bee", color: "orange", type: "fly", emoji: "🐝", colorName: "Orange" },
-    { name: "Butterfly", color: "green", type: "fly", emoji: "🦋", colorName: "Green" },
+    { name: "Red Fish", color: "red", type: "swim", emoji: "🐟", bgColor: "#ef4444" },
+    { name: "Yellow Bird", color: "yellow", type: "fly", emoji: "🐦", bgColor: "#eab308" },
+    { name: "Yellow Bee", color: "yellow", type: "fly", emoji: "🐝", bgColor: "#eab308" },
+    { name: "Green Frog", color: "green", type: "swim", emoji: "🐸", bgColor: "#22c55e" },
+    { name: "Red Crab", color: "red", type: "swim", emoji: "🦀", bgColor: "#ef4444" },
   ];
 
   const groupLabels = sortBy === "color" 
-    ? { red: "🔴 Red Animals", blue: "🔵 Blue Animals", yellow: "🟡 Yellow Animals", orange: "🟠 Orange Animals", green: "🟢 Green Animals" }
+    ? { red: "🔴 Red Animals", yellow: "🟡 Yellow Animals", green: "🟢 Green Animals" }
     : { fly: "🦋 Animals That Fly", swim: "🐠 Animals That Swim" };
 
   const correctGroups = sortBy
@@ -324,13 +325,18 @@ const SortingActivity = () => {
                       disabled={isPlaced && selectedAnimal !== animal.name}
                       className={`text-center p-4 rounded-lg border-2 transition-all ${
                         selectedAnimal === animal.name
-                          ? "border-primary bg-primary/20 scale-110"
+                          ? "border-primary scale-110 ring-4 ring-primary/50"
                           : isPlaced
                           ? "border-border/50 opacity-40 cursor-not-allowed"
                           : "border-border hover:border-primary cursor-pointer"
                       }`}
                     >
-                      <div className="text-6xl mb-2">{animal.emoji}</div>
+                      <div 
+                        className="w-20 h-20 rounded-full flex items-center justify-center mb-2 mx-auto border-4 border-white shadow-lg"
+                        style={{ backgroundColor: animal.bgColor }}
+                      >
+                        <span className="text-4xl">{animal.emoji}</span>
+                      </div>
                       <p className="text-sm font-medium">{animal.name}</p>
                     </button>
                   );
@@ -338,29 +344,35 @@ const SortingActivity = () => {
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className={`grid gap-4 ${sortBy === "color" ? "md:grid-cols-3 grid-cols-1" : "md:grid-cols-2"}`}>
               {Object.entries(groupLabels).map(([key, label]) => (
                 <button
                   key={key}
                   onClick={() => selectedAnimal && addToGroup(key)}
                   disabled={!selectedAnimal}
-                  className={`bg-accent/20 p-6 rounded-lg border-2 transition-all ${
+                  className={`bg-accent/20 p-4 rounded-lg border-2 transition-all ${
                     selectedAnimal ? "border-primary hover:bg-accent/30 cursor-pointer" : "border-border"
                   }`}
                 >
-                  <h3 className="font-bold text-lg mb-4">{label}</h3>
-                  <div className="flex gap-4 justify-center flex-wrap min-h-[80px] items-center">
+                  <h3 className="font-bold text-base mb-3">{label}</h3>
+                  <div className="flex gap-2 justify-center flex-wrap min-h-[60px] items-center">
                     {userGroups[key]?.map((animalName, idx) => {
                       const animal = animals.find(a => a.name === animalName);
                       return animal ? (
-                        <div key={idx} className="text-5xl">{animal.emoji}</div>
+                        <div 
+                          key={idx} 
+                          className="w-12 h-12 rounded-full flex items-center justify-center border-2 border-white shadow"
+                          style={{ backgroundColor: animal.bgColor }}
+                        >
+                          <span className="text-2xl">{animal.emoji}</span>
+                        </div>
                       ) : null;
                     })}
                     {(!userGroups[key] || userGroups[key].length === 0) && (
-                      <p className="text-muted-foreground text-sm">Drop animals here</p>
+                      <p className="text-muted-foreground text-xs">Drop here</p>
                     )}
                   </div>
-                  <p className="text-center mt-3 font-bold text-xl">Count: {userGroups[key]?.length || 0}</p>
+                  <p className="text-center mt-2 font-bold text-lg">Count: {userGroups[key]?.length || 0}</p>
                 </button>
               ))}
             </div>
@@ -563,7 +575,7 @@ const TowerBuilding = () => {
 
 const PartnersActivity = () => {
   const [currentCard, setCurrentCard] = useState(0);
-  const [selectedPartners, setSelectedPartners] = useState<string | null>(null);
+  const [selectedPartners, setSelectedPartners] = useState<string[]>([]);
   const [showFeedback, setShowFeedback] = useState(false);
 
   const cards = [
@@ -577,9 +589,10 @@ const PartnersActivity = () => {
         { emoji: "🧸", size: "small", hasBow: false, color: "brown" },
       ],
       options: [
-        { description: "Bears with bowties vs no bowties", partner1: 2, partner2: 2 },
-        { description: "Big bears vs small bears", partner1: 2, partner2: 2 },
-        { description: "Brown bears vs white bears", partner1: 3, partner2: 1 },
+        { description: "Bears with bowties vs no bowties", partner1: 2, partner2: 2, isCorrect: true },
+        { description: "Big bears vs small bears", partner1: 2, partner2: 2, isCorrect: true },
+        { description: "Brown bears vs white bears", partner1: 3, partner2: 1, isCorrect: true },
+        { description: "Happy bears vs sad bears", partner1: 1, partner2: 3, isCorrect: false },
       ]
     },
     {
@@ -593,8 +606,10 @@ const PartnersActivity = () => {
         { emoji: "🐠", size: "small", color: "orange" },
       ],
       options: [
-        { description: "Big fish vs small fish", partner1: 2, partner2: 3 },
-        { description: "Orange fish vs blue fish", partner1: 3, partner2: 2 },
+        { description: "Big fish vs small fish", partner1: 2, partner2: 3, isCorrect: true },
+        { description: "Orange fish vs blue fish", partner1: 3, partner2: 2, isCorrect: true },
+        { description: "Swimming vs floating fish", partner1: 4, partner2: 1, isCorrect: false },
+        { description: "Hungry fish vs full fish", partner1: 2, partner2: 3, isCorrect: false },
       ]
     },
     {
@@ -608,8 +623,10 @@ const PartnersActivity = () => {
         { emoji: "🐱", position: "walking", color: "gray" },
       ],
       options: [
-        { description: "Sitting cats vs walking cats", partner1: 3, partner2: 2 },
-        { description: "Orange cats vs gray cats", partner1: 2, partner2: 3 },
+        { description: "Sitting cats vs walking cats", partner1: 3, partner2: 2, isCorrect: true },
+        { description: "Orange cats vs gray cats", partner1: 2, partner2: 3, isCorrect: true },
+        { description: "Sleeping vs awake cats", partner1: 1, partner2: 4, isCorrect: false },
+        { description: "Hungry cats vs full cats", partner1: 3, partner2: 2, isCorrect: false },
       ]
     },
   ];
@@ -618,11 +635,26 @@ const PartnersActivity = () => {
 
   const renderBear = (bear: any, index: number) => {
     const sizeClass = bear.size === "big" ? "text-7xl" : "text-5xl";
-    const filter = bear.color === "white" ? "grayscale(100%) brightness(2)" : "";
+    const isWhite = bear.color === "white";
     return (
       <div key={index} className="relative inline-block">
-        <div className={sizeClass} style={{ filter }}>{bear.emoji}</div>
-        {bear.hasBow && <div className="absolute -top-2 -right-1 text-2xl">🎀</div>}
+        <div 
+          className={sizeClass} 
+          style={{ 
+            filter: isWhite ? "grayscale(100%) brightness(1.8)" : "",
+            textShadow: isWhite ? "0 0 3px rgba(0,0,0,0.4), 0 0 1px rgba(0,0,0,0.6)" : ""
+          }}
+        >
+          {bear.emoji}
+        </div>
+        {bear.hasBow && (
+          <div 
+            className="absolute left-1/2 -translate-x-1/2 text-xl"
+            style={{ top: bear.size === "big" ? "45%" : "40%" }}
+          >
+            🎀
+          </div>
+        )}
       </div>
     );
   };
@@ -635,11 +667,22 @@ const PartnersActivity = () => {
 
   const renderCat = (cat: any, index: number) => {
     const filter = cat.color === "gray" ? "grayscale(100%)" : "";
-    const position = cat.position === "sitting" ? "🪑" : "🚶";
+    const catEmoji = cat.position === "sitting" ? "🐱" : "🐈";
+    const transform = cat.position === "sitting" ? "rotate(0deg)" : "scaleX(-1)";
     return (
       <div key={index} className="relative inline-block">
-        <div className="text-6xl" style={{ filter }}>{cat.emoji}</div>
-        <div className="absolute -bottom-1 right-0 text-xl">{position}</div>
+        <div 
+          className="text-6xl transition-transform" 
+          style={{ filter, transform }}
+        >
+          {catEmoji}
+        </div>
+        {cat.position === "sitting" && (
+          <div className="text-xs text-center text-muted-foreground mt-1">sitting</div>
+        )}
+        {cat.position === "walking" && (
+          <div className="text-xs text-center text-muted-foreground mt-1">walking</div>
+        )}
       </div>
     );
   };
@@ -651,11 +694,28 @@ const PartnersActivity = () => {
     return null;
   };
 
+  const toggleOption = (optionKey: string) => {
+    if (showFeedback) return;
+    setSelectedPartners(prev => 
+      prev.includes(optionKey) 
+        ? prev.filter(p => p !== optionKey)
+        : [...prev, optionKey]
+    );
+  };
+
+  const getResults = () => {
+    return selectedPartners.map(key => {
+      const idx = parseInt(key.split("-")[1]);
+      const option = currentCardData.options[idx];
+      return { key, option, isCorrect: option.isCorrect };
+    });
+  };
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Partners Practice</CardTitle>
-        <CardDescription>Find different partners inside each group</CardDescription>
+        <CardDescription>Find different partners inside each group (select all that apply)</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="text-center">
@@ -668,53 +728,94 @@ const PartnersActivity = () => {
         </div>
 
         <div className="space-y-4">
-          <h4 className="font-semibold text-center">What partners can you find? Click to select:</h4>
-          {currentCardData.options.map((option, idx) => (
-            <button
-              key={idx}
-              onClick={() => {
-                setSelectedPartners(`option-${idx}`);
-                setShowFeedback(false);
-              }}
-              disabled={showFeedback}
-              className={`w-full p-6 rounded-lg border-2 transition-all ${
-                selectedPartners === `option-${idx}`
-                  ? "border-primary bg-primary/10"
-                  : "border-border hover:border-primary/50"
-              } ${showFeedback ? "opacity-60 cursor-not-allowed" : ""}`}
-            >
-              <div className="text-center space-y-3">
-                <p className="text-lg font-medium">{option.description}</p>
-                <p className="text-xl text-muted-foreground">
-                  {option.partner1} and {option.partner2}
-                </p>
-              </div>
-            </button>
-          ))}
+          <h4 className="font-semibold text-center">What partners can you find? Select all correct ways to split them:</h4>
+          {currentCardData.options.map((option, idx) => {
+            const optionKey = `option-${idx}`;
+            const isSelected = selectedPartners.includes(optionKey);
+            const result = showFeedback ? getResults().find(r => r.key === optionKey) : null;
+            
+            return (
+              <button
+                key={idx}
+                onClick={() => toggleOption(optionKey)}
+                disabled={showFeedback}
+                className={`w-full p-6 rounded-lg border-2 transition-all ${
+                  showFeedback && result
+                    ? result.isCorrect
+                      ? "border-green-500 bg-green-500/10"
+                      : "border-red-500 bg-red-500/10"
+                    : showFeedback && !result && option.isCorrect
+                    ? "border-yellow-500 bg-yellow-500/10"
+                    : isSelected
+                    ? "border-primary bg-primary/10"
+                    : "border-border hover:border-primary/50"
+                } ${showFeedback ? "cursor-not-allowed" : ""}`}
+              >
+                <div className="text-center space-y-3">
+                  <div className="flex items-center justify-center gap-2">
+                    <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+                      isSelected ? "border-primary bg-primary" : "border-muted-foreground"
+                    }`}>
+                      {isSelected && <span className="text-primary-foreground text-sm">✓</span>}
+                    </div>
+                    <p className="text-lg font-medium">{option.description}</p>
+                    {showFeedback && result && (
+                      <span className={result.isCorrect ? "text-green-600" : "text-red-600"}>
+                        {result.isCorrect ? "✓" : "✗"}
+                      </span>
+                    )}
+                    {showFeedback && !result && option.isCorrect && (
+                      <span className="text-yellow-600">(missed)</span>
+                    )}
+                  </div>
+                  <p className="text-xl text-muted-foreground">
+                    {option.partner1} and {option.partner2}
+                  </p>
+                </div>
+              </button>
+            );
+          })}
         </div>
 
-        {selectedPartners && !showFeedback && (
+        {selectedPartners.length > 0 && !showFeedback && (
           <div className="flex justify-center">
             <Button onClick={() => setShowFeedback(true)} size="lg">
-              Check My Answer
+              Check My Answers
             </Button>
           </div>
         )}
 
-        {showFeedback && selectedPartners && (
-          <div className="bg-green-500/20 text-green-700 dark:text-green-300 p-4 rounded-lg text-center">
-            <p className="font-bold text-lg mb-2">✓ Great job finding partners!</p>
-            <p className="text-xl font-bold">
-              I found {currentCardData.options[parseInt(selectedPartners.split("-")[1])].partner1} and {currentCardData.options[parseInt(selectedPartners.split("-")[1])].partner2} inside {currentCardData.total}!
-            </p>
-          </div>
-        )}
+        {showFeedback && (() => {
+          const results = getResults();
+          const correctCount = results.filter(r => r.isCorrect).length;
+          const incorrectCount = results.filter(r => !r.isCorrect).length;
+          const totalCorrectOptions = currentCardData.options.filter(o => o.isCorrect).length;
+          const allCorrect = correctCount === totalCorrectOptions && incorrectCount === 0;
+          
+          return (
+            <div className={`p-4 rounded-lg text-center ${
+              allCorrect 
+                ? "bg-green-500/20 text-green-700 dark:text-green-300" 
+                : incorrectCount > 0
+                ? "bg-red-500/20 text-red-700 dark:text-red-300"
+                : "bg-yellow-500/20 text-yellow-700 dark:text-yellow-300"
+            }`}>
+              <p className="font-bold text-lg mb-2">
+                {allCorrect 
+                  ? "✓ Perfect! You found all the correct partners!" 
+                  : incorrectCount > 0
+                  ? `✗ ${incorrectCount} wrong selection${incorrectCount > 1 ? "s" : ""}. Some options don't match what you can see!`
+                  : `You got ${correctCount} of ${totalCorrectOptions} correct ways!`}
+              </p>
+            </div>
+          );
+        })()}
 
         <div className="flex justify-between pt-4 border-t border-border">
           <Button
             onClick={() => {
               setCurrentCard(Math.max(0, currentCard - 1));
-              setSelectedPartners(null);
+              setSelectedPartners([]);
               setShowFeedback(false);
             }}
             disabled={currentCard === 0}
@@ -722,16 +823,24 @@ const PartnersActivity = () => {
           >
             Previous
           </Button>
-          <Button
-            onClick={() => {
-              setCurrentCard(Math.min(cards.length - 1, currentCard + 1));
-              setSelectedPartners(null);
-              setShowFeedback(false);
-            }}
-            disabled={currentCard === cards.length - 1}
-          >
-            Next
-          </Button>
+          {currentCard === cards.length - 1 && showFeedback ? (
+            <Link to="/activities">
+              <Button size="lg">
+                Continue Learning
+              </Button>
+            </Link>
+          ) : (
+            <Button
+              onClick={() => {
+                setCurrentCard(Math.min(cards.length - 1, currentCard + 1));
+                setSelectedPartners([]);
+                setShowFeedback(false);
+              }}
+              disabled={currentCard === cards.length - 1}
+            >
+              Next
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>
