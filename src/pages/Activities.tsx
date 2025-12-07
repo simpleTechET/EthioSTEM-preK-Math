@@ -673,6 +673,28 @@ const topicFLessons = [
     path: "/activity/matching-22",
     unlocked: true
   },
+  {
+  id: 23,
+  title: "Dice & Object Match",
+  description: "Roll the dice, count the dots, and create matching groups!",
+  icon: "🎲",
+  duration: "15-20 min",
+  path: "/activity/matching-23",
+  unlocked: true,
+  standards: ["PK.CC.2", "PK.CC.3ab", "PK.CC.4"],
+  objective: "Make a group of up to 5 objects and match the numeral (concrete to abstract)"
+},
+{
+  id: 24,
+  title: "Numeral to Objects",
+  description: "Look at numerals and count out matching groups of objects!",
+  icon: "👀",
+  duration: "15-20 min",
+  path: "/activity/matching-24", 
+  unlocked: true,
+  standards: ["PK.CC.2", "PK.CC.3ab", "PK.CC.4"],
+  objective: "Look at a numeral and count out a group of objects to match (abstract to concrete)"
+},
 ]
 
 export default Activities;
