@@ -224,11 +224,11 @@ const SortingActivity = () => {
   const [selectedAnimal, setSelectedAnimal] = useState<string | null>(null);
 
   const animals = [
-    { name: "Red Fish", color: "red", type: "swim", emoji: "🐟", bgColor: "#ef4444" },
-    { name: "Yellow Bird", color: "yellow", type: "fly", emoji: "🐦", bgColor: "#eab308" },
-    { name: "Yellow Bee", color: "yellow", type: "fly", emoji: "🐝", bgColor: "#eab308" },
-    { name: "Green Frog", color: "green", type: "swim", emoji: "🐸", bgColor: "#22c55e" },
-    { name: "Red Crab", color: "red", type: "swim", emoji: "🦀", bgColor: "#ef4444" },
+    { name: "Green Turtle", color: "green", type: "swim", emoji: "🐢", bgColor: "#eab308" },
+    { name: "Red Bird", color: "red", type: "fly", emoji: "🐦", bgColor: "#22c55e" },
+    { name: "Yellow Bee", color: "yellow", type: "fly", emoji: "🐝", bgColor: "#ef4444" },
+    { name: "Green Frog", color: "green", type: "swim", emoji: "🐸", bgColor: "#eab308" },
+    { name: "Red Crab", color: "red", type: "swim", emoji: "🦀", bgColor: "#22c55e" },
   ];
 
   const groupLabels = sortBy === "color" 
