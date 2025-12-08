@@ -42,6 +42,7 @@ const CountingMatching21 = lazy(() => import("./pages/CountingMatching21"));
 const CountingMatching22 = lazy(() => import("./pages/CountingMatching22"));
 const CountingMatching23 = lazy(() => import("./pages/CountingMatching23"));
 const CountingMatching24 = lazy(() => import("./pages/CountingMatching24"));
+const CountingMatching25 = lazy(() => import("./pages/CountingMatching25"));
 
 const SignUp = lazy(() => import("./pages/SignUp")); // Add this
 const SignIn = lazy(() => import("./pages/SignIn")); // Add this
@@ -100,6 +101,7 @@ const App = () => (
             <Route path="/activity/matching-22" element={<CountingMatching22 />} />
             <Route path="/activity/matching-23" element={<CountingMatching23 />} />
             <Route path="/activity/matching-24" element={<CountingMatching24 />} />
+            <Route path="/activity/matching-25" element={<CountingMatching25 />} />
 
               <Route path="*" element={<NotFound />} />
             </Routes>
