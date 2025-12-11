@@ -706,6 +706,51 @@ const topicFLessons = [
   standards: ["PK.CC.2", "PK.CC.3ab", "PK.CC.4"],
   objective: "Represent numbers 1-5 using objects and pictures"
 },
+{
+  id: 26, 
+  title: "My Number Book - Part 2",
+  description: "Finish your number book by adding numerals to your object collections!",
+  icon: "✏️",
+  duration: "15-20 min",
+  path: "/activity/matching-26",
+  unlocked: true,
+  standards: ["PK.CC.2", "PK.CC.3ab", "PK.CC.4"],
+  objective: "Represent numbers 1-5 using numerals"
+},
+{
+  id: 27,
+  title: "Number Bingo Bonanza",
+  description: "Play bingo with numerals and object groups - match and win!",
+  icon: "🎯",
+  duration: "15-20 min",
+  path: "/activity/matching-27",
+  unlocked: true,
+  standards: ["PK.CC.2", "PK.CC.3ab", "PK.CC.4"],
+  objective: "Play a game involving numbers to 5"
+},
+{
+  id: 28,
+  title: "Snake Path Parade",
+  description: "Count snakes 1-5 as they leave slithery paths in the sand!",
+  icon: "🐍",
+  duration: "15-20 min",
+  path: "/activity/matching-28",
+  unlocked: true,
+  standards: ["PK.CC.3c", "PK.CC.2"],
+  objective: "Count 1, 2, 3, 4, 5 objects in sequence with stories"
+},
+
+{
+  id: 29,
+  title: "Beanbag Toss Challenge",
+  description: "Toss beanbags into hoops and discover you need 1 more to match the number!",
+  icon: "🎯",
+  duration: "15-20 min",
+  path: "/activity/matching-29",
+  unlocked: true,
+  standards: ["PK.CC.3c", "PK.CC.2"],
+  objective: "Find 1 more object needed to match a given numeral"
+},
 ]
 
 export default Activities;
