@@ -751,6 +751,39 @@ const topicFLessons = [
   standards: ["PK.CC.3c", "PK.CC.2"],
   objective: "Find 1 more object needed to match a given numeral"
 },
+   {
+    id: 30,
+    title: "Tower Building Adventure",
+    description: "Build towers by adding 1 more cube at a time!",
+    icon: "🧱",
+    duration: "15-20 min",
+    path: "/activity/matching-30",
+    unlocked: true,
+    standards: ["PK.CC.3c", "PK.CC.5"],
+    objective: "Build a tower by putting 1 more cube or block at a time"
+  },
+  {
+    id: 31,
+    title: "Number Stairs Builder",
+    description: "Build number stairs showing 1 more with each step!",
+    icon: "📶",
+    duration: "15-20 min",
+    path: "/activity/matching-31",
+    unlocked: true,
+    standards: ["PK.CC.3c", "PK.OA.2", "PK.CC.5"],
+    objective: "Build number stairs showing 1 more with cubes"
+  },
+  {
+    id: 32,
+    title: "What Comes Next?",
+    description: "Count up and discover what number comes after!",
+    icon: "⏭️",
+    duration: "15-20 min",
+    path: null,
+    unlocked: false,
+    standards: ["PK.CC.3c", "PK.CC.2"],
+    objective: "Count up—What comes after?"
+  }
 ]
 
 export default Activities;
