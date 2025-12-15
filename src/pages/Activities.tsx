@@ -779,8 +779,8 @@ const topicFLessons = [
     description: "Count up and discover what number comes after!",
     icon: "⏭️",
     duration: "15-20 min",
-    path: null,
-    unlocked: false,
+    path: "/activity/matching-32",
+    unlocked: true,
     standards: ["PK.CC.3c", "PK.CC.2"],
     objective: "Count up—What comes after?"
   }
