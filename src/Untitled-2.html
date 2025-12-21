@@ -428,7 +428,7 @@ const Activities = () => {
       )
     ))}
   </div>
-  {/* <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
     {topicGLessons.map((lesson) => (
       lesson.path ? (
         <Link to={lesson.path} key={lesson.id}>
@@ -477,27 +477,78 @@ const Activities = () => {
         </Card>
       )
     ))}
-  </div> */}
-</section> 
-{/* Topic G: One More with Numbers 1 to 5 */}
+  </div>
+</section>
+{/* Topic G */}
 <section className="mb-16">
   <div className="flex items-center gap-3 mb-6">
-    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500 to-green-500 flex items-center justify-center">
-      <span className="text-2xl">➕</span>
+    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+      <span className="text-2xl">🔢</span>
     </div>
     <div>
-      <h2 className="text-2xl font-bold text-foreground">Topic G: One More with Numbers 1 to 5</h2>
-      <p className="text-muted-foreground">Understand that each number is one more than the previous</p>
+      <h2 className="text-2xl font-bold text-foreground">Topic G: Matching 1 Numeral with up to 5 Objects</h2>
+      <p className="text-muted-foreground">Connect quantities to written numerals 1-5</p>
     </div>
+  </div>
+
+  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {topicGLessons.map((lesson) => (
+      lesson.path ? (
+        <Link to={lesson.path} key={lesson.id}>
+          <Card className="h-full hover:shadow-playful transition-all duration-300 hover:scale-105 cursor-pointer border-2 hover:border-purple-500 bg-gradient-to-br from-purple-50/50 to-pink-50/50 relative">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-semibold text-purple-700 bg-purple-100 px-3 py-1 rounded-full">
+                  Lesson {lesson.id}
+                </span>
+                <Play className="w-5 h-5 text-success" />
+              </div>
+              <CardTitle className="text-lg">{lesson.title}</CardTitle>
+              <CardDescription className="text-sm">{lesson.description}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center gap-2">
+                <span className="text-3xl">{lesson.icon}</span>
+                <span className="text-sm text-muted-foreground">{lesson.duration}</span>
+              </div>
+            </CardContent>
+            {isLessonCompleted(lesson.id) && (
+              <div className="absolute bottom-3 right-3">
+                <CheckCircle2 className="w-6 h-6 text-green-600 fill-green-100" />
+              </div>
+            )}
+          </Card>
+        </Link>
+      ) : (
+        <Card key={lesson.id} className="opacity-60 cursor-not-allowed relative bg-gradient-to-br from-purple-50/30 to-pink-50/30">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-semibold text-muted-foreground bg-muted px-3 py-1 rounded-full">
+                Lesson {lesson.id}
+              </span>
+              <Lock className="w-5 h-5 text-muted-foreground" />
+            </div>
+            <CardTitle className="text-lg text-muted-foreground">{lesson.title}</CardTitle>
+            <CardDescription className="text-sm">{lesson.description}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-2">
+              <span className="text-3xl">{lesson.icon}</span>
+              <span className="text-sm text-muted-foreground">{lesson.duration}</span>
+            </div>
+          </CardContent>
+        </Card>
+      )
+    ))}
   </div>
   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
     {topicGLessons.map((lesson) => (
       lesson.path ? (
         <Link to={lesson.path} key={lesson.id}>
-          <Card className="h-full hover:shadow-playful transition-all duration-300 hover:scale-105 cursor-pointer border-2 hover:border-teal-500 bg-gradient-to-br from-teal-50/50 to-green-50/50 relative">
+          <Card className="h-full hover:shadow-playful transition-all duration-300 hover:scale-105 cursor-pointer border-2 hover:border-purple-500 bg-gradient-to-br from-purple-50/50 to-pink-50/50 relative">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-semibold text-teal-700 bg-teal-100 px-3 py-1 rounded-full">
+                <span className="text-sm font-semibold text-purple-700 bg-purple-100 px-3 py-1 rounded-full">
                   Lesson {lesson.id}
                 </span>
                 <Play className="w-5 h-5 text-success" />
@@ -519,7 +570,7 @@ const Activities = () => {
           </Card>
         </Link>
       ) : (
-        <Card key={lesson.id} className="opacity-60 cursor-not-allowed relative bg-gradient-to-br from-teal-50/30 to-green-50/30">
+        <Card key={lesson.id} className="opacity-60 cursor-not-allowed relative bg-gradient-to-br from-purple-50/30 to-pink-50/30">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-semibold text-muted-foreground bg-muted px-3 py-1 rounded-full">
@@ -540,101 +591,6 @@ const Activities = () => {
       )
     ))}
   </div>
-</section>
-{/* Topic H: Counting 5, 4, 3, 2, 1 */}
-<section className="mb-16">
-  <div className="flex items-center gap-3 mb-6">
-    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-rose-500 to-red-500 flex items-center justify-center">
-      <span className="text-2xl">⬇️</span>
-    </div>
-    <div>
-      <h2 className="text-2xl font-bold text-foreground">Topic H: Counting 5, 4, 3, 2, 1</h2>
-      <p className="text-muted-foreground">Count down and understand 1 less</p>
-    </div>
-  </div>
-  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-    {topicHLessons.map((lesson) => (
-      lesson.path ? (
-        <Link to={lesson.path} key={lesson.id}>
-          <Card className="h-full hover:shadow-playful transition-all duration-300 hover:scale-105 cursor-pointer border-2 hover:border-rose-500 bg-gradient-to-br from-rose-50/50 to-red-50/50 relative">
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-semibold text-rose-700 bg-rose-100 px-3 py-1 rounded-full">
-                  Lesson {lesson.id}
-                </span>
-                <Play className="w-5 h-5 text-success" />
-              </div>
-              <CardTitle className="text-lg">{lesson.title}</CardTitle>
-              <CardDescription className="text-sm">{lesson.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-2">
-                <span className="text-3xl">{lesson.icon}</span>
-                <span className="text-sm text-muted-foreground">{lesson.duration}</span>
-              </div>
-            </CardContent>
-            {isLessonCompleted(lesson.id) && (
-              <div className="absolute bottom-3 right-3">
-                <CheckCircle2 className="w-6 h-6 text-green-600 fill-green-100" />
-              </div>
-            )}
-          </Card>
-        </Link>
-      ) : (
-        <Card key={lesson.id} className="opacity-60 cursor-not-allowed relative bg-gradient-to-br from-rose-50/30 to-red-50/30">
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-semibold text-muted-foreground bg-muted px-3 py-1 rounded-full">
-                Lesson {lesson.id}
-              </span>
-              <Lock className="w-5 h-5 text-muted-foreground" />
-            </div>
-            <CardTitle className="text-lg text-muted-foreground">{lesson.title}</CardTitle>
-            <CardDescription className="text-sm">{lesson.description}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-2">
-              <span className="text-3xl">{lesson.icon}</span>
-              <span className="text-sm text-muted-foreground">{lesson.duration}</span>
-            </div>
-          </CardContent>
-        </Card>
-      )
-    ))}
-  </div>
-</section>
-{/* End of Module 1 Assessment */}
-<section className="mb-16">
-  <div className="flex items-center gap-3 mb-6">
-    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accent to-warning flex items-center justify-center">
-      <span className="text-2xl">📋</span>
-    </div>
-    <div>
-      <h2 className="text-2xl font-bold text-foreground">End of Module Assessment</h2>
-      <p className="text-muted-foreground">Final evaluation of all Module 1 skills</p>
-    </div>
-  </div>
-  <Link to="/assessment/end-of-module-1">
-    <Card className="hover:shadow-playful transition-all duration-300 hover:scale-105 cursor-pointer border-2 hover:border-primary">
-      <CardHeader>
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">
-            For Teachers/Parents
-          </span>
-        </div>
-        <CardTitle className="text-xl">End of Module 1 Assessment</CardTitle>
-        <CardDescription>Comprehensive evaluation of Topics A-H</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-2 text-sm text-muted-foreground">
-          <p>• Matching and Sorting Objects</p>
-          <p>• Counting 1-5</p>
-          <p>• Matching Numerals to Quantities</p>
-          <p>• Understanding One More and One Less</p>
-        </div>
-      </CardContent>
-    </Card>
-  </Link>
 </section>
         {/* Coming Soon Section */}
         <section>
@@ -949,6 +905,7 @@ const topicGLessons = [
   standards: ["PK.CC.3c", "PK.CC.2"],
   objective: "Count 1, 2, 3, 4, 5 objects in sequence with stories"
 },
+
 {
   id: 29,
   title: "Beanbag Toss Challenge",
@@ -992,9 +949,8 @@ const topicGLessons = [
     unlocked: true,
     standards: ["PK.CC.3c", "PK.CC.2"],
     objective: "Count up—What comes after?"
-  }];
-
-  const topicHLessons = [{
+  },
+  {
     id: 33,
     title: "Building Down Stairs (Part 1)",
     description: "Build step-down stairs with cubes from 5 to 1.",
@@ -1016,40 +972,6 @@ const topicGLessons = [
     standards: ["PK.CC.3c", "PK.CC.4"],
     objective: "Build descending number stairs at pictorial/abstract levels"
   },
-  {
-    id: 35,
-    title: "Five Little Crabs",
-    description: "Count down from 5 to 1 as waves wash crabs away!",
-    icon: "🦀",
-    duration: "15-20 min",
-    path: "/activity/matching-35",
-    unlocked: true,
-    standards: ["PK.CC.3c", "PK.OA.2"],
-    objective: "Count 5, 4, 3, 2, 1 using a story and fingers"
-  },
-  {
-    id: 36,
-    title: "Five Little Fishies",
-    description: "Count down as Mr. Shark snaps up fish one by one!",
-    icon: "🦈",
-    duration: "15-20 min",
-    path: "/activity/matching-36",
-    unlocked: true,
-    standards: ["PK.CC.3c", "PK.OA.2"],
-    objective: "Count 5, 4, 3, 2, 1 using a story and fingers"
-  },
-  {
-    id: 37,
-    title: "Culminating Task",
-    description: "Sort objects, count them, and build towers with numerals!",
-    icon: "🏆",
-    duration: "15-20 min",
-    path: "/activity/matching-37",
-    unlocked: true,
-    standards: ["PK.CC.1", "PK.CC.2", "PK.CC.3", "PK.CC.4", "PK.MD.2"],
-    objective: "Sort, count, and represent groups with towers and numerals"
-  }
-];
-
+]
 
 export default Activities;
