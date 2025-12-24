@@ -1,0 +1,347 @@
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowLeft, Play, Lock, CheckCircle2 } from "lucide-react";
+
+const Activities = () => {
+  const [completedLessons, setCompletedLessons] = useState<number[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('ethiostem-completed-lessons');
+    if (saved) {
+      setCompletedLessons(JSON.parse(saved));
+    }
+  }, []);
+
+  const isLessonCompleted = (lessonId: number) => {
+    return completedLessons.includes(lessonId);
+  };
+
+  const renderLessonCard = (lesson: any, topicColor: string) => {
+    const content = (
+      <Card className={`relative transition-all duration-300 ${lesson.path ? 'hover:shadow-lg hover:scale-[1.02] cursor-pointer' : 'opacity-60'}`}>
+        <CardHeader className="pb-2">
+          <div className="flex items-center justify-between">
+            <span className={`text-xs font-medium px-2 py-1 rounded-full bg-${topicColor}/10 text-${topicColor}`}>
+              Lesson {lesson.id}
+            </span>
+            {lesson.path ? (
+              <Play className={`w-4 h-4 text-${topicColor}`} />
+            ) : (
+              <Lock className="w-4 h-4 text-muted-foreground" />
+            )}
+          </div>
+          <CardTitle className="text-lg">{lesson.title}</CardTitle>
+          <CardDescription>{lesson.description}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <span>{lesson.icon}</span>
+            <span>{lesson.duration}</span>
+          </div>
+        </CardContent>
+        {isLessonCompleted(lesson.id) && (
+          <div className="absolute top-2 right-2">
+            <CheckCircle2 className="w-5 h-5 text-green-500" />
+          </div>
+        )}
+      </Card>
+    );
+
+    return lesson.path ? (
+      <Link key={lesson.id} to={lesson.path}>
+        {content}
+      </Link>
+    ) : (
+      <div key={lesson.id}>{content}</div>
+    );
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50">
+      {/* Header */}
+      <header className="bg-card/80 backdrop-blur-sm border-b border-border py-4 px-6 sticky top-0 z-10">
+        <div className="max-w-6xl mx-auto flex items-center gap-4">
+          <Link to="/">
+            <Button variant="outline" size="icon">
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
+          </Link>
+          <div>
+            <h1 className="font-bold text-foreground">Learning Activities</h1>
+            <p className="text-xs text-muted-foreground">Module 1: Counting to 5</p>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-6xl mx-auto px-4 py-8 space-y-12">
+        {/* Topic A: Matching Objects */}
+        <section>
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-2xl">
+              🎯
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-foreground">Topic A: Matching Objects</h2>
+              <p className="text-muted-foreground">Learn to identify and match similar objects</p>
+            </div>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {matchingLessons.map((lesson) => renderLessonCard(lesson, "primary"))}
+          </div>
+        </section>
+
+        {/* Topic B: Sorting */}
+        <section>
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center text-2xl">
+              🔵
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-foreground">Topic B: Sorting</h2>
+              <p className="text-muted-foreground">Group objects by their attributes</p>
+            </div>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {sortingLessons.map((lesson) => renderLessonCard(lesson, "blue-500"))}
+          </div>
+        </section>
+
+        {/* Topic C: Counting */}
+        <section>
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center text-2xl">
+              🔢
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-foreground">Topic C: Counting</h2>
+              <p className="text-muted-foreground">Learn to count objects up to 3</p>
+            </div>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {countingLessons.map((lesson) => renderLessonCard(lesson, "green-500"))}
+          </div>
+        </section>
+
+        {/* Topic D: Matching Numerals to Quantities */}
+        <section>
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center text-2xl">
+              🔢
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-foreground">Topic D: Matching Numerals to Quantities</h2>
+              <p className="text-muted-foreground">Connect numbers to groups of objects</p>
+            </div>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {topicDLessons.map((lesson) => renderLessonCard(lesson, "purple-500"))}
+          </div>
+        </section>
+
+        {/* Assessment */}
+        <section>
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center text-2xl">
+              📋
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-foreground">Assessment</h2>
+              <p className="text-muted-foreground">Track student progress and understanding</p>
+            </div>
+          </div>
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-medium px-2 py-1 rounded-full bg-amber-500/10 text-amber-600">
+                  For Teachers/Parents
+                </span>
+              </div>
+              <CardTitle>Mid-Module 1 Assessment</CardTitle>
+              <CardDescription>Evaluate student understanding of Topics A-D</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground">
+                <p>• Matching Objects</p>
+                <p>• Sorting</p>
+                <p>• Counting 1-3</p>
+                <p>• Matching Numerals to Quantities</p>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* Topic E: How Many Questions with 4 or 5 Objects */}
+        <section>
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-12 bg-cyan-500/10 rounded-xl flex items-center justify-center text-2xl">
+              🐠
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-foreground">Topic E: How Many Questions with 4 or 5 Objects</h2>
+              <p className="text-muted-foreground">Count and arrange groups of 4-5 objects</p>
+            </div>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {topicELessons.map((lesson) => renderLessonCard(lesson, "cyan-500"))}
+          </div>
+        </section>
+
+        {/* Topic F: Matching 1 Numeral with up to 5 Objects */}
+        <section>
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-12 bg-rose-500/10 rounded-xl flex items-center justify-center text-2xl">
+              🔢
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-foreground">Topic F: Matching 1 Numeral with up to 5 Objects</h2>
+              <p className="text-muted-foreground">Connect quantities to written numerals 1-5</p>
+            </div>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {topicFLessons.map((lesson) => renderLessonCard(lesson, "rose-500"))}
+          </div>
+        </section>
+
+        {/* Topic G: 1 More */}
+        <section>
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center text-2xl">
+              ➕
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-foreground">Topic G: 1 More</h2>
+              <p className="text-muted-foreground">Understand the concept of adding 1 more to a group</p>
+            </div>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {topicGLessons.map((lesson) => renderLessonCard(lesson, "emerald-500"))}
+          </div>
+        </section>
+
+        {/* Topic H: Counting 5, 4, 3, 2, 1 */}
+        <section>
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center text-2xl">
+              🔙
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-foreground">Topic H: Counting 5, 4, 3, 2, 1</h2>
+              <p className="text-muted-foreground">Count backward through stories, songs, and finger counting to understand 1 less</p>
+            </div>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {topicHLessons.map((lesson) => renderLessonCard(lesson, "indigo-500"))}
+          </div>
+        </section>
+        <section>
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center text-2xl">
+              📋
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-foreground">Assessment</h2>
+              <p className="text-muted-foreground">Track student progress and understanding</p>
+            </div>
+          </div>
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-medium px-2 py-1 rounded-full bg-amber-500/10 text-amber-600">
+                  For Teachers/Parents
+                </span>
+              </div>
+              <CardTitle>End-Module 1 Assessment</CardTitle>
+              <CardDescription>Evaluate student understanding of All Topics</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground">
+                <p>• Matching Objects</p>
+                <p>• Sorting</p>
+                <p>• Counting 1-3</p>
+                <p>• Matching Numerals to Quantities</p>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+        {/* Coming Soon Section */}
+        <section className="text-center py-12">
+          <Card className="max-w-md mx-auto">
+            <CardContent className="pt-6">
+              <p className="text-4xl mb-4">🚀</p>
+              <h3 className="text-xl font-bold text-foreground mb-2">More Activities Coming Soon!</h3>
+              <p className="text-muted-foreground">
+                Complete the current activities to unlock more counting and number lessons
+              </p>
+            </CardContent>
+          </Card>
+        </section>
+      </main>
+    </div>
+  );
+        };
+
+const matchingLessons = [
+  { id: 1, title: "Exactly the Same", description: "Match objects that are identical", icon: "💯", duration: "10 min", path: "/activity/matching-1", unlocked: true },
+  { id: 2, title: "Same, But Different Size", description: "Match objects that are similar but different sizes", icon: "📏", duration: "10 min", path: "/activity/matching-2", unlocked: true },
+  { id: 3, title: "Match Fruits", description: "Match fruits that are the same type but different sizes", icon: "🍎", duration: "10 min", path: "/activity/matching-3", unlocked: true },
+  { id: 4, title: "Used Together", description: "Match objects that go together", icon: "🧩", duration: "10 min", path: "/activity/matching-4", unlocked: true }
+];
+
+const sortingLessons = [
+  { id: 5, title: "Make One Group", description: "Create groups with a given attribute", icon: "📦", duration: "12 min", path: "/activity/sorting-5", unlocked: true },
+  { id: 6, title: "Sort into Two", description: "Divide objects into two groups", icon: "⚖️", duration: "12 min", path: "/activity/sorting-6", unlocked: true },
+  { id: 7, title: "Two Different Ways", description: "Sort the same objects in different ways", icon: "🔄", duration: "12 min", path: "/activity/sorting-7", unlocked: true }
+];
+
+const countingLessons = [
+  { id: 8, title: "Count Up to 3", description: "Touch and count objects up to 3", icon: "🐻", duration: "15 min", path: "/activity/counting-8", unlocked: true },
+  { id: 9, title: "Count Up to 3", description: "Arrange and count objects in different ways", icon: "🔢", duration: "15 min", path: "/activity/counting-9", unlocked: true },
+  { id: 10, title: "Lines & Scattered Groups", description: "Count objects in different arrangements", icon: "👁️", duration: "12 min", path: "/activity/counting-10", unlocked: true },
+  { id: 11, title: "Counting Games", description: "Play games with counting and moving", icon: "🎮", duration: "12 min", path: "/activity/counting-11", unlocked: true }
+];
+
+const topicDLessons = [
+  { id: 12, title: "Match Numbers 1, 2, 3", description: "Match numerals to quantities", icon: "🔢", duration: "12 min", path: "/activity/counting-12", unlocked: true },
+  { id: 13, title: "Make Groups & Match Numbers", description: "Create groups and match to numerals 1-3", icon: "🎲", duration: "12 min", path: "/activity/counting-13", unlocked: true },
+  { id: 14, title: "Numbers to Objects", description: "Count objects to match numerals 1-3", icon: "🧊", duration: "12 min", path: "/activity/counting-14", unlocked: true }
+];
+
+const topicELessons = [
+  { id: 15, title: "Fishy Friends Counting", description: "Help the fish play tag and line up to escape the shark!", icon: "🐠", duration: "15-20 min", path: "/activity/counting-15", unlocked: true },
+  { id: 16, title: "Family Photo Counting", description: "Count family members in photos and tell how many!", icon: "👨‍👩‍👧‍👦", duration: "15-20 min", path: "/activity/counting-16", unlocked: true },
+  { id: 17, title: "Piano Finger Counting", description: "Play the piano and count your fingers the Math Way!", icon: "🎹", duration: "15-20 min", path: "/activity/counting-17", unlocked: true },
+  { id: 18, title: "Toy Store Arrays", description: "Help organize toys in the toy store display!", icon: "🧸", duration: "15-20 min", path: "/activity/counting-18", unlocked: true },
+  { id: 19, title: "Number Partners Discovery", description: "Break apart groups to find number partners hiding inside!", icon: "🔍", duration: "15-20 min", path: "/activity/counting-19", unlocked: true },
+  { id: 20, title: "Circle of Friends", description: "Count friends sitting in a circle without losing your place!", icon: "⭕", duration: "15-20 min", path: "/activity/counting-20", unlocked: true }
+];
+
+const topicFLessons = [
+  { id: 21, title: "Number Match Adventure", description: "Count up to 4 objects and find the matching numeral!", icon: "🔢", duration: "15-20 min", path: "/activity/matching-21", unlocked: true },
+  { id: 22, title: "Five Friends Matching", description: "Count up to 5 objects and match them with numerals!", icon: "5️⃣", duration: "15-20 min", path: "/activity/matching-22", unlocked: true },
+  { id: 23, title: "Dice & Object Match", description: "Roll the dice, count the dots, and create matching groups!", icon: "🎲", duration: "15-20 min", path: "/activity/matching-23", unlocked: true },
+  { id: 24, title: "Numeral to Objects", description: "Look at numerals and count out matching groups of objects!", icon: "👀", duration: "15-20 min", path: "/activity/matching-24", unlocked: true },
+  { id: 25, title: "My Number Book - Part 1", description: "Create your own number book with objects and pictures for numbers 1-5!", icon: "📖", duration: "15-20 min", path: "/activity/matching-25", unlocked: true },
+  { id: 26, title: "My Number Book - Part 2", description: "Finish your number book by adding numerals to your object collections!", icon: "✏️", duration: "15-20 min", path: "/activity/matching-26", unlocked: true },
+  { id: 27, title: "Number Bingo Bonanza", description: "Play bingo with numerals and object groups - match and win!", icon: "🎯", duration: "15-20 min", path: "/activity/matching-27", unlocked: true }
+];
+
+const topicGLessons = [
+  { id: 28, title: "Snake Path Parade", description: "Count snakes 1-5 as they leave slithery paths in the sand!", icon: "🐍", duration: "15-20 min", path: "/activity/matching-28", unlocked: true },
+  { id: 29, title: "Beanbag Toss Challenge", description: "Toss beanbags into hoops and discover you need 1 more to match the number!", icon: "🎯", duration: "15-20 min", path: "/activity/matching-29", unlocked: true },
+  { id: 30, title: "Tower Building Adventure", description: "Build towers by adding 1 more cube at a time!", icon: "🧱", duration: "15-20 min", path: "/activity/matching-30", unlocked: true },
+  { id: 31, title: "Number Stairs Builder", description: "Build number stairs showing 1 more with each step!", icon: "📶", duration: "15-20 min", path: "/activity/matching-31", unlocked: true },
+  { id: 32, title: "What Comes Next?", description: "Count up and discover what number comes after!", icon: "⏭️", duration: "15-20 min", path: "/activity/matching-32", unlocked: true }
+];
+
+const topicHLessons = [
+  { id: 33, title: "Descending Number Stairs", description: "Build descending stairs with cubes from 5 to 1", icon: "🧱", duration: "15-20 min", path: "/lesson-33", unlocked: true },
+  { id: 34, title: "Staircase Mat & Stickers", description: "Build descending stairs with pennies and stickers", icon: "🪙", duration: "15-20 min", path: "/lesson-34", unlocked: true },
+  { id: 35, title: "Five Little Crabs", description: "Count 5, 4, 3, 2, 1 using story and fingers", icon: "🦀", duration: "15-20 min", path: "/lesson-35", unlocked: true },
+  { id: 36, title: "Five Little Fishies", description: "Count down with fingers and Mr. Shark", icon: "🐠", duration: "15-20 min", path: "/lesson-36", unlocked: true },
+  { id: 37, title: "Culminating Task", description: "Sort objects by use, count groups, build towers and match numerals", icon: "🏆", duration: "25 min", path: "/lesson-37", unlocked: true },
+  { id: 38, title: "Assessment", description: "Check knowledge of all lessons", icon: "🏆", duration: "25 min", path: "/lesson-38", unlocked: true }
+];
+
+export default Activities;

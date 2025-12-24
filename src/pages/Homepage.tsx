@@ -149,7 +149,7 @@ const Homepage = () => {
               </CardContent>
             </Card>
 
-            {/* Module 2 - Coming Soon */}
+            {/* Module 2 - Coming Soon
             <Card className="border-2 border-border opacity-75">
               <CardHeader>
                 <div className="flex items-center justify-between mb-2">
@@ -180,8 +180,22 @@ const Homepage = () => {
                   </Button>
                 </div>
               </CardContent>
-            </Card>
-
+            </Card> */}
+{/* MODULE 2: SHAPES */}
+        <section id="module2" className="pt-8 border-t-4 border-violet-300">
+          <div className="bg-gradient-to-r from-violet-100 to-purple-100 rounded-xl p-6 mb-8">
+            <h2 className="text-3xl font-bold text-violet-900 mb-2">Module 2: Shapes</h2>
+            <p className="text-violet-700">
+              Explore 2D and 3D shapes - identify, describe, sort, compare, and build!
+            </p>
+          </div>
+          <Link to="/activities" className="block">
+                    <Button className="w-full mt-4 bg-primary hover:bg-primary/90">
+                      Start Module 2
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+        </section>
             {/* Module 3 - Coming Soon */}
             <Card className="border-2 border-border opacity-75">
               <CardHeader>
@@ -337,7 +351,7 @@ const Homepage = () => {
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <img 
-                  src="/EthioSTEM-preK-Math/logo_notxt.png" 
+                  src="\logo_notxt.png" 
                   alt="Ethiopian STEM Academy" 
                   className="w-10 h-10 object-contain"
                 />
