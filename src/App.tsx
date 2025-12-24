@@ -57,8 +57,9 @@ const CountingMatching36 = lazy(() => import("./pages/CountingMatching36"));
 const CountingMatching37 = lazy(() => import("./pages/CountingMatching37"));
 const EndOfModule1Assessment = lazy(() => import("./pages/EndOfModule1Assessment"));
 
-const ShapesTriangles = lazy(() => import("./pages/ShapesTriangles"));
-const ShapesFindDescribe = lazy(() => import("./pages/ShapesFindDescribe"));
+const ActivitiesModule2 = lazy(() => import("./pages/ActivitiesModule2"));
+const ShapesTriangles = lazy(() => import("./pages/ShapesTriangles1"));
+const ShapesFindDescribe = lazy(() => import("./pages/ShapesFindDescribe2"));
 
 const SignUp = lazy(() => import("./pages/SignUp")); // Add this
 const SignIn = lazy(() => import("./pages/SignIn")); // Add this
@@ -132,6 +133,7 @@ const App = () => (
             <Route path="/activity/matching-37" element={<CountingMatching37 />} />
             <Route path="/assessment/end-of-module-1" element={<EndOfModule1Assessment />} />
 
+            <Route path="/activities/module-2" element={<ActivitiesModule2 />} />
             <Route path="/activity/shapes-38" element={<ShapesFindDescribe />} />
             <Route path="/activity/shapes-39" element={<ShapesTriangles />} />
               <Route path="*" element={<NotFound />} />

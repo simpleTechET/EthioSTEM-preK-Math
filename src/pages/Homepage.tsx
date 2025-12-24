@@ -181,21 +181,41 @@ const Homepage = () => {
                 </div>
               </CardContent>
             </Card> */}
-{/* MODULE 2: SHAPES */}
-        <section id="module2" className="pt-8 border-t-4 border-violet-300">
-          <div className="bg-gradient-to-r from-violet-100 to-purple-100 rounded-xl p-6 mb-8">
-            <h2 className="text-3xl font-bold text-violet-900 mb-2">Module 2: Shapes</h2>
-            <p className="text-violet-700">
-              Explore 2D and 3D shapes - identify, describe, sort, compare, and build!
-            </p>
-          </div>
-          <Link to="/activities" className="block">
-                    <Button className="w-full mt-4 bg-primary hover:bg-primary/90">
-                      Start Module 2
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </Link>
-        </section>
+{/* Module 2 - Available */}
+<Card className="border-2 border-secondary/20 hover:border-secondary hover:shadow-playful transition-all duration-300 hover:scale-105">
+  <CardHeader>
+    <div className="flex items-center justify-between mb-2">
+      <span className="text-sm font-semibold text-secondary bg-secondary/10 px-3 py-1 rounded-full">
+        Available Now
+      </span>
+      <CheckCircle2 className="w-6 h-6 text-success" />
+    </div>
+    <CardTitle className="text-2xl">Pre-K Math: Module 2</CardTitle>
+    <CardDescription>Shapes</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <div className="space-y-4">
+      <div className="flex items-start gap-2 text-sm text-muted-foreground">
+        <Target className="w-4 h-4 text-secondary mt-1 flex-shrink-0" />
+        <span>Identify, analyze, and compare 2D and 3D shapes</span>
+      </div>
+      <div className="flex items-start gap-2 text-sm text-muted-foreground">
+        <Users className="w-4 h-4 text-secondary mt-1 flex-shrink-0" />
+        <span>12 interactive lessons with hands-on activities</span>
+      </div>
+      <div className="flex items-start gap-2 text-sm text-muted-foreground">
+        <BookOpen className="w-4 h-4 text-secondary mt-1 flex-shrink-0" />
+        <span>Based on Eureka Math curriculum</span>
+      </div>
+      <Link to="/activities/module-2" className="block">
+        <Button className="w-full mt-4 bg-secondary hover:bg-secondary/90">
+          Start Module 2
+          <ArrowRight className="w-4 h-4 ml-2" />
+        </Button>
+      </Link>
+    </div>
+  </CardContent>
+</Card>
             {/* Module 3 - Coming Soon */}
             <Card className="border-2 border-border opacity-75">
               <CardHeader>

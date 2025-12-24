@@ -766,7 +766,7 @@ const ShapesTriangles = () => {
       </main>
 
       {/* Navigation Footer */}
-      {phase !== "intro" && phase !== "complete" && (
+      {/* {phase !== "intro" && phase !== "complete" && (
         <footer className="fixed bottom-0 left-0 right-0 bg-card/80 backdrop-blur-sm border-t border-border/50 py-4">
           <div className="container mx-auto px-4 flex justify-between items-center">
             <Button 
@@ -816,7 +816,7 @@ const ShapesTriangles = () => {
             </Button>
           </div>
         </footer>
-      )}
+      )} */}
     </div>
   );
 };
