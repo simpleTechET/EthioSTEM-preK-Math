@@ -58,8 +58,16 @@ const CountingMatching37 = lazy(() => import("./pages/CountingMatching37"));
 const EndOfModule1Assessment = lazy(() => import("./pages/EndOfModule1Assessment"));
 
 const ActivitiesModule2 = lazy(() => import("./pages/ActivitiesModule2"));
-const ShapesTriangles = lazy(() => import("./pages/ShapesTriangles1"));
-const ShapesFindDescribe = lazy(() => import("./pages/ShapesFindDescribe2"));
+const ShapesTriangles1 = lazy(() => import("./pages/ShapesTriangles1"));
+const ShapesFindDescribe2 = lazy(() => import("./pages/ShapesFindDescribe2"));
+const UnderstandRectangles3 = lazy(() => import("./pages/UnderstandRectangles3"));
+const UnderstandCircles4 = lazy(() => import("./pages/UnderstandCircles4"));
+const UnderstandShapes5 = lazy(() => import("./pages/UnderstandShapes5"));
+const BuildTriangle6 = lazy(() => import("./pages/BuildTriangle6"));
+const ShapesRectangles7 = lazy(() => import("./pages/ShapesRectangles7"));
+const ShapesCircles8 = lazy(() => import("./pages/ShapesCircles8"));
+const ShapesSolids9 = lazy(() => import("./pages/ShapesSolids9"));
+const ShapesFaces10 = lazy(() => import("./pages/ShapesFaces10"));
 
 const SignUp = lazy(() => import("./pages/SignUp")); // Add this
 const SignIn = lazy(() => import("./pages/SignIn")); // Add this
@@ -134,8 +142,16 @@ const App = () => (
             <Route path="/assessment/end-of-module-1" element={<EndOfModule1Assessment />} />
 
             <Route path="/activities/module-2" element={<ActivitiesModule2 />} />
-            <Route path="/activity/shapes-38" element={<ShapesFindDescribe />} />
-            <Route path="/activity/shapes-39" element={<ShapesTriangles />} />
+            <Route path="/activity/shapes-1" element={<ShapesTriangles1 />} />
+            <Route path="/activity/shapes-2" element={<ShapesFindDescribe2 />} />
+            <Route path="/activity/shapes-3" element={<UnderstandRectangles3 />} />
+            <Route path="/activity/shapes-4" element={<UnderstandCircles4 />} />
+            <Route path="/activity/shapes-5" element={<UnderstandShapes5 />} />
+            <Route path="/activity/shapes-6" element={<BuildTriangle6 />} />
+            <Route path="/activity/shapes-7" element={<ShapesRectangles7 />} />
+            <Route path="/activity/shapes-8" element={<ShapesCircles8 />} />
+            <Route path="/activity/shapes-9" element={<ShapesSolids9 />} />
+            <Route path="/activity/shapes-10" element={<ShapesFaces10 />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

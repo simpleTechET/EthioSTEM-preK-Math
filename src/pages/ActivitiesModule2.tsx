@@ -231,56 +231,56 @@ const ActivitiesModule2 = () => {
 // Copy the lesson arrays from Activities.tsx
 const module2TopicALessons = [
   {
-    id: 38,
+    id: 1,
     title: "Shape Detective",
     description: "Find and describe circles, rectangles, squares, and triangles without naming them.",
     icon: "🕵️",
     duration: "15-20 min",
-    path: "/activity/shapes-38",
+    path: "/activity/shapes-1",
     unlocked: true,
     standards: ["PK.G.1", "PK.G.3"],
     objective: "Find and describe 2D shapes using informal language"
   },
   {
-    id: 39,
+    id: 2,
     title: "Triangle Hunt",
     description: "Identify, analyze, sort, compare, and position triangles.",
     icon: "🔺",
     duration: "15-20 min",
-    path: "/activity/shapes-39",
+    path: "/activity/shapes-2",
     unlocked: true,
     standards: ["PK.G.2", "PK.G.3", "PK.MD.2"],
     objective: "Identify, analyze, sort, compare, and position triangles"
   },
   {
-    id: 40,
+    id: 3,
     title: "Rectangle and Square Adventure",
     description: "Identify, analyze, sort, compare, and position rectangles and squares.",
     icon: "🟦",
     duration: "15-20 min",
-    path: "/activity/shapes-40",
+    path: "/activity/shapes-3",
     unlocked: true,
     standards: ["PK.G.2", "PK.G.3", "PK.MD.2"],
     objective: "Identify, analyze, sort, compare, and position rectangles and squares"
   },
   {
-    id: 41,
+    id: 4,
     title: "Circle Explorer",
     description: "Identify, analyze, sort, compare, and position circles.",
     icon: "⭕",
     duration: "15-20 min",
-    path: "/activity/shapes-41",
+    path: "/activity/shapes-4",
     unlocked: true,
     standards: ["PK.G.2", "PK.G.3", "PK.MD.2"],
     objective: "Identify, analyze, sort, compare, and position circles"
   },
   {
-    id: 42,
+    id: 5,
     title: "Shape Park",
     description: "Identify, analyze, sort, compare, and position circles, rectangles, squares, and triangles in a park scene.",
     icon: "🏞️",
     duration: "15-20 min",
-    path: "/activity/shapes-42",
+    path: "/activity/shapes-5",
     unlocked: true,
     standards: ["PK.G.1", "PK.G.2", "PK.G.3", "PK.MD.2"],
     objective: "Identify, analyze, sort, compare, and position multiple 2D shapes"
@@ -289,34 +289,34 @@ const module2TopicALessons = [
 
 const module2TopicBLessons = [
   {
-    id: 43,
+    id: 6,
     title: "Build a Triangle",
     description: "Use straws and clay to construct a triangle with three sides and three corners.",
     icon: "🔺",
     duration: "15-20 min",
-    path: "/activity/shapes-43",
+    path: "/activity/shapes-6",
     unlocked: true,
     standards: ["PK.G.4"],
     objective: "Construct a triangle from components"
   },
   {
-    id: 44,
+    id: 7,
     title: "Build a Rectangle & Square",
     description: "Use materials to construct rectangles and squares with four sides and corners.",
     icon: "⬜",
     duration: "15-20 min",
-    path: "/activity/shapes-44",
+    path: "/activity/shapes-7",
     unlocked: true,
     standards: ["PK.G.4"],
     objective: "Construct a rectangle and a square"
   },
   {
-    id: 45,
+    id: 8,
     title: "Build a Circle",
     description: "Create a circle using flexible materials to understand its round shape.",
     icon: "🔵",
     duration: "15-20 min",
-    path: "/activity/shapes-45",
+    path: "/activity/shapes-8",
     unlocked: true,
     standards: ["PK.G.4"],
     objective: "Construct a circle"
@@ -325,45 +325,45 @@ const module2TopicBLessons = [
 
 const module2TopicCLessons = [
   {
-    id: 46,
+    id: 9,
     title: "Solid Shape Search",
     description: "Find and describe solid shapes (3D objects) using informal language.",
     icon: "🔎",
     duration: "15-20 min",
-    path: "/activity/shapes-46",
+    path: "/activity/shapes-9",
     unlocked: true,
     standards: ["PK.G.3"],
     objective: "Find and describe solid shapes using informal language"
   },
   {
-    id: 47,
+    id: 10,
     title: "Face Detective",
     description: "Match solid shapes to their two-dimensional faces by analyzing footprints.",
     icon: "👣",
     duration: "15-20 min",
-    path: "/activity/shapes-47",
+    path: "/activity/shapes-10",
     unlocked: true,
     standards: ["PK.G.3", "PK.MD.2"],
     objective: "Match solid shapes to their 2D faces"
   },
   {
-    id: 48,
+    id: 11,
     title: "Build with Solid Shapes",
     description: "Analyze, sort, compare, and build with solid shapes like cubes, spheres, and cylinders.",
     icon: "🧱",
     duration: "15-20 min",
-    path: "/activity/shapes-48",
+    path: "/activity/shapes-11",
     unlocked: true,
     standards: ["PK.G.3", "PK.MD.2"],
     objective: "Identify, analyze, sort, compare, and build with solid shapes"
   },
   {
-    id: 49,
+    id: 12,
     title: "Create a Model",
     description: "Position solid shapes to create a model of a familiar place like a classroom or park.",
     icon: "🏗️",
     duration: "15-20 min",
-    path: "/activity/shapes-49",
+    path: "/activity/shapes-12",
     unlocked: true,
     standards: ["PK.G.1"],
     objective: "Position solid shapes to create a model"

@@ -44,7 +44,7 @@ const NON_TRIANGLES = [
 
 const POSITION_WORDS = ["on", "under", "next to", "in", "up", "down"];
 
-const ShapesTriangles = () => {
+const ShapesTriangles1 = () => {
   const [phase, setPhase] = useState<LessonPhase>("intro");
   const [antCount, setAntCount] = useState(0);
   const [cornerCount, setCornerCount] = useState(0);
@@ -821,4 +821,4 @@ const ShapesTriangles = () => {
   );
 };
 
-export default ShapesTriangles;
+export default ShapesTriangles1;
