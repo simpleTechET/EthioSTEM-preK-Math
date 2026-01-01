@@ -70,6 +70,7 @@ const ShapesSolids9 = lazy(() => import("./pages/ShapesSolids9"));
 const ShapesFaces10 = lazy(() => import("./pages/ShapesFaces10"));
 const ShapesBuild11 = lazy(() => import("./pages/ShapesBuild11"));
 const ShapesModel12 = lazy(() => import("./pages/ShapesModel12"));
+const EndOfModule2Assessment = lazy(() => import("./pages/EndOfModule2Assessment"));
 
 const SignUp = lazy(() => import("./pages/SignUp")); // Add this
 const SignIn = lazy(() => import("./pages/SignIn")); // Add this
@@ -156,6 +157,7 @@ const App = () => (
             <Route path="/activity/shapes-10" element={<ShapesFaces10 />} />
             <Route path="/activity/shapes-11" element={<ShapesBuild11 />} />
             <Route path="/activity/shapes-12" element={<ShapesModel12 />} />
+            <Route path="/assessment/end-of-module-2" element={<EndOfModule2Assessment />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
