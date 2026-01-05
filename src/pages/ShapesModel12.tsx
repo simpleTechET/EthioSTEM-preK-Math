@@ -693,3 +693,4 @@ const ShapesModel12: React.FC = () => {
 };
 
 export default ShapesModel12;
+/* REMOTE origin/main: same default export preserved */

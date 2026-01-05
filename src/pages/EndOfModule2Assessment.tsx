@@ -801,3 +801,4 @@ const EndOfModule2Assessment = () => {
 };
 
 export default EndOfModule2Assessment;
+/* REMOTE origin/main: same default export preserved */

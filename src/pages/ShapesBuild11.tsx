@@ -652,3 +652,4 @@ const ShapesBuild11: React.FC = () => {
 };
 
 export default ShapesBuild11;
+/* REMOTE origin/main: same default export preserved */
