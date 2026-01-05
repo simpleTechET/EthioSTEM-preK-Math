@@ -6,7 +6,7 @@ import { ArrowLeft, ArrowRight, RotateCcw, Check, Star, Volume2 } from 'lucide-r
 
 type Step = 'intro' | 'show5' | 'add6' | 'count6' | 'add7' | 'count7' | 'practice' | 'complete';
 
-const CountingM3Lesson2: React.FC = () => {
+const CountingTo7Linear: React.FC = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState<Step>('intro');
   const [rockCount, setRockCount] = useState(5);
@@ -438,4 +438,4 @@ const CountingM3Lesson2: React.FC = () => {
   );
 };
 
-export default CountingM3Lesson2;
+export default CountingTo7Linear;

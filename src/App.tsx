@@ -73,8 +73,9 @@ const ShapesModel12 = lazy(() => import("./pages/ShapesModel12"));
 const EndOfModule2Assessment = lazy(() => import("./pages/EndOfModule2Assessment"));
 
 const ActivitiesModule3 = lazy(() => import("./pages/ActivitiesModule3"));
-const CountingM3Lesson1 = lazy(() => import("./pages/CountingM3Lesson1"));
-const CountingM3Lesson2 = lazy(() => import("./pages/CountingM3Lesson2"));
+const CountingTo7Intro = lazy(() => import("./pages/CountingTo7Intro"));
+const CountingTo7Linear = lazy(() => import("./pages/CountingTo7Linear"));
+const FingerCounting6 = lazy(() => import("./pages/FingerCounting6"));
 
 const SignUp = lazy(() => import("./pages/SignUp")); // Add this
 const SignIn = lazy(() => import("./pages/SignIn")); // Add this
@@ -164,8 +165,9 @@ const App = () => (
             <Route path="/assessment/end-of-module-2" element={<EndOfModule2Assessment />} />
 
             <Route path="/activities/module3" element={<ActivitiesModule3 />} />
-            <Route path="/activity/counting-m3-1" element={<CountingM3Lesson1 />} />
-            <Route path="/activity/counting-m3-2" element={<CountingM3Lesson2 />} />
+            <Route path="/activity/counting-to-7-intro" element={<CountingTo7Intro />} />
+            <Route path="/activity/counting-to-7-linear" element={<CountingTo7Linear />} />
+            <Route path="/activity/finger-counting-6" element={<FingerCounting6 />} />
 
               <Route path="*" element={<NotFound />} />
             </Routes>
