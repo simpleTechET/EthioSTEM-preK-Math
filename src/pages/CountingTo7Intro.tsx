@@ -6,7 +6,7 @@ import { ArrowLeft, Play, RotateCcw, CheckCircle2, Users, Circle } from "lucide-
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 
-const CountingM3Lesson1 = () => {
+const CountingTo7Intro = () => {
   const navigate = useNavigate();
   const [showGame, setShowGame] = useState(false);
   const [currentStep, setCurrentStep] = useState<'intro' | 'count5' | 'add6' | 'count6' | 'add7' | 'count7' | 'practice' | 'complete'>('intro');
@@ -484,4 +484,4 @@ const CountingM3Lesson1 = () => {
   );
 };
 
-export default CountingM3Lesson1;
+export default CountingTo7Intro;
