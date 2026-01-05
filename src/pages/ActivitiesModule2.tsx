@@ -223,6 +223,38 @@ const ActivitiesModule2 = () => {
             ))}
           </div>
         </section>
+        <section className="mb-16">
+  <div className="flex items-center gap-3 mb-6">
+    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accent to-warning flex items-center justify-center">
+      <span className="text-2xl">📋</span>
+    </div>
+    <div>
+      <h2 className="text-2xl font-bold text-foreground">End of Module Assessment</h2>
+      <p className="text-muted-foreground">Final evaluation of all Module 2 skills</p>
+    </div>
+  </div>
+  <Link to="/assessment/end-of-module-2">
+    <Card className="hover:shadow-playful transition-all duration-300 hover:scale-105 cursor-pointer border-2 hover:border-primary">
+      <CardHeader>
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">
+            For Teachers/Parents
+          </span>
+        </div>
+        <CardTitle className="text-xl">End of Module 2 Assessment</CardTitle>
+        <CardDescription>Comprehensive evaluation of Topics A-E</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-2 text-sm text-muted-foreground">
+          <p>• Matching and Sorting Objects</p>
+          <p>• Counting 1-5</p>
+          <p>• Matching Numerals to Quantities</p>
+          <p>• Understanding One More and One Less</p>
+        </div>
+      </CardContent>
+    </Card>
+  </Link>
+</section>
       </div>
     </div>
   );

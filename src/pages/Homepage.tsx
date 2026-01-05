@@ -149,38 +149,6 @@ const Homepage = () => {
               </CardContent>
             </Card>
 
-            {/* Module 2 - Coming Soon
-            <Card className="border-2 border-border opacity-75">
-              <CardHeader>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-semibold text-muted-foreground bg-muted px-3 py-1 rounded-full">
-                    Coming Soon
-                  </span>
-                  <Lock className="w-6 h-6 text-muted-foreground" />
-                </div>
-                <CardTitle className="text-2xl text-muted-foreground">Pre-K Math: Module 2</CardTitle>
-                <CardDescription>Shapes and Spatial Relationships</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <Target className="w-4 h-4 text-muted-foreground/50 mt-1 flex-shrink-0" />
-                    <span>Explore 2D and 3D shapes</span>
-                  </div>
-                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <Users className="w-4 h-4 text-muted-foreground/50 mt-1 flex-shrink-0" />
-                    <span>Learn spatial vocabulary</span>
-                  </div>
-                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <BookOpen className="w-4 h-4 text-muted-foreground/50 mt-1 flex-shrink-0" />
-                    <span>Hands-on geometry activities</span>
-                  </div>
-                  <Button disabled className="w-full mt-4 bg-muted cursor-not-allowed">
-                    Coming 2025
-                  </Button>
-                </div>
-              </CardContent>
-            </Card> */}
 {/* Module 2 - Available */}
 <Card className="border-2 border-secondary/20 hover:border-secondary hover:shadow-playful transition-all duration-300 hover:scale-105">
   <CardHeader>
@@ -220,31 +188,35 @@ const Homepage = () => {
             <Card className="border-2 border-border opacity-75">
               <CardHeader>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-semibold text-muted-foreground bg-muted px-3 py-1 rounded-full">
-                    Coming Soon
+                  <span className="text-sm font-semibold px-3 py-1 rounded-full">
+                    Available Now
                   </span>
-                  <Lock className="w-6 h-6 text-muted-foreground" />
+      <CheckCircle2 className="w-6 h-6 text-success" />
+                  {/* <Lock className="w-6 h-6 text-muted-foreground" /> */}
                 </div>
-                <CardTitle className="text-2xl text-muted-foreground">Pre-K Math: Module 3</CardTitle>
+                <CardTitle className="text-2xl">Pre-K Math: Module 3</CardTitle>
                 <CardDescription>Counting to 10</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <Target className="w-4 h-4 text-muted-foreground/50 mt-1 flex-shrink-0" />
+                  <div className="flex items-start gap-2 text-sm">
+                    <Target className="w-4 h-4 mt-1 flex-shrink-0" />
                     <span>Count and write numbers 6-10</span>
                   </div>
-                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <Users className="w-4 h-4 text-muted-foreground/50 mt-1 flex-shrink-0" />
+                  <div className="flex items-start gap-2 text-sm">
+                    <Users className="w-4 h-4 mt-1 flex-shrink-0" />
                     <span>Compare quantities and order numbers</span>
                   </div>
-                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <BookOpen className="w-4 h-4 text-muted-foreground/50 mt-1 flex-shrink-0" />
+                  <div className="flex items-start gap-2 text-sm">
+                    <BookOpen className="w-4 h-4 mt-1 flex-shrink-0" />
                     <span>Build number sense to 10</span>
                   </div>
-                  <Button disabled className="w-full mt-4 bg-muted cursor-not-allowed">
-                    Coming 2025
+      <Link to="/activities/module-3" className="block">
+                  <Button disabled className="w-full mt-4">
+          Start Module 3
+          <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
+      </Link>
                 </div>
               </CardContent>
             </Card>
