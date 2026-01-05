@@ -74,6 +74,7 @@ const EndOfModule2Assessment = lazy(() => import("./pages/EndOfModule2Assessment
 
 const ActivitiesModule3 = lazy(() => import("./pages/ActivitiesModule3"));
 const CountingM3Lesson1 = lazy(() => import("./pages/CountingM3Lesson1"));
+const CountingM3Lesson2 = lazy(() => import("./pages/CountingM3Lesson2"));
 
 const SignUp = lazy(() => import("./pages/SignUp")); // Add this
 const SignIn = lazy(() => import("./pages/SignIn")); // Add this
@@ -164,6 +165,7 @@ const App = () => (
 
             <Route path="/activities/module3" element={<ActivitiesModule3 />} />
             <Route path="/activity/counting-m3-1" element={<CountingM3Lesson1 />} />
+            <Route path="/activity/counting-m3-2" element={<CountingM3Lesson2 />} />
 
               <Route path="*" element={<NotFound />} />
             </Routes>
