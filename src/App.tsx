@@ -187,6 +187,24 @@ const App = () => (
             <Route path="/activity/counting-to-7-intro" element={<CountingTo7Intro />} />
             <Route path="/activity/counting-to-7-linear" element={<CountingTo7Linear />} />
             <Route path="/activity/finger-counting-6" element={<FingerCounting6 />} />
+            <Route path="/activity/count-arrays-5" element={<CountArrays5 />} />
+            <Route path="/activity/compose-six-6" element={<ComposeSix6 />} />
+            <Route path="/activity/compose-seven-7" element={<ComposeSeven7 />} />
+            <Route path="/activity/circle-count-8" element={<CircleCount8 />} />
+            <Route path="/activity/arrange-count-9" element={<ArrangeCount9 />} />
+            <Route path="/activity/tally-10" element={<Tally10 />} />
+            <Route path="/activity/count-out-11" element={<CountOut11 />} />
+            <Route path="/activity/introduce-8-lesson-12" element={<Introduce8Lesson12 />} />
+            <Route path="/activity/linear-count-13" element={<LinearCount13 />} />
+            <Route path="/activity/finger-count-14" element={<FingerCount14 />} />
+            <Route path="/activity/array-count-15" element={<ArrayCount15 />} />
+            <Route path="/activity/compose-8-lesson-16" element={<Compose8Lesson16 />} />
+            <Route path="/activity/circular-count-17" element={<CircularCount17 />} />
+            <Route path="/activity/arrange-count-18" element={<ArrangeCount18 />} />
+            <Route path="/activity/tally-19" element={<Tally19 />} />
+            <Route path="/activity/count-out-20" element={<CountOut20 />} />
+            <Route path="/activity/introduce-zero-21" element={<IntroduceZero21 />} />
+            <Route path="/activity/introduce-9-lesson-22" element={<Introduce9Lesson22 />} />
 
               <Route path="*" element={<NotFound />} />
             </Routes>
