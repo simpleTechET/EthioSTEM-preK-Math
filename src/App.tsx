@@ -75,6 +75,25 @@ const EndOfModule2Assessment = lazy(() => import("./pages/EndOfModule2Assessment
 const ActivitiesModule3 = lazy(() => import("./pages/ActivitiesModule3"));
 const CountingTo7Intro = lazy(() => import("./pages/CountingTo7Intro"));
 const CountingTo7Linear = lazy(() => import("./pages/CountingTo7Linear"));
+const CountEggs4 = lazy(() => import("./pages/3CountEggs4"));
+const CountArrays5 = lazy(() => import("./pages/3CountArrays5"));
+const ComposeSix6 = lazy(() => import("./pages/3ComposeSix6"));
+const ComposeSeven7 = lazy(() => import("./pages/3ComposeSeven7"));
+const CircleCount8 = lazy(() => import("./pages/3CircleCount8"));
+const ArrangeCount9 = lazy(() => import("./pages/3ArrangeCount9"));
+const Tally10 = lazy(() => import("./pages/3Tally10"));
+const CountOut11 = lazy(() => import("./pages/3CountOut11"));
+const Introduce8Lesson12 = lazy(() => import("./pages/3Introduce8Lesson12"));
+const LinearCount13 = lazy(() => import("./pages/3LinearCount13"));
+const FingerCount14 = lazy(() => import("./pages/3FingerCount14"));
+const ArrayCount15 = lazy(() => import("./pages/3ArrayCount15"));
+const Compose8Lesson16 = lazy(() => import("./pages/3Compose8Lesson16"));
+const CircularCount17 = lazy(() => import("./pages/3CircularCount17"));
+const ArrangeCount18 = lazy(() => import("./pages/3ArrangeCount18"));
+const Tally19 = lazy(() => import("./pages/3Tally19"));
+const CountOut20 = lazy(() => import("./pages/3CountOut20"));
+const IntroduceZero21 = lazy(() => import("./pages/3IntroduceZero21"));
+const Introduce9Lesson22 = lazy(() => import("./pages/3Introduce9Lesson22"));
 const FingerCounting6 = lazy(() => import("./pages/FingerCounting6"));
 
 const SignUp = lazy(() => import("./pages/SignUp")); // Add this
