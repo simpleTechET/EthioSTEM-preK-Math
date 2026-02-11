@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"; // Removed unus
 import { lazy, Suspense } from "react";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { PremiumProvider } from '@/contexts/PremiumContext';
+// import CountEggs4 from "./pages/3CountEggs4";
+// import CountArrays5 from "./pages/3CountArrays5";
 
 // Lazy load route components for better performance
 const Homepage = lazy(() => import("./pages/Homepage"));
@@ -15,46 +17,46 @@ const TopicMatching = lazy(() => import("./pages/TopicMatching"));
 const TopicSorting = lazy(() => import("./pages/TopicSorting"));
 const TopicCounting3 = lazy(() => import("./pages/TopicCounting3"));
 const TopicNumbers3 = lazy(() => import("./pages/TopicNumbers3"));
-const MatchingActivity1 = lazy(() => import("./pages/MatchingActivity1"));
-const MatchingActivity2 = lazy(() => import("./pages/MatchingActivity2"));
-const MatchingActivity3 = lazy(() => import("./pages/MatchingActivity3"));
-const MatchingActivity4 = lazy(() => import("./pages/MatchingActivity4"));
-const SortingActivity5 = lazy(() => import("./pages/SortingActivity5"));
-const SortingActivity6 = lazy(() => import("./pages/SortingActivity6"));
-const SortingActivity7 = lazy(() => import("./pages/SortingActivity7"));
-const CountingActivity8 = lazy(() => import("./pages/CountingActivity8"));
-const CountingActivity9 = lazy(() => import("./pages/CountingActivity9"));
-const CountingActivity10 = lazy(() => import("./pages/CountingActivity10"));
-const CountingActivity11 = lazy(() => import("./pages/CountingActivity11"));
-const CountingActivity12 = lazy(() => import("./pages/CountingActivity12"));
-const CountingActivity13 = lazy(() => import("./pages/CountingActivity13"));
-const CountingActivity14 = lazy(() => import("./pages/CountingActivity14"));
-const MidModuleAssessment = lazy(() => import("./pages/MidModuleAssessment"));
+const MatchingActivity1 = lazy(() => import("./pages/1MatchingActivity1"));
+const MatchingActivity2 = lazy(() => import("./pages/1MatchingActivity2"));
+const MatchingActivity3 = lazy(() => import("./pages/1MatchingActivity3"));
+const MatchingActivity4 = lazy(() => import("./pages/1MatchingActivity4"));
+const SortingActivity5 = lazy(() => import("./pages/1SortingActivity5"));
+const SortingActivity6 = lazy(() => import("./pages/1SortingActivity6"));
+const SortingActivity7 = lazy(() => import("./pages/1SortingActivity7"));
+const CountingActivity8 = lazy(() => import("./pages/1CountingActivity8"));
+const CountingActivity9 = lazy(() => import("./pages/1CountingActivity9"));
+const CountingActivity10 = lazy(() => import("./pages/1CountingActivity10"));
+const CountingActivity11 = lazy(() => import("./pages/1CountingActivity11"));
+const CountingActivity12 = lazy(() => import("./pages/1CountingActivity12"));
+const CountingActivity13 = lazy(() => import("./pages/1CountingActivity13"));
+const CountingActivity14 = lazy(() => import("./pages/1CountingActivity14"));
+const MidModuleAssessment = lazy(() => import("./pages/MidModule1Assessment"));
 
-const CountingActivity15 = lazy(() => import("./pages/CountingActivity15"));
-const CountingActivity16 = lazy(() => import("./pages/CountingActivity16"));
-const CountingActivity17 = lazy(() => import("./pages/CountingActivity17"));
-const CountingActivity18 = lazy(() => import("./pages/CountingActivity18"));
-const CountingActivity19 = lazy(() => import("./pages/CountingActivity19"));
-const CountingActivity20 = lazy(() => import("./pages/CountingActivity20"));
+const CountingActivity15 = lazy(() => import("./pages/1CountingActivity15"));
+const CountingActivity16 = lazy(() => import("./pages/1CountingActivity16"));
+const CountingActivity17 = lazy(() => import("./pages/1CountingActivity17"));
+const CountingActivity18 = lazy(() => import("./pages/1CountingActivity18"));
+const CountingActivity19 = lazy(() => import("./pages/1CountingActivity19"));
+const CountingActivity20 = lazy(() => import("./pages/1CountingActivity20"));
 
-const CountingMatching21 = lazy(() => import("./pages/CountingMatching21"));
-const CountingMatching22 = lazy(() => import("./pages/CountingMatching22"));
-const CountingMatching23 = lazy(() => import("./pages/CountingMatching23"));
-const CountingMatching24 = lazy(() => import("./pages/CountingMatching24"));
-const CountingMatching25 = lazy(() => import("./pages/CountingMatching25"));
-const CountingMatching26 = lazy(() => import("./pages/CountingMatching26"));
-const CountingMatching27 = lazy(() => import("./pages/CountingMatching27"));
-const CountingMatching28 = lazy(() => import("./pages/CountingMatching28"));
-const CountingMatching29 = lazy(() => import("./pages/CountingMatching29"));
-const CountingMatching30 = lazy(() => import("./pages/CountingMatching30"));
-const CountingMatching31 = lazy(() => import("./pages/CountingMatching31"));
-const CountingMatching32 = lazy(() => import("./pages/CountingMatching32"));
-const CountingMatching33 = lazy(() => import("./pages/CountingMatching33"));
-const CountingMatching34 = lazy(() => import("./pages/CountingMatching34"));
-const CountingMatching35 = lazy(() => import("./pages/CountingMatching35"));
-const CountingMatching36 = lazy(() => import("./pages/CountingMatching36"));
-const CountingMatching37 = lazy(() => import("./pages/CountingMatching37"));
+const CountingMatching21 = lazy(() => import("./pages/1CountingMatching21"));
+const CountingMatching22 = lazy(() => import("./pages/1CountingMatching22"));
+const CountingMatching23 = lazy(() => import("./pages/1CountingMatching23"));
+const CountingMatching24 = lazy(() => import("./pages/1CountingMatching24"));
+const CountingMatching25 = lazy(() => import("./pages/1CountingMatching25"));
+const CountingMatching26 = lazy(() => import("./pages/1CountingMatching26"));
+const CountingMatching27 = lazy(() => import("./pages/1CountingMatching27"));
+const CountingMatching28 = lazy(() => import("./pages/1CountingMatching28"));
+const CountingMatching29 = lazy(() => import("./pages/1CountingMatching29"));
+const CountingMatching30 = lazy(() => import("./pages/1CountingMatching30"));
+const CountingMatching31 = lazy(() => import("./pages/1CountingMatching31"));
+const CountingMatching32 = lazy(() => import("./pages/1CountingMatching32"));
+const CountingMatching33 = lazy(() => import("./pages/1CountingMatching33"));
+const CountingMatching34 = lazy(() => import("./pages/1CountingMatching34"));
+const CountingMatching35 = lazy(() => import("./pages/1CountingMatching35"));
+const CountingMatching36 = lazy(() => import("./pages/1CountingMatching36"));
+const CountingMatching37 = lazy(() => import("./pages/1CountingMatching37"));
 const EndOfModule1Assessment = lazy(() => import("./pages/EndOfModule1Assessment"));
 
 const ActivitiesModule2 = lazy(() => import("./pages/ActivitiesModule2"));
@@ -74,6 +76,12 @@ const EndOfModule2Assessment = lazy(() => import("./pages/EndOfModule2Assessment
 
 const ActivitiesModule3 = lazy(() => import("./pages/ActivitiesModule3"));
 const CountingM3Lesson1 = lazy(() => import("./pages/CountingM3Lesson1"));
+const CountingToSeven1 = lazy(() => import("./pages/CountingToSeven1"));
+const CountingToSeven2 = lazy(() => import("./pages/CountingToSeven2"));
+// const CountingMatchingM3_1 = lazy(() => import("./pages/CountingMatchingM3_1"));
+const CountEggs4 = lazy(() => import("./pages/3CountEggs4"));
+const CountArrays5 = lazy(() => import("./pages/3CountArrays5"));
+
 /* REMOTE origin/main alternatives (kept as comments to preserve remote additions):
 const ActivitiesModule3 = lazy(() => import("./pages/ActivitiesModule3"));
 const CountingTo7Intro = lazy(() => import("./pages/CountingTo7Intro"));
@@ -167,10 +175,14 @@ const App = () => (
             <Route path="/activity/shapes-11" element={<ShapesBuild11 />} />
             <Route path="/activity/shapes-12" element={<ShapesModel12 />} />
             <Route path="/assessment/end-of-module-2" element={<EndOfModule2Assessment />} />
-<<<<<<< HEAD
->>>>>>> origin/main
+
             <Route path="/activities/module-3" element={<ActivitiesModule3 />} />
-            <Route path="/activity/counting-m3-1" element={<CountingM3Lesson1 />} />
+            {/* <Route path="/activity/counting-m3-1" element={<CountingM3Lesson1 />} /> */}
+            <Route path="/activity/counting-to-seven-1" element={<CountingToSeven1 />} />
+            <Route path="/activity/counting-to-seven-2" element={<CountingToSeven2 />} />
+            <Route path="/activity/count-eggs-4" element={<CountEggs4 />} />
+            <Route path="/activity/count-arrays-5" element={<CountArrays5 />} />
+            {/* <Route path="/activity/counting-matching-m3-1" element={<CountingMatchingM3_1 />} /> */}
             {/* REMOTE origin/main alternatives (commented):
               <Route path="/activities/module3" element={<ActivitiesModule3 />} />
               <Route path="/activity/counting-to-7-intro" element={<CountingTo7Intro />} />
