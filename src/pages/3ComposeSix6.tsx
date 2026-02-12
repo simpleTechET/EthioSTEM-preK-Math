@@ -101,7 +101,7 @@ const PARTNER_PUZZLES = [
   { left: 1, right: 5, leftColor: '#BB8FCE', rightColor: '#85C1E9' },
 ];
 
-const ComposeSix: React.FC = () => {
+const ComposeSixLesson: React.FC = () => {
   const [phase, setPhase] = useState<'intro' | 'compose' | 'decompose' | 'match' | 'celebrate'>('intro');
   const [currentPuzzleIndex, setCurrentPuzzleIndex] = useState(0);
   const [leftFilled, setLeftFilled] = useState(0);
@@ -468,4 +468,4 @@ const ComposeSix: React.FC = () => {
   );
 };
 
-export default ComposeSix;
+export default ComposeSixLesson;

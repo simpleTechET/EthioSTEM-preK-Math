@@ -13,6 +13,12 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        fredoka: ["Fredoka", "sans-serif"],
+        nunito: ["Nunito", "sans-serif"],
+        playfair: ["Playfair Display", "serif"],
+        inter: ["Inter", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -57,6 +63,26 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        chick: {
+          yellow: "hsl(var(--chick-yellow))",
+          orange: "hsl(var(--chick-orange))",
+        },
+        egg: {
+          cream: "hsl(var(--egg-cream))",
+          shadow: "hsl(var(--egg-shadow))",
+        },
+        sky: {
+          light: "hsl(var(--sky-light))",
+          dark: "hsl(var(--sky-dark))",
+        },
+        grass: {
+          light: "hsl(var(--grass-light))",
+          dark: "hsl(var(--grass-dark))",
+        },
+        nest: {
+          brown: "hsl(var(--nest-brown))",
+          light: "hsl(var(--nest-light))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -65,25 +91,22 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      boxShadow: {
+        soft: "var(--shadow-soft)",
+        button: "var(--shadow-button)",
+        egg: "var(--shadow-egg)",
       },
     },
   },

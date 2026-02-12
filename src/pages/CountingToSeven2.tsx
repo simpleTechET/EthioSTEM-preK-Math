@@ -87,7 +87,7 @@ const CountingTo7Linear: React.FC = () => {
   const handlePracticeAnswer = (answer: number) => {
     const correct = answer === practiceQuestions[practiceIndex].answer;
     setShowFeedback(correct ? 'correct' : 'incorrect');
-    
+
     if (correct) {
       speakText("That's right! Great counting!");
     } else {
@@ -125,11 +125,10 @@ const CountingTo7Linear: React.FC = () => {
           initial={{ scale: 0, y: -20 }}
           animate={{ scale: 1, y: 0 }}
           transition={{ delay: i * 0.1, type: 'spring', stiffness: 300 }}
-          className={`w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-2xl font-bold shadow-lg border-4 ${
-            isRed 
-              ? 'bg-red-500 border-red-700 text-white' 
+          className={`w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-2xl font-bold shadow-lg border-4 ${isRed
+              ? 'bg-red-500 border-red-700 text-white'
               : 'bg-gray-700 border-gray-900 text-white'
-          }`}
+            }`}
         >
           {i + 1}
         </motion.div>
@@ -157,7 +156,7 @@ const CountingTo7Linear: React.FC = () => {
       <div className="min-h-screen bg-gradient-to-b from-blue-100 to-green-100 p-4 md:p-8">
         <Button
           variant="ghost"
-          onClick={() => navigate('/activities/module3')}
+          onClick={() => navigate('/activities/module-3')}
           className="mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" /> Back to Module 3
@@ -314,17 +313,17 @@ const CountingTo7Linear: React.FC = () => {
                   variant="outline"
                   onClick={() => speakText(
                     currentStep === 'intro' ? "The explorer needs to cross the creek to get home." :
-                    currentStep === 'show5' ? "There are 5 black rocks. 1, 2, 3, 4, 5." :
-                    currentStep === 'add6' ? "The explorer needs 1 more rock." :
-                    currentStep === 'count6' ? "5 and 1 more is 6!" :
-                    currentStep === 'add7' ? "We need 1 more rock." :
-                    "6 and 1 more is 7!"
+                      currentStep === 'show5' ? "There are 5 black rocks. 1, 2, 3, 4, 5." :
+                        currentStep === 'add6' ? "The explorer needs 1 more rock." :
+                          currentStep === 'count6' ? "5 and 1 more is 6!" :
+                            currentStep === 'add7' ? "We need 1 more rock." :
+                              "6 and 1 more is 7!"
                   )}
                 >
                   <Volume2 className="mr-2 h-4 w-4" /> Listen
                 </Button>
                 <Button size="lg" onClick={handleStepAction}>
-                  {currentStep === 'count7' ? 'Help Explorer Cross!' : 'Next'} 
+                  {currentStep === 'count7' ? 'Help Explorer Cross!' : 'Next'}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
@@ -338,7 +337,7 @@ const CountingTo7Linear: React.FC = () => {
               className="bg-white rounded-3xl shadow-xl p-6 md:p-8"
             >
               <h2 className="text-2xl font-bold text-center mb-6">Practice Time! 🌟</h2>
-              
+
               <div className="text-center mb-8">
                 <p className="text-xl font-semibold mb-6">
                   {practiceQuestions[practiceIndex].question}
@@ -363,9 +362,8 @@ const CountingTo7Linear: React.FC = () => {
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className={`mt-6 text-2xl font-bold ${
-                      showFeedback === 'correct' ? 'text-green-500' : 'text-orange-500'
-                    }`}
+                    className={`mt-6 text-2xl font-bold ${showFeedback === 'correct' ? 'text-green-500' : 'text-orange-500'
+                      }`}
                   >
                     {showFeedback === 'correct' ? '🎉 Correct!' : '🤔 Try again!'}
                   </motion.div>
@@ -376,10 +374,9 @@ const CountingTo7Linear: React.FC = () => {
                 {practiceQuestions.map((_, idx) => (
                   <div
                     key={idx}
-                    className={`w-3 h-3 rounded-full ${
-                      idx < practiceIndex ? 'bg-green-500' :
-                      idx === practiceIndex ? 'bg-primary' : 'bg-gray-300'
-                    }`}
+                    className={`w-3 h-3 rounded-full ${idx < practiceIndex ? 'bg-green-500' :
+                        idx === practiceIndex ? 'bg-primary' : 'bg-gray-300'
+                      }`}
                   />
                 ))}
               </div>
@@ -399,7 +396,7 @@ const CountingTo7Linear: React.FC = () => {
               >
                 🌟
               </motion.div>
-              
+
               <h2 className="text-3xl font-bold text-primary mb-4">
                 Amazing Work!
               </h2>

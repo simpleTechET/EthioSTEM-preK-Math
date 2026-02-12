@@ -1,12 +1,12 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */
 
-@layer base {
+/* @layer base {
   :root {
     --background: 48 100% 98%;
     --foreground: 210 40% 12%;
@@ -40,10 +40,10 @@ All colors MUST be HSL.
     
     --success: 142 76% 36%;
     --warning: 45 93% 58%;
-    --info: 207 90% 54%;
+    --info: 207 90% 54%; */
     
     /* Chart colors for shapes and data visualization */
-    --chart-1: 0 84% 60%;
+    /* --chart-1: 0 84% 60%;
     --chart-2: 221 83% 53%;
     --chart-3: 142 71% 45%;
     --chart-4: 45 93% 47%;
@@ -98,15 +98,125 @@ All colors MUST be HSL.
 
     --border: 210 40% 20%;
     --input: 210 40% 20%;
-    --ring: 142 76% 50%;
+    --ring: 142 76% 50%; */
     
     /* Chart colors for shapes and data visualization (dark mode) */
-    --chart-1: 0 84% 60%;
+    /* --chart-1: 0 84% 60%;
     --chart-2: 221 83% 53%;
     --chart-3: 142 71% 45%;
     --chart-4: 45 93% 47%;
     --chart-5: 280 68% 60%;
     
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+} */
+
+/* @layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+} */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
+
+@layer base {
+  :root {
+    /* Child-friendly warm palette */
+    --background: 195 100% 85%;
+    --foreground: 25 30% 25%;
+
+    --card: 45 100% 96%;
+    --card-foreground: 25 30% 25%;
+
+    --popover: 45 100% 96%;
+    --popover-foreground: 25 30% 25%;
+
+    /* Sunny orange-yellow primary */
+    --primary: 38 100% 55%;
+    --primary-foreground: 25 30% 15%;
+
+    /* Soft grass green secondary */
+    --secondary: 120 35% 65%;
+    --secondary-foreground: 120 40% 20%;
+
+    --muted: 45 30% 90%;
+    --muted-foreground: 25 20% 45%;
+
+    /* Playful coral accent */
+    --accent: 15 90% 65%;
+    --accent-foreground: 15 50% 15%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 45 40% 80%;
+    --input: 45 40% 85%;
+    --ring: 38 100% 55%;
+
+    --radius: 1rem;
+
+    /* Custom colors for the app */
+    --chick-yellow: 45 100% 60%;
+    --chick-orange: 30 100% 55%;
+    --egg-cream: 40 60% 92%;
+    --egg-shadow: 40 30% 80%;
+    --sky-light: 195 100% 90%;
+    --sky-dark: 200 80% 75%;
+    --grass-light: 95 50% 60%;
+    --grass-dark: 100 45% 45%;
+    --nest-brown: 25 50% 40%;
+    --nest-light: 30 45% 55%;
+
+    /* Shadows */
+    --shadow-soft: 0 4px 20px -4px hsl(25 30% 25% / 0.15);
+    --shadow-button: 0 6px 0 0 hsl(var(--primary) / 0.3);
+    --shadow-egg: 0 8px 24px -8px hsl(25 30% 25% / 0.2);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -124,6 +234,142 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-nunito;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-fredoka;
   }
 }
+
+@layer components {
+  .egg {
+    @apply relative cursor-pointer transition-all duration-300;
+    filter: drop-shadow(var(--shadow-egg));
+  }
+
+  .egg:hover {
+    transform: scale(1.05) rotate(-2deg);
+  }
+
+  .egg:active {
+    transform: scale(0.95);
+  }
+
+  .chick {
+    animation: chick-bounce 0.6s ease-out;
+  }
+
+  .finger-dot {
+    @apply rounded-full transition-all duration-300;
+  }
+
+  .finger-dot.active {
+    animation: finger-pop 0.3s ease-out;
+  }
+
+  .grass-blade {
+    animation: grass-sway 3s ease-in-out infinite;
+  }
+}
+
+@layer utilities {
+  .text-shadow-playful {
+    text-shadow: 2px 2px 0 hsl(var(--primary) / 0.3);
+  }
+
+  .gradient-sky {
+    background: linear-gradient(180deg, hsl(var(--sky-light)) 0%, hsl(var(--sky-dark)) 100%);
+  }
+
+  .gradient-grass {
+    background: linear-gradient(180deg, hsl(var(--grass-light)) 0%, hsl(var(--grass-dark)) 100%);
+  }
+}
+
+@keyframes chick-bounce {
+  0% {
+    transform: translateY(-20px) scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(5px) scale(1.1);
+  }
+  70% {
+    transform: translateY(-3px) scale(0.95);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes finger-pop {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes grass-sway {
+  0%, 100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes wiggle {
+  0%, 100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes celebrate {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.1) rotate(-5deg);
+  }
+  50% {
+    transform: scale(1) rotate(5deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(-3deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.animate-wiggle {
+  animation: wiggle 0.5s ease-in-out;
+}
+
+.animate-float {
+  animation: float 2s ease-in-out infinite;
+}
+
+.animate-celebrate {
+  animation: celebrate 0.6s ease-in-out;
+}
+

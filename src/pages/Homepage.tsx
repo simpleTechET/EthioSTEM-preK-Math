@@ -11,9 +11,9 @@ const Homepage = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <img 
-                src="/EthioSTEM-preK-Math/logo_notxt.png" 
-                alt="Ethiopian STEM Academy" 
+              <img
+                src="/EthioSTEM-preK-Math/logo_notxt.png"
+                alt="Ethiopian STEM Academy"
                 className="w-12 h-12 object-contain"
               />
               <div>
@@ -39,30 +39,30 @@ const Homepage = () => {
         <div className="container mx-auto px-4 py-20 relative">
           <div className="max-w-4xl mx-auto text-center">
             <div className="mb-8">
-              <img 
-                src="/EthioSTEM-preK-Math/logo.png" 
-                alt="Ethiopian STEM Academy" 
+              <img
+                src="/EthioSTEM-preK-Math/logo.png"
+                alt="Ethiopian STEM Academy"
                 className="w-56 h-56 mx-auto object-contain mb-4"
               />
             </div>
-            
+
             <div className="inline-flex items-center gap-2 bg-card/80 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border-2 border-primary/20">
               <Sparkles className="w-4 h-4 text-primary" />
               <span className="text-sm font-semibold text-primary">Welcome to EthioSTEM Learning</span>
             </div>
-            
+
             <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
               Interactive Learning for
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent">
                 Young Minds
               </span>
             </h1>
-            
+
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Building strong foundations in mathematics and science through engaging, 
+              Building strong foundations in mathematics and science through engaging,
               research-based curriculum designed for Ethiopian children.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/activities">
                 <Button size="lg" className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 shadow-playful">
@@ -149,41 +149,41 @@ const Homepage = () => {
               </CardContent>
             </Card>
 
-{/* Module 2 - Available */}
-<Card className="border-2 border-secondary/20 hover:border-secondary hover:shadow-playful transition-all duration-300 hover:scale-105">
-  <CardHeader>
-    <div className="flex items-center justify-between mb-2">
-      <span className="text-sm font-semibold text-secondary bg-secondary/10 px-3 py-1 rounded-full">
-        Available Now
-      </span>
-      <CheckCircle2 className="w-6 h-6 text-success" />
-    </div>
-    <CardTitle className="text-2xl">Pre-K Math: Module 2</CardTitle>
-    <CardDescription>Shapes</CardDescription>
-  </CardHeader>
-  <CardContent>
-    <div className="space-y-4">
-      <div className="flex items-start gap-2 text-sm text-muted-foreground">
-        <Target className="w-4 h-4 text-secondary mt-1 flex-shrink-0" />
-        <span>Identify, analyze, and compare 2D and 3D shapes</span>
-      </div>
-      <div className="flex items-start gap-2 text-sm text-muted-foreground">
-        <Users className="w-4 h-4 text-secondary mt-1 flex-shrink-0" />
-        <span>12 interactive lessons with hands-on activities</span>
-      </div>
-      <div className="flex items-start gap-2 text-sm text-muted-foreground">
-        <BookOpen className="w-4 h-4 text-secondary mt-1 flex-shrink-0" />
-        <span>Based on Eureka Math curriculum</span>
-      </div>
-      <Link to="/activities/module-2" className="block">
-        <Button className="w-full mt-4 bg-secondary hover:bg-secondary/90">
-          Start Module 2
-          <ArrowRight className="w-4 h-4 ml-2" />
-        </Button>
-      </Link>
-    </div>
-  </CardContent>
-</Card>
+            {/* Module 2 - Available */}
+            <Card className="border-2 border-secondary/20 hover:border-secondary hover:shadow-playful transition-all duration-300 hover:scale-105">
+              <CardHeader>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-semibold text-secondary bg-secondary/10 px-3 py-1 rounded-full">
+                    Available Now
+                  </span>
+                  <CheckCircle2 className="w-6 h-6 text-success" />
+                </div>
+                <CardTitle className="text-2xl">Pre-K Math: Module 2</CardTitle>
+                <CardDescription>Shapes</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <Target className="w-4 h-4 text-secondary mt-1 flex-shrink-0" />
+                    <span>Identify, analyze, and compare 2D and 3D shapes</span>
+                  </div>
+                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <Users className="w-4 h-4 text-secondary mt-1 flex-shrink-0" />
+                    <span>12 interactive lessons with hands-on activities</span>
+                  </div>
+                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <BookOpen className="w-4 h-4 text-secondary mt-1 flex-shrink-0" />
+                    <span>Based on Eureka Math curriculum</span>
+                  </div>
+                  <Link to="/activities/module-2" className="block">
+                    <Button className="w-full mt-4 bg-secondary hover:bg-secondary/90">
+                      Start Module 2
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
             {/* Module 3 - Coming Soon */}
             <Card className="border-2 border-border opacity-75">
               <CardHeader>
@@ -191,7 +191,7 @@ const Homepage = () => {
                   <span className="text-sm font-semibold px-3 py-1 rounded-full">
                     Available Now
                   </span>
-      <CheckCircle2 className="w-6 h-6 text-success" />
+                  <CheckCircle2 className="w-6 h-6 text-success" />
                   {/* <Lock className="w-6 h-6 text-muted-foreground" /> */}
                 </div>
                 <CardTitle className="text-2xl">Pre-K Math: Module 3</CardTitle>
@@ -211,12 +211,12 @@ const Homepage = () => {
                     <BookOpen className="w-4 h-4 mt-1 flex-shrink-0" />
                     <span>Build number sense to 10</span>
                   </div>
-      <Link to="/activities/module-3" className="block">
-                  <Button disabled className="w-full mt-4">
-          Start Module 3
-          <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-      </Link>
+                  <Link to="/activities/module-3" className="block">
+                    <Button className="w-full mt-4">
+                      Start Module 3
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>
@@ -292,49 +292,49 @@ const Homepage = () => {
         </div>
       </section>
 
-{/* CTA Section */}
-<section className="py-20">
-  <div className="container mx-auto px-4">
-    <Card className="bg-gradient-to-r from-primary to-secondary border-0 text-white max-w-4xl mx-auto">
-      <CardContent className="text-center py-16 px-6">
-        <h2 className="text-4xl font-bold mb-4">Ready to Start Learning?</h2>
-        <p className="text-xl mb-8 text-primary-foreground/80">
-          Join thousands of Ethiopian families building strong foundations in math
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link to="/activities">
-            <Button size="lg" className="text-lg px-8 py-6 bg-background text-foreground hover:bg-background/90">
-              Begin Module 1
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-          </Link>
-          <Link to="/parent-guide">
-            <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-2 border-background text-background hover:bg-background/10">
-              Learn More
-            </Button>
-          </Link>
+      {/* CTA Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <Card className="bg-gradient-to-r from-primary to-secondary border-0 text-white max-w-4xl mx-auto">
+            <CardContent className="text-center py-16 px-6">
+              <h2 className="text-4xl font-bold mb-4">Ready to Start Learning?</h2>
+              <p className="text-xl mb-8 text-primary-foreground/80">
+                Join thousands of Ethiopian families building strong foundations in math
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link to="/activities">
+                  <Button size="lg" className="text-lg px-8 py-6 bg-background text-foreground hover:bg-background/90">
+                    Begin Module 1
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </Button>
+                </Link>
+                <Link to="/parent-guide">
+                  <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-2 border-background text-background hover:bg-background/10">
+                    Learn More
+                  </Button>
+                </Link>
+              </div>
+
+              {/* Premium CTA - ADD THIS */}
+              <div className="mt-8 pt-8 border-t border-background/20">
+                <p className="text-background/90 mb-4 text-lg">
+                  🌟 Want a personalized AI study companion that speaks to your child?
+                </p>
+                <Link to="/premium/signup">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="text-lg px-8 py-6 border-2 border-background text-background hover:bg-background/20 shadow-lg"
+                  >
+                    <Sparkles className="w-5 h-5 mr-2" />
+                    Join Premium Waitlist (Free)
+                  </Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
         </div>
-        
-        {/* Premium CTA - ADD THIS */}
-        <div className="mt-8 pt-8 border-t border-background/20">
-          <p className="text-background/90 mb-4 text-lg">
-            🌟 Want a personalized AI study companion that speaks to your child?
-          </p>
-          <Link to="/premium/signup">
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="text-lg px-8 py-6 border-2 border-background text-background hover:bg-background/20 shadow-lg"
-            >
-              <Sparkles className="w-5 h-5 mr-2" />
-              Join Premium Waitlist (Free)
-            </Button>
-          </Link>
-        </div>
-      </CardContent>
-    </Card>
-  </div>
-</section>
+      </section>
 
       {/* Footer */}
       <footer className="bg-card/80 backdrop-blur-sm text-muted-foreground py-12 border-t border-border">
@@ -342,9 +342,9 @@ const Homepage = () => {
           <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <img 
-                  src="\logo_notxt.png" 
-                  alt="Ethiopian STEM Academy" 
+                <img
+                  src="\logo_notxt.png"
+                  alt="Ethiopian STEM Academy"
                   className="w-10 h-10 object-contain"
                 />
                 <h3 className="text-xl font-bold text-foreground">EthioSTEM</h3>

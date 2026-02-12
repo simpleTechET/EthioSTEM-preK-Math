@@ -26,7 +26,7 @@ const CountingTo7Intro = () => {
 
   const handleComplete = () => {
     markLessonComplete();
-    navigate("/activities/module3");
+    navigate("/activities/module-3");
   };
 
   const practiceQuestions = useMemo(() => [
@@ -77,7 +77,7 @@ const CountingTo7Intro = () => {
   const handlePracticeAnswer = (answer: number) => {
     setSelectedAnswer(answer);
     const correct = practiceQuestions[practiceStep].answer;
-    
+
     if (answer === correct) {
       toast.success("Correct! Great counting!");
       setTimeout(() => {
@@ -104,9 +104,8 @@ const CountingTo7Intro = () => {
           transition={{ delay: i * 0.1, type: "spring" }}
           className="flex flex-col items-center"
         >
-          <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold ${
-            i < 5 ? 'bg-primary text-primary-foreground' : 'bg-warning text-warning-foreground'
-          }`}>
+          <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold ${i < 5 ? 'bg-primary text-primary-foreground' : 'bg-warning text-warning-foreground'
+            }`}>
             <Users className="w-8 h-8" />
           </div>
           <span className="text-sm font-medium mt-1">{i + 1}</span>
@@ -123,9 +122,8 @@ const CountingTo7Intro = () => {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: i * 0.08, type: "spring" }}
-          className={`w-12 h-12 rounded-full flex items-center justify-center ${
-            i < 5 ? 'bg-chart-1' : 'bg-chart-2'
-          }`}
+          className={`w-12 h-12 rounded-full flex items-center justify-center ${i < 5 ? 'bg-chart-1' : 'bg-chart-2'
+            }`}
         >
           <Circle className="w-6 h-6 text-white fill-white" />
         </motion.div>
@@ -406,15 +404,14 @@ const CountingTo7Intro = () => {
                         onClick={() => handlePracticeAnswer(option)}
                         disabled={selectedAnswer !== null}
                         size="lg"
-                        variant={selectedAnswer === option 
+                        variant={selectedAnswer === option
                           ? (option === practiceQuestions[practiceStep].answer ? "default" : "destructive")
                           : "outline"
                         }
-                        className={`w-20 h-20 text-3xl ${
-                          selectedAnswer === option && option === practiceQuestions[practiceStep].answer
+                        className={`w-20 h-20 text-3xl ${selectedAnswer === option && option === practiceQuestions[practiceStep].answer
                             ? 'bg-success hover:bg-success'
                             : ''
-                        }`}
+                          }`}
                       >
                         {option}
                       </Button>
@@ -424,9 +421,8 @@ const CountingTo7Intro = () => {
                     {practiceQuestions.map((_, i) => (
                       <div
                         key={i}
-                        className={`w-3 h-3 rounded-full ${
-                          i < practiceStep ? 'bg-success' : i === practiceStep ? 'bg-primary' : 'bg-muted'
-                        }`}
+                        className={`w-3 h-3 rounded-full ${i < practiceStep ? 'bg-success' : i === practiceStep ? 'bg-primary' : 'bg-muted'
+                          }`}
                       />
                     ))}
                   </div>
@@ -461,8 +457,8 @@ const CountingTo7Intro = () => {
                     <Button onClick={handleComplete} size="lg">
                       Complete Lesson ✓
                     </Button>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       onClick={() => {
                         setCurrentStep('intro');
                         setPlayerCount(5);

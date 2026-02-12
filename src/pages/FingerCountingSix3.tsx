@@ -70,13 +70,13 @@ const FingerCounting6: React.FC = () => {
     if (currentStep !== 'practice') return;
     const currentQuestion = practiceQuestions[practiceIndex];
     if (currentQuestion.isMultipleChoice) return;
-    
+
     // For finger counting, we enforce left-to-right order
     const newFingers = [...userFingers];
-    
+
     // Count how many are currently active
     const activeCount = newFingers.filter(f => f).length;
-    
+
     if (newFingers[index]) {
       // Turning off - only allow turning off the rightmost active finger
       let rightmostActive = -1;
@@ -95,17 +95,17 @@ const FingerCounting6: React.FC = () => {
         newFingers[index] = true;
       }
     }
-    
+
     setUserFingers(newFingers);
   };
 
   const checkFingerAnswer = () => {
     const activeCount = userFingers.filter(f => f).length;
     const correct = activeCount === practiceQuestions[practiceIndex].answer;
-    
+
     setShowFeedback(correct ? 'correct' : 'incorrect');
     speakText(correct ? "Perfect! You counted the Math Way!" : "Not quite. Try again!");
-    
+
     setTimeout(() => {
       setShowFeedback(null);
       if (correct) {
@@ -124,7 +124,7 @@ const FingerCounting6: React.FC = () => {
     const correct = answer === practiceQuestions[practiceIndex].answer;
     setShowFeedback(correct ? 'correct' : 'incorrect');
     speakText(correct ? "That's right!" : "Try again!");
-    
+
     setTimeout(() => {
       setShowFeedback(null);
       if (correct) {
@@ -148,10 +148,10 @@ const FingerCounting6: React.FC = () => {
 
   const renderHand = (isLeft: boolean, activeFingers: number) => {
     const fingers = isLeft ? [0, 1, 2, 3, 4] : [5, 6, 7, 8, 9];
-    const fingerNames = isLeft 
+    const fingerNames = isLeft
       ? ['Pinky', 'Ring', 'Middle', 'Index', 'Thumb']
       : ['Thumb', 'Index', 'Middle', 'Ring', 'Pinky'];
-    
+
     return (
       <div className={`flex flex-col items-center ${isLeft ? '' : ''}`}>
         <div className="text-sm font-medium mb-2 text-muted-foreground">
@@ -161,20 +161,19 @@ const FingerCounting6: React.FC = () => {
           {fingers.map((fingerIndex, i) => {
             const isActive = fingerIndex < activeFingers;
             const fingerNum = isLeft ? i : 4 - i;
-            
+
             return (
               <motion.div
                 key={fingerIndex}
                 initial={{ scaleY: 0.3 }}
-                animate={{ 
+                animate={{
                   scaleY: isActive ? 1 : 0.3,
                   backgroundColor: isActive ? '#FCD34D' : '#9CA3AF'
                 }}
                 transition={{ type: 'spring', stiffness: 300 }}
-                className={`w-8 h-16 md:w-10 md:h-20 rounded-t-full origin-bottom flex items-start justify-center pt-2 ${
-                  isActive ? 'shadow-lg' : ''
-                }`}
-                style={{ 
+                className={`w-8 h-16 md:w-10 md:h-20 rounded-t-full origin-bottom flex items-start justify-center pt-2 ${isActive ? 'shadow-lg' : ''
+                  }`}
+                style={{
                   marginTop: isActive ? '0' : '40px',
                   height: isActive ? '80px' : '40px'
                 }}
@@ -194,7 +193,7 @@ const FingerCounting6: React.FC = () => {
 
   const renderInteractiveHands = () => {
     const fingerLabels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
-    
+
     return (
       <div className="flex justify-center gap-8">
         {/* Left Hand */}
@@ -207,11 +206,10 @@ const FingerCounting6: React.FC = () => {
                 onClick={() => toggleFinger(i)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`w-10 h-20 rounded-t-full origin-bottom flex items-center justify-center transition-all ${
-                  userFingers[i] 
-                    ? 'bg-yellow-400 shadow-lg' 
+                className={`w-10 h-20 rounded-t-full origin-bottom flex items-center justify-center transition-all ${userFingers[i]
+                    ? 'bg-yellow-400 shadow-lg'
                     : 'bg-gray-300 h-10 mt-10'
-                }`}
+                  }`}
               >
                 {userFingers[i] ? (
                   <span className="text-xl">🐣</span>
@@ -234,11 +232,10 @@ const FingerCounting6: React.FC = () => {
                 onClick={() => toggleFinger(i)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`w-10 h-20 rounded-t-full origin-bottom flex items-center justify-center transition-all ${
-                  userFingers[i] 
-                    ? 'bg-yellow-400 shadow-lg' 
+                className={`w-10 h-20 rounded-t-full origin-bottom flex items-center justify-center transition-all ${userFingers[i]
+                    ? 'bg-yellow-400 shadow-lg'
                     : 'bg-gray-300 h-10 mt-10'
-                }`}
+                  }`}
               >
                 {userFingers[i] ? (
                   <span className="text-xl">🐣</span>
@@ -259,7 +256,7 @@ const FingerCounting6: React.FC = () => {
       <div className="min-h-screen bg-gradient-to-b from-yellow-50 to-green-50 p-4 md:p-8">
         <Button
           variant="ghost"
-          onClick={() => navigate('/activities/module3')}
+          onClick={() => navigate('/activities/module-3')}
           className="mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" /> Back to Module 3
@@ -391,10 +388,10 @@ const FingerCounting6: React.FC = () => {
                   variant="outline"
                   onClick={() => speakText(
                     currentStep === 'intro' ? "Your fingers are baby chicks, and your fists are nests!" :
-                    currentStep === 'nest' ? "Make two fists. These are your nests with eggs inside!" :
-                    currentStep === 'hatch1' ? "Lift your left pinky. The first chick hatches!" :
-                    currentStep === 'hatch5' ? "Count the chicks: 1, 2, 3, 4, 5!" :
-                    "5 and 1 more is 6! You're counting the Math Way!"
+                      currentStep === 'nest' ? "Make two fists. These are your nests with eggs inside!" :
+                        currentStep === 'hatch1' ? "Lift your left pinky. The first chick hatches!" :
+                          currentStep === 'hatch5' ? "Count the chicks: 1, 2, 3, 4, 5!" :
+                            "5 and 1 more is 6! You're counting the Math Way!"
                   )}
                 >
                   <Volume2 className="mr-2 h-4 w-4" /> Listen
@@ -413,7 +410,7 @@ const FingerCounting6: React.FC = () => {
               className="bg-white rounded-3xl shadow-xl p-6 md:p-8"
             >
               <h2 className="text-2xl font-bold text-center mb-6">Practice Time! 🐣</h2>
-              
+
               <div className="text-center mb-6">
                 <p className="text-xl font-semibold mb-6">
                   {practiceQuestions[practiceIndex].question}
@@ -442,8 +439,8 @@ const FingerCounting6: React.FC = () => {
                     <p className="text-sm text-muted-foreground mb-4">
                       Tap fingers from left to right to show chicks hatching!
                     </p>
-                    <Button 
-                      size="lg" 
+                    <Button
+                      size="lg"
                       onClick={checkFingerAnswer}
                       disabled={showFeedback !== null}
                     >
@@ -456,9 +453,8 @@ const FingerCounting6: React.FC = () => {
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className={`mt-6 text-2xl font-bold ${
-                      showFeedback === 'correct' ? 'text-green-500' : 'text-orange-500'
-                    }`}
+                    className={`mt-6 text-2xl font-bold ${showFeedback === 'correct' ? 'text-green-500' : 'text-orange-500'
+                      }`}
                   >
                     {showFeedback === 'correct' ? '🎉 Perfect!' : '🤔 Try again!'}
                   </motion.div>
@@ -469,10 +465,9 @@ const FingerCounting6: React.FC = () => {
                 {practiceQuestions.map((_, idx) => (
                   <div
                     key={idx}
-                    className={`w-3 h-3 rounded-full ${
-                      idx < practiceIndex ? 'bg-green-500' :
-                      idx === practiceIndex ? 'bg-primary' : 'bg-gray-300'
-                    }`}
+                    className={`w-3 h-3 rounded-full ${idx < practiceIndex ? 'bg-green-500' :
+                        idx === practiceIndex ? 'bg-primary' : 'bg-gray-300'
+                      }`}
                   />
                 ))}
               </div>
@@ -492,7 +487,7 @@ const FingerCounting6: React.FC = () => {
               >
                 🌟
               </motion.div>
-              
+
               <h2 className="text-3xl font-bold text-primary mb-4">
                 Excellent Work!
               </h2>
