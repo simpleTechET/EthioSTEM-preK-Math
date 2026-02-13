@@ -102,7 +102,8 @@ const FingerCount24 = lazy(() => import("./pages/3FingerCount24"));
 const ArrayCount25 = lazy(() => import("./pages/3ArrayCount25"));
 const CircularCount9Lesson27 = lazy(() => import("./pages/3CircularCount9Lesson27"));
 const Compose9Lesson26 = lazy(() => import("./pages/3Compose9Lesson26"));
-const ArrangeCount28 = lazy(() => import("./pages/3ArrangeCount28"));
+const ArrangeCount28 = lazy(() => import("./pages/3ArrangeCount9Lesson28"));
+const Tally9Lesson29 = lazy(() => import("./pages/3Tally9Lesson29"));
 
 const SignUp = lazy(() => import("./pages/SignUp")); // Add this
 const SignIn = lazy(() => import("./pages/SignIn")); // Add this
@@ -220,6 +221,7 @@ const App = () => (
                 <Route path="/3-circular-count-9-lesson-27" element={<CircularCount9Lesson27 />} />
                 <Route path="/3-compose-9-lesson-26" element={<Compose9Lesson26 />} />
                 <Route path="/3-arrange-count-28" element={<ArrangeCount28 />} />
+                <Route path="/3-tally-9-lesson-29" element={<Tally9Lesson29 />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
