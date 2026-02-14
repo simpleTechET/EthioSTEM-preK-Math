@@ -1,4 +1,7 @@
-import { Link } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { ArrowLeft, CheckCircle, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface Lesson {
   path: string;
@@ -6,16 +9,6 @@ interface Lesson {
   title: string;
   description: string;
   emoji: string;
-}
-
-interface Topic {
-  id: string;
-  title: string;
-  subtitle: string;
-  standards: string;
-  color: string;
-  borderColor: string;
-  lessons: Lesson[];
 }
 
 interface Topic {
@@ -322,7 +315,7 @@ const topics: Topic[] = [
   },
   {
     id: "G",
-    title: "Topic G",
+    title: "Topic G: Number Stairs",
     subtitle: "How Many Questions with up to 10 Objects",
     standards: "PK.CC.1, PK.CC.3abc, PK.CC.4",
     color: "bg-indigo-50",
@@ -331,11 +324,40 @@ const topics: Topic[] = [
     gradientTo: "to-violet-500",
     icon: "🌟",
     waveFill: "#eef2ff",
-    lessons: [],
+    lessons: [
+      {
+        path: "/3-towers-30",
+        lessonNumber: 30,
+        title: "Building Towers",
+        description: "Identify 1 more and build towers to 5",
+        emoji: "🏗️",
+      },
+      {
+        path: "/3-stairs-31",
+        lessonNumber: 31,
+        title: "Number Stairs to 5",
+        description: "Build number stairs by adding 1 more each time",
+        emoji: "🪜",
+      },
+      {
+        path: "/3-climb-stairs-32",
+        lessonNumber: 32,
+        title: "Climbing Stairs",
+        description: "Practice counting up and down number stairs to 5",
+        emoji: "🪜",
+      },
+      {
+        path: "/3-descending-stairs-33",
+        lessonNumber: 33,
+        title: "Descending Stairs",
+        description: "Identify 1 less and build descending number stairs",
+        emoji: "🪜",
+      },
+    ],
   },
   {
     id: "H",
-    title: "Topic H",
+    title: "Topic H: Counting Down",
     subtitle: "Matching One Numeral with up to 10 Objects",
     standards: "PK.CC.3ab, PK.CC.4",
     color: "bg-fuchsia-50",
@@ -344,11 +366,106 @@ const topics: Topic[] = [
     gradientTo: "to-pink-500",
     icon: "🎯",
     waveFill: "#fdf4ff",
-    lessons: [],
+    lessons: [
+      {
+        path: "/3-penny-staircase-34",
+        lessonNumber: 34,
+        title: "Penny Staircase",
+        description: "Count down from 5 to 1 with pennies",
+        emoji: "🪙",
+      },
+      {
+        path: "/3-little-crabs-35",
+        lessonNumber: 35,
+        title: "Five Little Crabs",
+        description: "Counting back from 5 using crabs and riddles",
+        emoji: "🦀",
+      },
+      {
+        path: "/3-little-fishies-36",
+        lessonNumber: 36,
+        title: "Five Little Fishies",
+        description: "Achieve fluency in counting down from 5 to 1",
+        emoji: "🐠",
+      },
+      {
+        path: "/3-culminating-thirty-seven-37",
+        lessonNumber: 37,
+        title: "Lesson 37: Culminating Task",
+        description: "Sort, count, and build with 7 objects",
+        emoji: "🎒",
+      },
+      {
+        path: "/3-circular-ten-thirty-eight-38",
+        lessonNumber: 38,
+        title: "Lesson 38: Circular Ten",
+        description: "Count 10 objects in a circle",
+        emoji: "🔄",
+      },
+      {
+        path: "/3-varied-ten-thirty-nine-39",
+        lessonNumber: 39,
+        title: "Lesson 39: Varied Ten",
+        description: "10 in lines, arrays, and circles",
+        emoji: "✨",
+      },
+      {
+        path: "/3-tally-ten-forty-40",
+        lessonNumber: 40,
+        title: "Lesson 40: Tally Ten",
+        description: "Represent 10 with tally marks",
+        emoji: "🖊️",
+      },
+      {
+        path: "/3-count-out-ten-forty-one-41",
+        lessonNumber: 41,
+        title: "Count Out Ten",
+        description: "Serve 10 friends in the café",
+        emoji: "🥪",
+      },
+      {
+        path: "/3-number-book-forty-two-42",
+        lessonNumber: 42,
+        title: "Number Book",
+        description: "Represent numbers 6-10",
+        emoji: "📖",
+      },
+    ],
   },
 ];
 
-const Index = () => {
+const Module3Index = () => {
+  const location = useLocation();
+  const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+  const lessonRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
+
+  useEffect(() => {
+    const saved = localStorage.getItem("ethio-stem-m3-completed");
+    if (saved) {
+      setCompletedLessons(JSON.parse(saved));
+    }
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const lastId = params.get("last");
+    if (lastId && lessonRefs.current[lastId]) {
+      setTimeout(() => {
+        lessonRefs.current[lastId]?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 500);
+    }
+  }, [location]);
+
+  const resetProgress = () => {
+    if (confirm("Reset all your stars? 🌟")) {
+      setCompletedLessons([]);
+      localStorage.removeItem("ethio-stem-m3-completed");
+    }
+  };
+
   return (
     <div className="min-h-screen gradient-sky overflow-hidden relative">
       {/* Clouds */}
@@ -362,13 +479,26 @@ const Index = () => {
       </div>
 
       <div className="container mx-auto px-4 py-12 relative z-10 pb-24">
-        <header className="text-center mb-12">
+        <header className="text-center mb-12 relative">
+          <Link to="/" className="absolute left-0 top-0">
+            <Button variant="ghost" size="icon" className="rounded-full bg-white/50 hover:bg-white border-2 border-white/20">
+              <ArrowLeft className="w-6 h-6" />
+            </Button>
+          </Link>
           <h1 className="font-fredoka text-4xl md:text-5xl text-foreground text-shadow-playful mb-4">
             🌟 EthioSTEM PreK Math 🌟
           </h1>
           <p className="font-nunito text-xl text-foreground/80">
             Module 3: Counting to 10
           </p>
+          <Button
+            onClick={resetProgress}
+            variant="outline"
+            size="sm"
+            className="mt-4 rounded-full bg-white/30 border-white/50 hover:bg-white/80 text-xs gap-2"
+          >
+            <RefreshCw className="w-3 h-3" /> Reset Progress
+          </Button>
         </header>
 
         <div className="max-w-3xl mx-auto space-y-6">
@@ -377,15 +507,12 @@ const Index = () => {
               key={topic.id}
               className={`${topic.color} rounded-2xl shadow-lg overflow-hidden border-2 ${topic.borderColor} transform transition-all hover:scale-[1.01]`}
             >
-              {/* Fun Topic Header */}
               <div className={`relative p-5 bg-gradient-to-r ${topic.gradientFrom} ${topic.gradientTo} overflow-hidden`}>
-                {/* Decorative bubbles */}
                 <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
                 <div className="absolute bottom-0 left-10 w-12 h-12 bg-white/10 rounded-full translate-y-1/2" />
                 <div className="absolute top-2 right-20 w-6 h-6 bg-white/20 rounded-full animate-float" />
 
                 <div className="relative flex items-center gap-4">
-                  {/* Big fun icon */}
                   <div className="w-16 h-16 rounded-2xl bg-white/30 backdrop-blur-sm flex items-center justify-center shadow-lg transform -rotate-3 hover:rotate-3 transition-transform">
                     <span className="text-4xl">{topic.icon}</span>
                   </div>
@@ -405,29 +532,42 @@ const Index = () => {
                   </div>
                 </div>
 
-                {/* Wavy bottom border */}
                 <svg className="absolute bottom-0 left-0 right-0 h-3" viewBox="0 0 100 10" preserveAspectRatio="none">
                   <path d="M0 10 Q 10 0, 20 5 T 40 5 T 60 5 T 80 5 T 100 5 L 100 10 Z" style={{ fill: topic.waveFill }} />
                 </svg>
               </div>
 
-              {/* Lessons */}
               <div className="p-4">
                 {topic.lessons.length > 0 ? (
                   <div className="space-y-3">
-                    {topic.lessons.map((lesson) => (
-                      <Link key={lesson.path} to={lesson.path}>
-                        <div className="bg-white/80 rounded-xl p-4 hover:scale-[1.02] transition-all cursor-pointer shadow-sm flex items-center gap-4 hover:bg-white">
-                          <div className="text-4xl">{lesson.emoji}</div>
-                          <div className="flex-1">
-                            <h3 className="font-fredoka text-lg text-foreground">
-                              Lesson {lesson.lessonNumber}: {lesson.title}
-                            </h3>
-                            <p className="font-nunito text-sm text-muted-foreground">{lesson.description}</p>
+                    {topic.lessons.map((lesson) => {
+                      const lessonId = lesson.path.split('/').pop() || "";
+                      const isCompleted = completedLessons.includes(lessonId);
+                      return (
+                        <Link
+                          key={lesson.path}
+                          to={lesson.path}
+                          ref={(el) => {
+                            if (lessonId) lessonRefs.current[lessonId] = el;
+                          }}
+                        >
+                          <div className="bg-white/80 rounded-xl p-4 hover:scale-[1.02] transition-all cursor-pointer shadow-sm flex items-center gap-4 hover:bg-white relative">
+                            <div className="text-4xl">{lesson.emoji}</div>
+                            <div className="flex-1">
+                              <h3 className="font-fredoka text-lg text-foreground">
+                                Lesson {lesson.lessonNumber}: {lesson.title}
+                              </h3>
+                              <p className="font-nunito text-sm text-muted-foreground">{lesson.description}</p>
+                            </div>
+                            {isCompleted && (
+                              <div className="absolute bottom-2 right-2 text-green-500 animate-in zoom-in duration-300">
+                                <CheckCircle className="w-8 h-8 fill-green-50" />
+                              </div>
+                            )}
                           </div>
-                        </div>
-                      </Link>
-                    ))}
+                        </Link>
+                      );
+                    })}
                   </div>
                 ) : (
                   <div className="text-center py-4">
@@ -448,8 +588,7 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Grass at bottom */}
-      <div className="fixed bottom-0 left-0 right-0 h-16 gradient-grass z-0">
+      <div className="fixed bottom-0 left-0 right-0 h-16 gradient-grass z-0 pointer-events-none">
         <svg viewBox="0 0 100 20" preserveAspectRatio="none" className="w-full h-full">
           {[...Array(30)].map((_, i) => (
             <path
@@ -465,4 +604,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Module3Index;

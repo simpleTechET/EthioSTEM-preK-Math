@@ -1,512 +1,221 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, ArrowRight, Volume2, RotateCcw, Hand } from "lucide-react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { ArrowLeft, RefreshCw, Home, Star, Sparkles, Smile, Hand, Waves } from "lucide-react";
 
 const FingerCount14 = () => {
   const navigate = useNavigate();
-  const [phase, setPhase] = useState<"intro" | "learn" | "practice" | "complete">("intro");
-  const [hatchedFingers, setHatchedFingers] = useState<boolean[]>(Array(10).fill(false));
-  const [countingActive, setCountingActive] = useState(false);
-  const [highlightedFinger, setHighlightedFinger] = useState(-1);
-  const [practiceMode, setPracticeMode] = useState<"count8" | "count5" | "count3">("count8");
+  const [showGame, setShowGame] = useState(false);
+  const [currentStep, setCurrentStep] = useState<'hatch5' | 'hatch3' | 'complete'>('hatch5');
+  const [showFeedback, setShowFeedback] = useState<'correct' | 'incorrect' | null>(null);
 
-  const speakText = (text: string) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.8;
-    utterance.pitch = 1.1;
-    speechSynthesis.speak(utterance);
-  };
-
-  useEffect(() => {
-    if (phase === "intro") {
-      setTimeout(() => {
-        speakText("Let's count to 8 using our fingers! Pretend each finger is a baby chick hatching from an egg!");
-      }, 500);
-    }
-  }, [phase]);
-
-  const countFingers = (count: number) => {
-    if (countingActive) return;
-    setCountingActive(true);
-    setHatchedFingers(Array(10).fill(false));
-    setHighlightedFinger(-1);
-    
-    let fingerIndex = 0;
-    
-    const interval = setInterval(() => {
-      if (fingerIndex < count) {
-        setHighlightedFinger(fingerIndex);
-        setHatchedFingers(prev => {
-          const newHatched = [...prev];
-          newHatched[fingerIndex] = true;
-          return newHatched;
-        });
-        speakText(String(fingerIndex + 1));
-        fingerIndex++;
-      } else {
-        clearInterval(interval);
-        setCountingActive(false);
-        setHighlightedFinger(-1);
-        
-        if (count === 8) {
-          speakText(`${count} chicks hatched! 5 from one nest and 3 from another!`);
-        } else {
-          speakText(`${count} chicks hatched!`);
-        }
-      }
-    }, 700);
-  };
-
-  const hatchFinger = (index: number) => {
-    if (countingActive || index >= 8) return;
-    
-    // Must hatch in order
-    const hatchedCount = hatchedFingers.filter(h => h).length;
-    if (index !== hatchedCount) {
-      speakText(`Hatch finger ${hatchedCount + 1} first!`);
-      return;
-    }
-    
-    setHatchedFingers(prev => {
-      const newHatched = [...prev];
-      newHatched[index] = true;
-      return newHatched;
-    });
-    speakText(String(index + 1));
-    
-    if (index === 7) {
-      setTimeout(() => {
-        speakText("8 chicks hatched! Great counting!");
-      }, 500);
+  const markLessonComplete = () => {
+    const saved = localStorage.getItem("ethio-stem-m3-completed");
+    const completed = saved ? JSON.parse(saved) : [];
+    if (!completed.includes("3-finger-count-14")) {
+      completed.push("3-finger-count-14");
+      localStorage.setItem("ethio-stem-m3-completed", JSON.stringify(completed));
     }
   };
 
-  const resetFingers = () => {
-    setHatchedFingers(Array(10).fill(false));
-    setHighlightedFinger(-1);
+  const nextStep = () => {
+    setShowFeedback(null);
+    if (currentStep === 'hatch5') setCurrentStep('hatch3');
+    else if (currentStep === 'hatch3') {
+      markLessonComplete();
+      setCurrentStep('complete');
+    }
   };
 
-  // Finger positions for both hands - left hand pinky to right hand middle
-  const fingerLabels = ["Pinky", "Ring", "Middle", "Index", "Thumb", "Thumb", "Index", "Middle", "Ring", "Pinky"];
-  const fingerSizes = [0.7, 0.85, 0.95, 0.9, 0.75, 0.75, 0.9, 0.95, 0.85, 0.7];
+  const resetActivity = () => {
+    setShowGame(false);
+    setCurrentStep('hatch5');
+    setShowFeedback(null);
+  };
 
-  const renderHands = (interactive: boolean = false) => {
-    const leftHandFingers = [0, 1, 2, 3, 4]; // pinky to thumb
-    const rightHandFingers = [5, 6, 7, 8, 9]; // thumb to pinky
-    
+  const renderHands = (count: number, activeNest: 1 | 2) => {
     return (
-      <div className="flex justify-center gap-8 items-end">
-        {/* Left Hand (Nest 1) */}
-        <div className="text-center">
-          <div className="text-lg font-bold text-amber-700 mb-2">Nest 1 (5 eggs)</div>
-          <div className="relative bg-amber-100 rounded-full p-4 border-4 border-amber-300">
-            <div className="flex gap-1 items-end justify-center">
-              {leftHandFingers.map((fingerIndex) => {
-                const isHatched = hatchedFingers[fingerIndex];
-                const isHighlighted = highlightedFinger === fingerIndex;
-                const size = fingerSizes[fingerIndex];
-                
-                return (
-                  <div
-                    key={fingerIndex}
-                    className={`flex flex-col items-center transition-all duration-300 ${
-                      interactive && !isHatched ? "cursor-pointer hover:scale-110" : ""
-                    } ${isHighlighted ? "scale-125 z-10" : ""}`}
-                    onClick={() => interactive && hatchFinger(fingerIndex)}
-                  >
-                    {/* Finger/Chick */}
-                    <div
-                      className={`rounded-t-full flex items-center justify-center transition-all duration-300 ${
-                        isHatched
-                          ? "bg-yellow-400 border-2 border-yellow-500"
-                          : "bg-amber-200 border-2 border-amber-400"
-                      }`}
-                      style={{
-                        width: `${size * 40}px`,
-                        height: `${size * 60}px`,
-                      }}
-                    >
-                      {isHatched ? (
-                        <div className="text-center">
-                          <div className="text-lg">🐥</div>
-                          <div className="text-xs font-bold text-amber-800">{fingerIndex + 1}</div>
-                        </div>
-                      ) : (
-                        <div className="text-2xl">🥚</div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="mt-2 text-2xl">✋</div>
-          </div>
-        </div>
-
-        {/* Right Hand (Nest 2) */}
-        <div className="text-center">
-          <div className="text-lg font-bold text-orange-700 mb-2">Nest 2 (3 eggs)</div>
-          <div className="relative bg-orange-100 rounded-full p-4 border-4 border-orange-300">
-            <div className="flex gap-1 items-end justify-center">
-              {rightHandFingers.slice(0, 3).map((fingerIndex) => {
-                const isHatched = hatchedFingers[fingerIndex];
-                const isHighlighted = highlightedFinger === fingerIndex;
-                const size = fingerSizes[fingerIndex];
-                const displayIndex = fingerIndex - 5; // 0, 1, 2 for right hand
-                
-                return (
-                  <div
-                    key={fingerIndex}
-                    className={`flex flex-col items-center transition-all duration-300 ${
-                      interactive && !isHatched ? "cursor-pointer hover:scale-110" : ""
-                    } ${isHighlighted ? "scale-125 z-10" : ""}`}
-                    onClick={() => interactive && hatchFinger(fingerIndex)}
-                  >
-                    {/* Finger/Chick */}
-                    <div
-                      className={`rounded-t-full flex items-center justify-center transition-all duration-300 ${
-                        isHatched
-                          ? "bg-orange-400 border-2 border-orange-500"
-                          : "bg-orange-200 border-2 border-orange-400"
-                      }`}
-                      style={{
-                        width: `${size * 40}px`,
-                        height: `${size * 60}px`,
-                      }}
-                    >
-                      {isHatched ? (
-                        <div className="text-center">
-                          <div className="text-lg">🐥</div>
-                          <div className="text-xs font-bold text-orange-800">{fingerIndex + 1}</div>
-                        </div>
-                      ) : (
-                        <div className="text-2xl">🥚</div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-              {/* Remaining fingers (still in eggs - not part of 8) */}
-              {rightHandFingers.slice(3).map((fingerIndex) => (
-                <div
-                  key={fingerIndex}
-                  className="flex flex-col items-center opacity-40"
-                >
-                  <div
-                    className="rounded-t-full flex items-center justify-center bg-gray-200 border-2 border-gray-300"
-                    style={{
-                      width: `${fingerSizes[fingerIndex] * 40}px`,
-                      height: `${fingerSizes[fingerIndex] * 60}px`,
-                    }}
-                  >
-                    <div className="text-xl">🥚</div>
+      <div className="flex justify-center gap-12 my-8 py-12 bg-yellow-100/30 rounded-[4rem] border-8 border-white shadow-inner max-w-4xl mx-auto items-end px-12 overflow-hidden">
+        {/* Nest 1 (Left Hand) */}
+        <div className={`flex flex-col items-center gap-4 transition-all duration-500 ${activeNest === 2 ? 'opacity-40 scale-90' : 'scale-110'}`}>
+          <div className="flex gap-3 items-end h-48">
+            {[1, 2, 3, 4, 5].map((i) => {
+              const isVisible = (activeNest === 1 && i <= count) || activeNest === 2;
+              return (
+                <div key={i} className="flex flex-col items-center">
+                  <div className={`w-14 h-32 rounded-t-full border-4 border-white shadow-lg transition-all duration-300 flex flex-col items-center justify-center gap-1 ${isVisible ? 'bg-yellow-400' : 'bg-yellow-200'}`}>
+                    {isVisible ? (
+                      <>
+                        <span className="text-3xl animate-bounce">🐥</span>
+                        <span className="text-xl font-bold text-amber-900">{i}</span>
+                      </>
+                    ) : (
+                      <span className="text-2xl opacity-50">🥚</span>
+                    )}
                   </div>
                 </div>
-              ))}
-            </div>
-            <div className="mt-2 text-2xl">🤚</div>
+              );
+            })}
           </div>
+          <div className="text-5xl">✋</div>
+          <div className="text-xl font-bold text-amber-700 bg-amber-100 px-4 py-1 rounded-full border-2 border-white shadow-sm">Nest 1</div>
+        </div>
+
+        {/* Nest 2 (Right Hand) */}
+        <div className={`flex flex-col items-center gap-4 transition-all duration-500 ${activeNest === 1 ? 'opacity-40 scale-90' : 'scale-110'}`}>
+          <div className="flex gap-3 items-end h-48">
+            {[6, 7, 8].map((i) => {
+              const isVisible = activeNest === 2 && i <= (5 + count);
+              return (
+                <div key={i} className="flex flex-col items-center">
+                  <div className={`w-14 h-32 rounded-t-full border-4 border-white shadow-lg transition-all duration-300 flex flex-col items-center justify-center gap-1 ${isVisible ? 'bg-orange-400' : 'bg-orange-200'}`}>
+                    {isVisible ? (
+                      <>
+                        <span className="text-3xl animate-bounce">🐥</span>
+                        <span className="text-xl font-bold text-orange-900">{i}</span>
+                      </>
+                    ) : (
+                      <span className="text-2xl opacity-50">🥚</span>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="text-5xl">🤚</div>
+          <div className="text-xl font-bold text-orange-700 bg-orange-100 px-4 py-1 rounded-full border-2 border-white shadow-sm">Nest 2</div>
         </div>
       </div>
     );
   };
 
-  const hatchedCount = hatchedFingers.slice(0, 8).filter(h => h).length;
-
-  const resetLesson = () => {
-    setPhase("intro");
-    setHatchedFingers(Array(10).fill(false));
-    setCountingActive(false);
-    setHighlightedFinger(-1);
-    setPracticeMode("count8");
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-100 via-yellow-50 to-orange-100 p-4">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <Button
-          variant="ghost"
-          onClick={() => navigate("/")}
-          className="flex items-center gap-2"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back
-        </Button>
-        <h1 className="text-xl md:text-2xl font-bold text-amber-800">
-          Lesson 14: Finger Counting to 8
-        </h1>
-        <Button variant="ghost" onClick={resetLesson}>
-          <RotateCcw className="w-4 h-4" />
-        </Button>
-      </div>
-
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto">
-        {/* Phase: Intro */}
-        {phase === "intro" && (
-          <Card className="mb-6">
-            <CardContent className="p-6 text-center">
-              <div className="text-6xl mb-4">🐣✋🤚</div>
-              <h2 className="text-2xl font-bold text-amber-700 mb-4">
-                Counting Chicks with Fingers!
-              </h2>
-              <p className="text-lg text-gray-600 mb-4">
-                Pretend your fingers are baby chicks in eggs. When they hatch, we count them!
-              </p>
-              <p className="text-md text-amber-600 mb-6">
-                We'll count 8 chicks: 5 from one nest (left hand) and 3 from another nest (right hand)!
-              </p>
-              <Button
-                onClick={() => {
-                  setPhase("learn");
-                  speakText("Watch the chicks hatch from left to right! Start with your pinky finger.");
-                }}
-                className="bg-amber-500 hover:bg-amber-600 text-white px-8 py-4 text-xl"
-              >
-                Let's Count!
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Phase: Learn */}
-        {phase === "learn" && (
-          <div className="space-y-6">
-            <Card className="bg-white/90">
-              <CardContent className="p-6">
-                <div className="text-center mb-4">
-                  <h2 className="text-xl font-bold text-amber-700">
-                    Watch the Chicks Hatch!
-                  </h2>
-                  <p className="text-gray-600">
-                    Count from left to right as each chick hatches from its egg
-                  </p>
-                </div>
-
-                {/* Hands Display */}
-                <div className="bg-gradient-to-b from-green-100 to-green-200 rounded-xl p-6 mb-6">
-                  {renderHands()}
-                </div>
-
-                {/* Count Display */}
-                <div className="text-center mb-4">
-                  <div className="inline-flex items-center gap-4 bg-amber-100 px-6 py-3 rounded-full">
-                    <span className="text-2xl font-bold text-amber-700">
-                      Chicks hatched: {hatchedCount}
-                    </span>
-                    {hatchedCount > 0 && (
-                      <span className="text-lg text-gray-600">
-                        ({Math.min(hatchedCount, 5)} + {Math.max(0, hatchedCount - 5)})
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Key Learning */}
-                {hatchedCount === 8 && (
-                  <div className="bg-yellow-50 p-4 rounded-lg text-center mb-4">
-                    <p className="text-xl font-bold text-amber-700">
-                      🌟 5 + 3 = 8 chicks! 🌟
-                    </p>
-                  </div>
-                )}
-
-                {/* Controls */}
-                <div className="flex justify-center gap-4 flex-wrap">
-                  <Button
-                    onClick={() => countFingers(8)}
-                    disabled={countingActive}
-                    className="bg-green-500 hover:bg-green-600 text-white px-6 py-3"
-                  >
-                    <Volume2 className="w-5 h-5 mr-2" />
-                    Count to 8
-                  </Button>
-                  
-                  <Button
-                    onClick={resetFingers}
-                    disabled={countingActive}
-                    variant="outline"
-                    className="px-6 py-3"
-                  >
-                    <RotateCcw className="w-4 h-4 mr-2" />
-                    Reset
-                  </Button>
-                  
-                  {hatchedCount === 8 && (
-                    <Button
-                      onClick={() => {
-                        setPhase("practice");
-                        resetFingers();
-                        speakText("Now you try! Tap each egg to hatch the chicks, starting from the left!");
-                      }}
-                      className="bg-amber-500 hover:bg-amber-600 text-white px-6 py-3"
-                    >
-                      Practice
-                      <ArrowRight className="w-5 h-5 ml-2" />
-                    </Button>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Math Way reminder */}
-            <Card className="bg-blue-50">
-              <CardContent className="p-4">
-                <h3 className="font-bold text-blue-700 mb-2 flex items-center gap-2">
-                  <Hand className="w-5 h-5" />
-                  The Math Way
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Count from left to right: Start with your left pinky (1), go to your left thumb (5), 
-                  then continue with your right thumb (6), index (7), and middle finger (8)!
-                </p>
-              </CardContent>
-            </Card>
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-orange-50 to-white p-4 font-fredoka overflow-x-hidden">
+      <div className="max-w-5xl mx-auto">
+        <div className="flex items-center gap-4 mb-8">
+          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=3-finger-count-14")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
+            <ArrowLeft className="w-5 h-5 text-amber-600" />
+          </Button>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-bold text-amber-600 bg-amber-100 px-3 py-1 rounded-full uppercase tracking-widest font-nunito">
+                Lesson 14
+              </span>
+              <h1 className="text-2xl font-bold text-amber-900 uppercase">Finger Chicks!</h1>
+            </div>
           </div>
-        )}
+        </div>
 
-        {/* Phase: Practice */}
-        {phase === "practice" && (
+        {!showGame ? (
+          <Card className="border-4 border-white bg-white/60 backdrop-blur-md shadow-2xl rounded-[3rem] overflow-hidden text-center p-10 space-y-8 animate-in fade-in zoom-in duration-700 relative">
+            <div className="mx-auto w-24 h-24 bg-gradient-to-tr from-yellow-500 to-orange-500 rounded-3xl flex items-center justify-center mb-6 rotate-3 shadow-lg">
+              <span className="text-5xl text-white">🐣</span>
+            </div>
+            <h2 className="text-5xl text-amber-900 leading-tight">Hatch the Fingers!</h2>
+            <p className="text-2xl text-amber-800 font-nunito leading-relaxed max-w-2xl mx-auto">
+              Pretend your fingers are chicks in nests.
+              <br />
+              We'll hatch 5 in one nest and 3 more in the other!
+            </p>
+            <Button
+              onClick={() => setShowGame(true)}
+              className="bg-amber-600 hover:bg-amber-700 text-white text-3xl px-16 py-10 rounded-full shadow-2xl transition-all hover:scale-105 active:scale-95 border-b-8 border-amber-800"
+            >
+              Play! 🐥
+            </Button>
+            <p className="text-sm text-amber-400 font-bold uppercase tracking-widest pt-4 font-nunito">Topic C: How Many with 8 Objects</p>
+          </Card>
+        ) : (
           <div className="space-y-6">
-            <Card className="bg-white/90">
-              <CardContent className="p-6">
-                <div className="text-center mb-4">
-                  <h2 className="text-xl font-bold text-amber-700">
-                    Your Turn! Hatch the Chicks!
-                  </h2>
-                  <p className="text-gray-600">
-                    Tap each egg in order from left to right to hatch the chicks
-                  </p>
-                </div>
-
-                {/* Interactive Hands */}
-                <div className="bg-gradient-to-b from-green-100 to-green-200 rounded-xl p-6 mb-6">
-                  {renderHands(true)}
-                </div>
-
-                {/* Progress */}
-                <div className="flex justify-center gap-2 mb-4">
-                  {Array(8).fill(0).map((_, index) => (
-                    <div
-                      key={index}
-                      className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-all ${
-                        hatchedFingers[index]
-                          ? index < 5
-                            ? "bg-yellow-400 text-amber-800"
-                            : "bg-orange-400 text-orange-800"
-                          : "bg-gray-200 text-gray-400"
+            {currentStep !== 'complete' && (
+              <div className="flex justify-center gap-3 mb-4">
+                {['hatch5', 'hatch3'].map((step, idx) => (
+                  <div
+                    key={step}
+                    className={`h-3 rounded-full transition-all ${['hatch5', 'hatch3'].indexOf(currentStep) >= idx
+                      ? 'bg-amber-500 w-12 shadow-sm'
+                      : 'bg-amber-100 w-3'
                       }`}
-                    >
-                      {index + 1}
-                    </div>
-                  ))}
-                </div>
+                  />
+                ))}
+              </div>
+            )}
 
-                {/* Count Display */}
-                <div className="text-center mb-4">
-                  <p className="text-lg">
-                    Chicks hatched: {hatchedCount} / 8
+            {currentStep !== 'complete' && (
+              <Card className="bg-white/80 border-4 border-white shadow-2xl rounded-[3rem] p-10 text-center space-y-10 animate-in slide-in-from-bottom-8">
+                <h3 className="text-4xl text-amber-700">
+                  {currentStep === 'hatch5' ? "Hatch Nest 1!" : "Hatch Nest 2!"}
+                </h3>
+
+                {renderHands(currentStep === 'hatch5' ? 5 : 3, currentStep === 'hatch5' ? 1 : 2)}
+
+                <div className="bg-amber-50 p-8 rounded-[2.5rem] border-4 border-white shadow-inner max-w-2xl mx-auto font-nunito">
+                  <p className="text-4xl text-amber-800 leading-relaxed font-bold">
+                    {currentStep === 'hatch5' ? "I hatched 5 chicks!" : "I hatched 3 more!"}
                   </p>
-                  {hatchedCount === 5 && (
-                    <p className="text-amber-600 font-medium mt-2">
-                      Great! Now hatch 3 more from the second nest!
-                    </p>
-                  )}
-                  {hatchedCount === 8 && (
-                    <p className="text-xl font-bold text-green-600 mt-2">
-                      🎉 All 8 chicks hatched! 5 + 3 = 8!
-                    </p>
-                  )}
+                  <p className="text-8xl font-fredoka text-amber-600 mt-4 font-bold drop-shadow-sm">
+                    {currentStep === 'hatch5' ? '5' : '8'}
+                  </p>
                 </div>
 
-                {/* Controls */}
-                <div className="flex justify-center gap-4 flex-wrap">
-                  <Button
-                    onClick={resetFingers}
-                    variant="outline"
-                    className="px-6 py-3"
-                  >
-                    <RotateCcw className="w-4 h-4 mr-2" />
-                    Try Again
+                <Button
+                  onClick={() => setShowFeedback('correct')}
+                  className="bg-amber-600 hover:bg-amber-700 text-white py-12 px-16 text-4xl rounded-[2rem] shadow-xl border-b-8 border-amber-800 transition-all active:scale-95"
+                >
+                  Check! ✅
+                </Button>
+              </Card>
+            )}
+
+            {currentStep === 'complete' && (
+              <Card className="bg-gradient-to-br from-amber-600 via-orange-600 to-yellow-600 shadow-2xl rounded-[4rem] overflow-hidden p-16 text-center text-white space-y-10 animate-in zoom-in-95 duration-700">
+                <div className="text-9xl animate-bounce">🐥</div>
+                <h2 className="text-7xl drop-shadow-xl">Finger Star!</h2>
+                <p className="text-3xl font-nunito max-w-2xl mx-auto leading-relaxed">
+                  You counted all 8 fingers!
+                  <br />
+                  5 and 3 more is 8. You are a math genius!
+                </p>
+                <div className="flex gap-4 w-full pt-8">
+                  <Button onClick={resetActivity} className="h-24 flex-1 bg-white/10 hover:bg-white/20 text-white text-3xl rounded-[2rem] border-4 border-white/20">
+                    Again! 🔄
                   </Button>
-                  
-                  {hatchedCount === 8 && (
-                    <Button
-                      onClick={() => {
-                        setPhase("complete");
-                        speakText("Wonderful! You can count to 8 using your fingers!");
-                      }}
-                      className="bg-amber-500 hover:bg-amber-600 text-white px-6 py-3"
-                    >
-                      Finish
-                      <ArrowRight className="w-5 h-5 ml-2" />
-                    </Button>
-                  )}
+                  <Button onClick={() => navigate("/activities/module-3?last=3-finger-count-14")} className="h-24 flex-1 bg-white text-amber-600 hover:bg-amber-50 text-3xl rounded-[2rem] shadow-2xl">
+                    Yay! ✨
+                  </Button>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
+              </Card>
+            )}
 
-        {/* Phase: Complete */}
-        {phase === "complete" && (
-          <Card className="bg-gradient-to-br from-amber-100 to-orange-100">
-            <CardContent className="p-8 text-center">
-              <div className="text-6xl mb-4">🐥🎉✨</div>
-              <h2 className="text-3xl font-bold text-amber-700 mb-4">
-                Excellent Counting!
-              </h2>
-              <p className="text-xl text-gray-600 mb-4">
-                You learned to count to 8 with your fingers!
-              </p>
-              
-              <div className="bg-white/80 p-6 rounded-xl mb-6 inline-block">
-                <p className="text-xl font-bold text-amber-700 mb-4">
-                  The Math Way to 8:
-                </p>
-                <div className="flex justify-center gap-1 mb-4">
-                  {/* Left hand - 5 chicks */}
-                  {[1,2,3,4,5].map(i => (
-                    <div key={i} className="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center text-amber-800 font-bold text-sm">
-                      {i}
-                    </div>
-                  ))}
-                  <span className="text-xl mx-2">+</span>
-                  {/* Right hand - 3 chicks */}
-                  {[6,7,8].map(i => (
-                    <div key={i} className="w-8 h-8 bg-orange-400 rounded-full flex items-center justify-center text-orange-800 font-bold text-sm">
-                      {i}
-                    </div>
-                  ))}
-                </div>
-                <p className="text-lg text-gray-600">
-                  5 fingers + 3 fingers = 8 fingers
-                </p>
+            {showFeedback && (
+              <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/40 backdrop-blur-md animate-in fade-in duration-300">
+                <Card className={`max-w-md w-full p-12 text-center shadow-[0_0_50px_rgba(0,0,0,0.3)] rounded-[4rem] border-8 animate-in zoom-in duration-300 ${showFeedback === 'correct' ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'
+                  }`}>
+                  <div className="text-9xl mb-8">
+                    {showFeedback === 'correct' ? '🌟' : '🧐'}
+                  </div>
+                  <h4 className={`text-6xl font-fredoka mb-8 ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'
+                    }`}>
+                    {showFeedback === 'correct' ? 'Great!' : 'Try Again!'}
+                  </h4>
+                  <Button
+                    onClick={showFeedback === 'correct' ? nextStep : () => setShowFeedback(null)}
+                    className={`w-full py-12 text-4xl rounded-[2rem] shadow-xl border-b-8 ${showFeedback === 'correct' ? 'bg-green-600 hover:bg-green-700 border-green-800 text-white' : 'bg-red-600 hover:bg-red-700 border-red-800 text-white'
+                      }`}
+                  >
+                    {showFeedback === 'correct' ? 'Next! ➡️' : 'OK! 👍'}
+                  </Button>
+                </Card>
               </div>
-              
-              <div className="flex justify-center gap-4">
-                <Button
-                  onClick={resetLesson}
-                  variant="outline"
-                  className="px-6 py-3"
-                >
-                  <RotateCcw className="w-4 h-4 mr-2" />
-                  Practice Again
-                </Button>
-                <Button
-                  onClick={() => navigate("/")}
-                  className="bg-amber-500 hover:bg-amber-600 text-white px-6 py-3"
-                >
-                  Back to Lessons
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+            )}
+
+            {currentStep !== 'complete' && (
+              <Button onClick={() => setShowGame(false)} variant="ghost" className="text-amber-400 hover:text-amber-600 w-full py-2 font-bold font-nunito">
+                ← Back to Instructions
+              </Button>
+            )}
+          </div>
         )}
       </div>
     </div>

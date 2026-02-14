@@ -1,515 +1,192 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Volume2, RotateCcw } from "lucide-react";
-
-type LessonPhase = "intro" | "compose" | "decompose" | "practice" | "complete";
-
-interface PuzzlePiece {
-  left: number;
-  right: number;
-}
-
-const PUZZLES: PuzzlePiece[] = [
-  { left: 4, right: 4 },
-  { left: 5, right: 3 },
-  { left: 6, right: 2 },
-  { left: 7, right: 1 },
-  { left: 3, right: 5 },
-  { left: 2, right: 6 },
-];
-
-const CUBE_COLORS = [
-  "#ef4444", // red
-  "#f97316", // orange
-  "#eab308", // yellow
-  "#22c55e", // green
-  "#3b82f6", // blue
-  "#8b5cf6", // purple
-  "#ec4899", // pink
-  "#06b6d4", // cyan
-];
+import { Card } from "@/components/ui/card";
+import { ArrowLeft, RefreshCw, Home, Star, Sparkles, Smile, Puzzle, Waves } from "lucide-react";
 
 const Compose8Lesson16 = () => {
   const navigate = useNavigate();
-  const [phase, setPhase] = useState<LessonPhase>("intro");
-  const [currentPuzzle, setCurrentPuzzle] = useState(0);
-  const [isComposed, setIsComposed] = useState(false);
-  const [countingIndex, setCountingIndex] = useState(-1);
-  const [showNumeral, setShowNumeral] = useState(false);
-  const [practiceBreaks, setPracticeBreaks] = useState<number[]>([]);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const hasSpokenRef = useRef<Record<string, boolean>>({});
+  const [showGame, setShowGame] = useState(false);
+  const [currentStep, setCurrentStep] = useState<'compose' | 'break' | 'complete'>('compose');
+  const [showFeedback, setShowFeedback] = useState<'correct' | 'incorrect' | null>(null);
 
-  const speak = (text: string, key?: string) => {
-    if (key && hasSpokenRef.current[key]) return;
-    if (key) hasSpokenRef.current[key] = true;
-    
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.8;
-    utterance.pitch = 1.1;
-    window.speechSynthesis.speak(utterance);
-  };
-
-  useEffect(() => {
-    if (phase === "intro") {
-      setTimeout(() => {
-        speak("Welcome to Lesson 16! Today we will compose 8 and decompose it into two parts. We will also learn the numeral 8!", "intro");
-      }, 500);
-    } else if (phase === "compose") {
-      speak("Watch as we put two sticks of 4 cubes together to make 8!", "compose");
-    } else if (phase === "decompose") {
-      speak("Now let's break 8 apart into different pieces. Tap on the stick to break it!", "decompose");
-    } else if (phase === "practice") {
-      speak("Great job! Now practice breaking 8 into different parts. Match the puzzle!", "practice");
-    } else if (phase === "complete") {
-      speak("Wonderful! You learned that 8 can be made from different parts. You also learned the numeral 8!", "complete");
-    }
-  }, [phase]);
-
-  const handleCompose = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setIsComposed(true);
-    
-    // Count the cubes
-    let count = 0;
-    const countInterval = setInterval(() => {
-      if (count < 8) {
-        setCountingIndex(count);
-        speak((count + 1).toString());
-        count++;
-      } else {
-        clearInterval(countInterval);
-        setTimeout(() => {
-          setShowNumeral(true);
-          speak("8 cubes! This is the numeral 8. Trace it with your finger!");
-          setIsAnimating(false);
-        }, 500);
-      }
-    }, 400);
-  };
-
-  const handleDecompose = () => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setIsComposed(false);
-    setCountingIndex(-1);
-    setShowNumeral(false);
-    
-    setTimeout(() => {
-      const puzzle = PUZZLES[currentPuzzle];
-      speak(`We broke 8 into ${puzzle.left} and ${puzzle.right}!`);
-      setIsAnimating(false);
-    }, 500);
-  };
-
-  const handleNextPuzzle = () => {
-    if (currentPuzzle < PUZZLES.length - 1) {
-      setCurrentPuzzle(prev => prev + 1);
-      setIsComposed(false);
-      setCountingIndex(-1);
-      setShowNumeral(false);
-    } else if (phase === "decompose") {
-      setPhase("practice");
-      setCurrentPuzzle(0);
-      setIsComposed(true);
-      setPracticeBreaks([]);
+  const markLessonComplete = () => {
+    const saved = localStorage.getItem("ethio-stem-m3-completed");
+    const completed = saved ? JSON.parse(saved) : [];
+    if (!completed.includes("3-compose-8-16")) {
+      completed.push("3-compose-8-16");
+      localStorage.setItem("ethio-stem-m3-completed", JSON.stringify(completed));
     }
   };
 
-  const handlePracticeBreak = (breakPoint: number) => {
-    if (practiceBreaks.includes(breakPoint)) return;
-    
-    setPracticeBreaks([...practiceBreaks, breakPoint]);
-    const left = breakPoint;
-    const right = 8 - breakPoint;
-    speak(`${left} and ${right} make 8!`);
+  const nextStep = () => {
+    setShowFeedback(null);
+    if (currentStep === 'compose') setCurrentStep('break');
+    else if (currentStep === 'break') {
+      markLessonComplete();
+      setCurrentStep('complete');
+    }
   };
 
-  const resetPractice = () => {
-    setPracticeBreaks([]);
+  const resetActivity = () => {
+    setShowGame(false);
+    setCurrentStep('compose');
+    setShowFeedback(null);
   };
 
-  const renderCubeStick = (count: number, startIndex: number = 0, isRight: boolean = false) => {
-    return (
-      <div className={`flex flex-col gap-1 ${isRight ? 'ml-8' : ''}`}>
-        {Array.from({ length: count }).map((_, i) => {
-          const globalIndex = startIndex + i;
-          const isHighlighted = countingIndex === globalIndex;
-          return (
-            <div
-              key={i}
-              className={`w-12 h-12 rounded-lg border-2 border-white/50 shadow-lg transition-all duration-300 flex items-center justify-center text-white font-bold text-lg ${
-                isHighlighted ? 'scale-125 ring-4 ring-yellow-400' : ''
-              }`}
-              style={{ backgroundColor: CUBE_COLORS[globalIndex % CUBE_COLORS.length] }}
-            >
-              {countingIndex >= globalIndex && phase !== "practice" && globalIndex + 1}
-            </div>
-          );
-        })}
+  const renderCubes = (left: number, right: number, isComposed: boolean) => (
+    <div className="flex justify-center items-end gap-2 p-12 bg-rose-100/30 rounded-[4rem] border-8 border-white shadow-inner max-w-2xl mx-auto transition-all duration-700 h-[450px]">
+      <div className={`flex flex-col gap-2 transition-all duration-500 ${isComposed ? 'translate-y-0' : '-translate-x-8'}`}>
+        {Array.from({ length: left }).map((_, i) => (
+          <div key={i} className={`w-16 h-16 rounded-xl border-4 border-white shadow-lg animate-in zoom-in bg-rose-500`} style={{ animationDelay: `${i * 0.1}s` }} />
+        ))}
       </div>
-    );
-  };
-
-  const renderComposedStick = () => {
-    return (
-      <div 
-        className="flex flex-col gap-1 cursor-pointer hover:scale-105 transition-transform"
-        onClick={handleDecompose}
-      >
-        {Array.from({ length: 8 }).map((_, i) => {
-          const isHighlighted = countingIndex === i;
-          return (
-            <div
-              key={i}
-              className={`w-12 h-12 rounded-lg border-2 border-white/50 shadow-lg transition-all duration-300 flex items-center justify-center text-white font-bold text-lg ${
-                isHighlighted ? 'scale-125 ring-4 ring-yellow-400' : ''
-              }`}
-              style={{ backgroundColor: CUBE_COLORS[i % CUBE_COLORS.length] }}
-            >
-              {countingIndex >= i && i + 1}
-            </div>
-          );
-        })}
+      <div className={`flex flex-col gap-2 transition-all duration-500 ${isComposed ? 'translate-y-0' : 'translate-x-8'}`}>
+        {Array.from({ length: right }).map((_, i) => (
+          <div key={i} className={`w-16 h-16 rounded-xl border-4 border-white shadow-lg animate-in zoom-in bg-orange-500`} style={{ animationDelay: `${(left + i) * 0.1}s` }} />
+        ))}
       </div>
-    );
-  };
-
-  const renderPuzzleTemplate = () => {
-    const puzzle = PUZZLES[currentPuzzle];
-    return (
-      <div className="flex gap-8 items-end">
-        <div className="flex flex-col gap-1 opacity-30">
-          {Array.from({ length: puzzle.left }).map((_, i) => (
-            <div key={i} className="w-12 h-12 rounded-lg border-2 border-dashed border-gray-400 bg-gray-200" />
-          ))}
-        </div>
-        <div className="flex flex-col gap-1 opacity-30">
-          {Array.from({ length: puzzle.right }).map((_, i) => (
-            <div key={i} className="w-12 h-12 rounded-lg border-2 border-dashed border-gray-400 bg-gray-200" />
-          ))}
-        </div>
-      </div>
-    );
-  };
-
-  const renderNumeral8 = () => {
-    if (!showNumeral) return null;
-    
-    return (
-      <div className="flex flex-col items-center gap-4 animate-bounce-in">
-        <div className="text-9xl font-bold text-purple-600 drop-shadow-lg">
+      {isComposed && (
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-9xl font-bold text-white/20 pointer-events-none select-none">
           8
         </div>
-        <p className="text-2xl text-purple-700 font-semibold">This is eight!</p>
-        <p className="text-lg text-gray-600">Trace it with your finger: Make an S, go back up!</p>
-      </div>
-    );
-  };
-
-  const renderPracticeStick = () => {
-    return (
-      <div className="flex flex-col items-center gap-4">
-        <div className="flex flex-col gap-1">
-          {Array.from({ length: 8 }).map((_, i) => {
-            const breakIndex = i + 1;
-            const isBreakPoint = practiceBreaks.length > 0 && i === practiceBreaks[0] - 1;
-            
-            return (
-              <div key={i} className="relative">
-                <div
-                  className={`w-14 h-14 rounded-lg border-2 border-white/50 shadow-lg flex items-center justify-center text-white font-bold text-xl transition-all ${
-                    practiceBreaks.length > 0 && i < practiceBreaks[0] ? 'translate-x-[-30px]' : ''
-                  } ${practiceBreaks.length > 0 && i >= practiceBreaks[0] ? 'translate-x-[30px]' : ''}`}
-                  style={{ backgroundColor: CUBE_COLORS[i % CUBE_COLORS.length] }}
-                >
-                  {i + 1}
-                </div>
-                {i < 7 && practiceBreaks.length === 0 && (
-                  <button
-                    onClick={() => handlePracticeBreak(i + 1)}
-                    className="absolute -right-16 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-yellow-400 hover:bg-yellow-500 rounded-full flex items-center justify-center text-xl font-bold shadow-lg transition-all hover:scale-110"
-                  >
-                    ✂️
-                  </button>
-                )}
-              </div>
-            );
-          })}
-        </div>
-        
-        {practiceBreaks.length > 0 && (
-          <div className="mt-4 text-center animate-bounce-in">
-            <div className="text-3xl font-bold text-purple-600">
-              {practiceBreaks[0]} + {8 - practiceBreaks[0]} = 8
-            </div>
-            <Button onClick={resetPractice} className="mt-4 bg-blue-500 hover:bg-blue-600">
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Try Another Break
-            </Button>
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  const renderPhaseContent = () => {
-    switch (phase) {
-      case "intro":
-        return (
-          <div className="flex flex-col items-center gap-8">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold text-purple-700 mb-4">Lesson 16</h1>
-              <h2 className="text-2xl text-purple-600 mb-2">Compose and Decompose 8</h2>
-              <p className="text-xl text-gray-600">Learn the numeral 8!</p>
-            </div>
-            
-            <div className="flex gap-8 items-center">
-              <div className="text-center">
-                <p className="text-lg text-gray-600 mb-2">Two groups of 4...</p>
-                <div className="flex gap-4">
-                  {renderCubeStick(4, 0)}
-                  {renderCubeStick(4, 4)}
-                </div>
-              </div>
-              
-              <div className="text-6xl">➜</div>
-              
-              <div className="text-center">
-                <p className="text-lg text-gray-600 mb-2">...make 8!</p>
-                <div className="text-8xl font-bold text-purple-600">8</div>
-              </div>
-            </div>
-            
-            <Button 
-              onClick={() => setPhase("compose")} 
-              size="lg" 
-              className="text-xl px-8 py-6 bg-green-500 hover:bg-green-600"
-            >
-              Let's Start!
-              <ChevronRight className="w-6 h-6 ml-2" />
-            </Button>
-          </div>
-        );
-
-      case "compose":
-        return (
-          <div className="flex flex-col items-center gap-8">
-            <h2 className="text-3xl font-bold text-purple-700">Compose 8!</h2>
-            <p className="text-xl text-gray-600">
-              {isComposed 
-                ? "We put them together! Count the cubes!" 
-                : "Tap to put two 4-sticks together!"}
-            </p>
-            
-            <div className="flex gap-8 items-end">
-              {!isComposed ? (
-                <>
-                  <div 
-                    className="cursor-pointer hover:scale-105 transition-transform"
-                    onClick={handleCompose}
-                  >
-                    {renderCubeStick(4, 0)}
-                  </div>
-                  <div className="text-4xl text-gray-400">+</div>
-                  <div 
-                    className="cursor-pointer hover:scale-105 transition-transform"
-                    onClick={handleCompose}
-                  >
-                    {renderCubeStick(4, 4)}
-                  </div>
-                </>
-              ) : (
-                <div className="flex gap-16 items-center">
-                  {renderComposedStick()}
-                  {renderNumeral8()}
-                </div>
-              )}
-            </div>
-            
-            {showNumeral && (
-              <Button 
-                onClick={() => setPhase("decompose")} 
-                size="lg" 
-                className="text-xl px-8 py-6 bg-green-500 hover:bg-green-600"
-              >
-                Now Let's Decompose!
-                <ChevronRight className="w-6 h-6 ml-2" />
-              </Button>
-            )}
-          </div>
-        );
-
-      case "decompose":
-        const puzzle = PUZZLES[currentPuzzle];
-        return (
-          <div className="flex flex-col items-center gap-6">
-            <h2 className="text-3xl font-bold text-purple-700">Decompose 8!</h2>
-            <p className="text-xl text-gray-600">
-              Break the 8-stick into {puzzle.left} and {puzzle.right}
-            </p>
-            <p className="text-lg text-gray-500">Puzzle {currentPuzzle + 1} of {PUZZLES.length}</p>
-            
-            <div className="flex gap-16 items-center">
-              <div className="text-center">
-                <p className="text-sm text-gray-500 mb-2">Match this pattern:</p>
-                {renderPuzzleTemplate()}
-                <p className="mt-2 text-lg font-semibold text-purple-600">
-                  {puzzle.left} + {puzzle.right} = 8
-                </p>
-              </div>
-              
-              <div className="text-4xl">➜</div>
-              
-              <div className="text-center">
-                <p className="text-sm text-gray-500 mb-2">
-                  {isComposed ? "Tap to break apart!" : "Great! Tap to put back together!"}
-                </p>
-                {isComposed ? (
-                  <div 
-                    className="cursor-pointer hover:scale-105 transition-transform"
-                    onClick={handleDecompose}
-                  >
-                    {renderComposedStick()}
-                  </div>
-                ) : (
-                  <div 
-                    className="flex gap-4 cursor-pointer hover:scale-105 transition-transform"
-                    onClick={handleCompose}
-                  >
-                    {renderCubeStick(puzzle.left, 0)}
-                    {renderCubeStick(puzzle.right, puzzle.left, true)}
-                  </div>
-                )}
-              </div>
-            </div>
-            
-            {!isComposed && (
-              <Button 
-                onClick={handleNextPuzzle} 
-                size="lg" 
-                className="text-xl px-8 py-6 bg-green-500 hover:bg-green-600"
-              >
-                {currentPuzzle < PUZZLES.length - 1 ? "Next Puzzle" : "Practice Time!"}
-                <ChevronRight className="w-6 h-6 ml-2" />
-              </Button>
-            )}
-          </div>
-        );
-
-      case "practice":
-        return (
-          <div className="flex flex-col items-center gap-6">
-            <h2 className="text-3xl font-bold text-purple-700">Practice Breaking 8!</h2>
-            <p className="text-xl text-gray-600">
-              Use the scissors ✂️ to break the stick anywhere!
-            </p>
-            
-            <div className="flex gap-16 items-center">
-              {renderPracticeStick()}
-              
-              <div className="text-center">
-                <div className="text-9xl font-bold text-purple-600 drop-shadow-lg">8</div>
-                <p className="text-xl text-purple-700 mt-2">Eight</p>
-              </div>
-            </div>
-            
-            <Button 
-              onClick={() => setPhase("complete")} 
-              size="lg" 
-              className="text-xl px-8 py-6 bg-green-500 hover:bg-green-600"
-            >
-              Finish Lesson
-              <ChevronRight className="w-6 h-6 ml-2" />
-            </Button>
-          </div>
-        );
-
-      case "complete":
-        return (
-          <div className="flex flex-col items-center gap-8">
-            <div className="text-6xl">🎉</div>
-            <h2 className="text-4xl font-bold text-purple-700">Great Job!</h2>
-            <p className="text-xl text-gray-600 text-center max-w-md">
-              You learned to compose and decompose 8!
-            </p>
-            
-            <div className="grid grid-cols-2 gap-4 text-center">
-              <div className="bg-purple-100 p-4 rounded-xl">
-                <p className="text-lg text-purple-700">4 + 4 = 8</p>
-              </div>
-              <div className="bg-purple-100 p-4 rounded-xl">
-                <p className="text-lg text-purple-700">5 + 3 = 8</p>
-              </div>
-              <div className="bg-purple-100 p-4 rounded-xl">
-                <p className="text-lg text-purple-700">6 + 2 = 8</p>
-              </div>
-              <div className="bg-purple-100 p-4 rounded-xl">
-                <p className="text-lg text-purple-700">7 + 1 = 8</p>
-              </div>
-            </div>
-            
-            <div className="text-9xl font-bold text-purple-600">8</div>
-            
-            <div className="flex gap-4">
-              <Button onClick={() => navigate("/")} variant="outline" size="lg">
-                <ChevronLeft className="w-5 h-5 mr-2" />
-                Back to Lessons
-              </Button>
-              <Button 
-                onClick={() => {
-                  hasSpokenRef.current = {};
-                  setPhase("intro");
-                  setCurrentPuzzle(0);
-                  setIsComposed(false);
-                  setCountingIndex(-1);
-                  setShowNumeral(false);
-                  setPracticeBreaks([]);
-                }} 
-                size="lg"
-                className="bg-green-500 hover:bg-green-600"
-              >
-                <RotateCcw className="w-5 h-5 mr-2" />
-                Play Again
-              </Button>
-            </div>
-          </div>
-        );
-    }
-  };
+      )}
+    </div>
+  );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-100 via-pink-50 to-orange-100 p-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <Button variant="ghost" onClick={() => navigate("/")} className="text-purple-700">
-            <ChevronLeft className="w-5 h-5 mr-1" />
-            Back
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-orange-50 to-white p-4 font-fredoka overflow-x-hidden">
+      <div className="max-w-5xl mx-auto">
+        <div className="flex items-center gap-4 mb-8">
+          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=3-compose-8-16")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
+            <ArrowLeft className="w-5 h-5 text-rose-600" />
           </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => {
-              const messages: Record<LessonPhase, string> = {
-                intro: "Today we will compose 8 and decompose it into two parts!",
-                compose: "Tap to put two 4-sticks together to make 8!",
-                decompose: "Break the 8-stick to match the puzzle pattern!",
-                practice: "Use the scissors to break 8 anywhere you like!",
-                complete: "Great job learning about 8!"
-              };
-              speak(messages[phase]);
-            }}
-          >
-            <Volume2 className="w-5 h-5" />
-          </Button>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-bold text-rose-600 bg-rose-100 px-3 py-1 rounded-full uppercase tracking-widest font-nunito">
+                Lesson 16
+              </span>
+              <h1 className="text-2xl font-bold text-rose-900 uppercase">Partner Puzzle!</h1>
+            </div>
+          </div>
         </div>
-        
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-8 min-h-[600px] flex items-center justify-center">
-          {renderPhaseContent()}
-        </div>
+
+        {!showGame ? (
+          <Card className="border-4 border-white bg-white/60 backdrop-blur-md shadow-2xl rounded-[3rem] overflow-hidden text-center p-10 space-y-8 animate-in fade-in zoom-in duration-700 relative">
+            <div className="mx-auto w-24 h-24 bg-gradient-to-tr from-rose-500 to-pink-500 rounded-3xl flex items-center justify-center mb-6 rotate-3 shadow-lg">
+              <Puzzle className="w-12 h-12 text-white" />
+            </div>
+            <h2 className="text-5xl text-rose-900 leading-tight">Partner Pairs!</h2>
+            <p className="text-2xl text-rose-800 font-nunito leading-relaxed max-w-2xl mx-auto">
+              Let's put blocks together to make 8!
+              <br />
+              We'll also see that we can break 8 into different parts.
+            </p>
+            <Button
+              onClick={() => setShowGame(true)}
+              className="bg-rose-600 hover:bg-rose-700 text-white text-3xl px-16 py-10 rounded-full shadow-2xl transition-all hover:scale-105 active:scale-95 border-b-8 border-rose-800"
+            >
+              Play! 🧩
+            </Button>
+            <p className="text-sm text-rose-400 font-bold uppercase tracking-widest pt-4 font-nunito">Topic D: Matching Numerals to 8</p>
+          </Card>
+        ) : (
+          <div className="space-y-6">
+            {currentStep !== 'complete' && (
+              <div className="flex justify-center gap-3 mb-4">
+                {['compose', 'break'].map((step, idx) => (
+                  <div
+                    key={step}
+                    className={`h-3 rounded-full transition-all ${['compose', 'break'].indexOf(currentStep) >= idx
+                      ? 'bg-rose-500 w-12 shadow-sm'
+                      : 'bg-rose-100 w-3'
+                      }`}
+                  />
+                ))}
+              </div>
+            )}
+
+            {currentStep !== 'complete' && (
+              <Card className="bg-white/80 border-4 border-white shadow-2xl rounded-[3rem] p-10 text-center space-y-10 animate-in slide-in-from-bottom-8 relative overflow-hidden">
+                {currentStep === 'compose' && (
+                  <div className="absolute top-10 right-10 animate-spin-slow opacity-20">
+                    <Sparkles className="w-20 h-20 text-rose-400" />
+                  </div>
+                )}
+
+                <h3 className="text-4xl text-rose-700 uppercase tracking-widest">
+                  {currentStep === 'compose' ? "Put them together!" : "Break them apart!"}
+                </h3>
+
+                {renderCubes(currentStep === 'compose' ? 4 : 5, currentStep === 'compose' ? 4 : 3, currentStep === 'compose')}
+
+                <div className="bg-rose-50 p-8 rounded-[2.5rem] border-4 border-white shadow-inner max-w-2xl mx-auto font-nunito">
+                  <p className="text-4xl text-rose-800 leading-relaxed font-bold">
+                    {currentStep === 'compose' ? "4 and 4 make..." : "8 can be 5 and..."}
+                  </p>
+                  <p className="text-8xl font-fredoka text-rose-600 mt-4 font-bold drop-shadow-sm">
+                    {currentStep === 'compose' ? '8' : '3'}
+                  </p>
+                </div>
+
+                <Button
+                  onClick={() => setShowFeedback('correct')}
+                  className="bg-rose-600 hover:bg-rose-700 text-white py-12 px-16 text-4xl rounded-[2rem] shadow-xl border-b-8 border-rose-800 transition-all active:scale-95"
+                >
+                  Check! ✅
+                </Button>
+              </Card>
+            )}
+
+            {currentStep === 'complete' && (
+              <Card className="bg-gradient-to-br from-rose-600 via-pink-600 to-orange-600 shadow-2xl rounded-[4rem] overflow-hidden p-16 text-center text-white space-y-10 animate-in zoom-in-95 duration-700">
+                <div className="text-9xl animate-bounce"> puzzle </div>
+                <h2 className="text-7xl drop-shadow-xl">Puzzle Pro!</h2>
+                <p className="text-3xl font-nunito max-w-2xl mx-auto leading-relaxed">
+                  You found the partners of 8!
+                  <br />
+                  You are getting so good at this!
+                </p>
+                <div className="flex gap-4 w-full pt-8">
+                  <Button onClick={resetActivity} className="h-24 flex-1 bg-white/10 hover:bg-white/20 text-white text-3xl rounded-[2rem] border-4 border-white/20">
+                    Again! 🔄
+                  </Button>
+                  <Button onClick={() => navigate("/activities/module-3?last=3-compose-8-16")} className="h-24 flex-1 bg-white text-rose-600 hover:bg-rose-50 text-3xl rounded-[2rem] shadow-2xl">
+                    Yay! ✨
+                  </Button>
+                </div>
+              </Card>
+            )}
+
+            {showFeedback && (
+              <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/40 backdrop-blur-md animate-in fade-in duration-300">
+                <Card className={`max-w-md w-full p-12 text-center shadow-[0_0_50px_rgba(0,0,0,0.3)] rounded-[4rem] border-8 animate-in zoom-in duration-300 ${showFeedback === 'correct' ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'
+                  }`}>
+                  <div className="text-9xl mb-8">
+                    {showFeedback === 'correct' ? '🌟' : '🧐'}
+                  </div>
+                  <h4 className={`text-6xl font-fredoka mb-8 ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'
+                    }`}>
+                    {showFeedback === 'correct' ? 'Perfect!' : 'Try Again!'}
+                  </h4>
+                  <Button
+                    onClick={showFeedback === 'correct' ? nextStep : () => setShowFeedback(null)}
+                    className={`w-full py-12 text-4xl rounded-[2rem] shadow-xl border-b-8 ${showFeedback === 'correct' ? 'bg-green-600 hover:bg-green-700 border-green-800 text-white' : 'bg-red-600 hover:bg-red-700 border-red-800 text-white'
+                      }`}
+                  >
+                    {showFeedback === 'correct' ? 'Next! ➡️' : 'OK! 👍'}
+                  </Button>
+                </Card>
+              </div>
+            )}
+
+            {currentStep !== 'complete' && (
+              <Button onClick={() => setShowGame(false)} variant="ghost" className="text-rose-400 hover:text-rose-600 w-full py-2 font-bold font-nunito">
+                ← Back to Instructions
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,477 +1,201 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, RotateCcw, Fish, Circle, ArrowRight, Grid } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-
-type Configuration = 'circle' | 'line' | 'array';
-
-interface FishData {
-  id: number;
-  color: string;
-}
+import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { ArrowLeft, RefreshCw, Home, Star, Sparkles, Smile, Fish, Waves } from "lucide-react";
 
 const ArrangeCount9 = () => {
   const navigate = useNavigate();
-  const [phase, setPhase] = useState<'intro' | 'counting' | 'rearrange' | 'practice' | 'complete'>('intro');
-  const [fishCount, setFishCount] = useState(6);
-  const [configuration, setConfiguration] = useState<Configuration>('circle');
-  const [countedFish, setCountedFish] = useState<number[]>([]);
-  const [showShark, setShowShark] = useState(false);
-  const [selectedNumeral, setSelectedNumeral] = useState<number | null>(null);
-  const [showFeedback, setShowFeedback] = useState(false);
-  const [practiceRound, setPracticeRound] = useState(0);
-  const [startMarker, setStartMarker] = useState<number | null>(null);
+  const [showGame, setShowGame] = useState(false);
+  const [currentStep, setCurrentStep] = useState<'line' | 'circle' | 'array' | 'complete'>('line');
+  const [showFeedback, setShowFeedback] = useState<'correct' | 'incorrect' | null>(null);
 
-  const fish: FishData[] = Array.from({ length: fishCount }, (_, i) => ({
-    id: i,
-    color: i < 5 ? 'text-orange-400' : 'text-yellow-400'
-  }));
-
-  const speak = (text: string) => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.8;
-      utterance.pitch = 1.1;
-      window.speechSynthesis.speak(utterance);
+  const markLessonComplete = () => {
+    const saved = localStorage.getItem("ethio-stem-m3-completed");
+    const completed = saved ? JSON.parse(saved) : [];
+    if (!completed.includes("3-arrange-count-9")) {
+      completed.push("3-arrange-count-9");
+      localStorage.setItem("ethio-stem-m3-completed", JSON.stringify(completed));
     }
   };
 
-  useEffect(() => {
-    if (phase === 'intro') {
-      speak("Welcome to our underwater adventure! Let's count fish swimming in different ways. The number of fish stays the same no matter how they swim!");
-    }
-  }, [phase]);
-
-  const handleFishClick = (fishId: number) => {
-    if (phase !== 'counting') return;
-    
-    if (configuration === 'circle' && startMarker === null) {
-      setStartMarker(fishId);
-      speak("Good! You marked where to start counting. Now count each fish!");
-      return;
-    }
-
-    if (countedFish.includes(fishId)) return;
-
-    const newCounted = [...countedFish, fishId];
-    setCountedFish(newCounted);
-    speak(newCounted.length.toString());
-
-    if (newCounted.length === fishCount) {
-      setTimeout(() => {
-        speak(`Great job! You counted ${fishCount} fish!`);
-        setShowFeedback(true);
-      }, 500);
+  const nextStep = () => {
+    setShowFeedback(null);
+    if (currentStep === 'line') setCurrentStep('circle');
+    else if (currentStep === 'circle') setCurrentStep('array');
+    else if (currentStep === 'array') {
+      markLessonComplete();
+      setCurrentStep('complete');
     }
   };
 
-  const triggerShark = () => {
-    setShowShark(true);
-    speak("Oh no! A shark is coming! The fish need to swim in a different way to escape!");
-    
-    setTimeout(() => {
-      const configs: Configuration[] = ['circle', 'line', 'array'];
-      const currentIndex = configs.indexOf(configuration);
-      const nextConfig = configs[(currentIndex + 1) % 3];
-      setConfiguration(nextConfig);
-      setCountedFish([]);
-      setStartMarker(null);
-      setShowShark(false);
-      setShowFeedback(false);
-      speak(`The fish are now swimming in a ${nextConfig}! Count them again to make sure they're all safe!`);
-    }, 2000);
+  const resetActivity = () => {
+    setShowGame(false);
+    setCurrentStep('line');
+    setShowFeedback(null);
   };
 
-  const handleNumeralSelect = (num: number) => {
-    setSelectedNumeral(num);
-    if (num === fishCount) {
-      speak(`Yes! There are ${fishCount} fish!`);
-      setTimeout(() => {
-        if (practiceRound < 2) {
-          setPracticeRound(prev => prev + 1);
-          setFishCount(practiceRound === 0 ? 7 : 6);
-          setConfiguration('circle');
-          setCountedFish([]);
-          setStartMarker(null);
-          setSelectedNumeral(null);
-          setShowFeedback(false);
-        } else {
-          setPhase('complete');
-          speak("Wonderful! You learned that the number of fish stays the same no matter how they swim!");
-        }
-      }, 1500);
-    } else {
-      speak("Hmm, try counting again!");
-      setSelectedNumeral(null);
-    }
-  };
+  const renderFish = (count: number, config: 'line' | 'circle' | 'array') => {
+    const radius = 120;
+    return (
+      <div className={`relative w-full max-w-2xl mx-auto h-80 flex items-center justify-center bg-blue-100/30 rounded-[4rem] border-8 border-white shadow-inner mb-8 overflow-hidden`}>
+        <div className="absolute inset-0 opacity-20 pointer-events-none">
+          <Waves className="w-full h-full text-blue-400" />
+        </div>
 
-  const startCounting = () => {
-    setPhase('counting');
-    speak(configuration === 'circle' 
-      ? "Tap one fish to mark where you'll start counting. Then tap each fish in order!"
-      : "Tap each fish to count them!");
-  };
+        {Array.from({ length: count }).map((_, i) => {
+          let style = {};
+          if (config === 'line') {
+            style = { left: `${(i + 1) * (100 / (count + 1))}%`, top: '50%', transform: 'translate(-50%, -50%)' };
+          } else if (config === 'circle') {
+            const angle = (i * 360) / count - 90;
+            const x = Math.cos((angle * Math.PI) / 180) * radius;
+            const y = Math.sin((angle * Math.PI) / 180) * radius;
+            style = { left: `calc(50% + ${x}px)`, top: `calc(50% + ${y}px)`, transform: 'translate(-50%, -50%)' };
+          } else {
+            const cols = 4;
+            const row = Math.floor(i / cols);
+            const col = i % cols;
+            style = { left: `${(col + 1) * 20 + 10}%`, top: `${(row + 1) * 30 + 10}%`, transform: 'translate(-50%, -50%)' };
+          }
 
-  const getCirclePositions = (count: number) => {
-    return Array.from({ length: count }, (_, i) => {
-      const angle = (i * 360 / count - 90) * (Math.PI / 180);
-      const radius = 120;
-      return {
-        x: 150 + radius * Math.cos(angle),
-        y: 140 + radius * Math.sin(angle)
-      };
-    });
-  };
-
-  const getLinePositions = (count: number) => {
-    return Array.from({ length: count }, (_, i) => ({
-      x: 40 + i * 45,
-      y: 140
-    }));
-  };
-
-  const getArrayPositions = (count: number) => {
-    const cols = count <= 4 ? count : Math.ceil(count / 2);
-    return Array.from({ length: count }, (_, i) => ({
-      x: 80 + (i % cols) * 55,
-      y: 100 + Math.floor(i / cols) * 80
-    }));
-  };
-
-  const getPositions = () => {
-    switch (configuration) {
-      case 'circle': return getCirclePositions(fishCount);
-      case 'line': return getLinePositions(fishCount);
-      case 'array': return getArrayPositions(fishCount);
-    }
-  };
-
-  const positions = getPositions();
-
-  const renderFish = () => {
-    return positions.map((pos, index) => {
-      const fishData = fish[index];
-      const isCounted = countedFish.includes(fishData.id);
-      const isStartMarker = startMarker === fishData.id;
-      
-      return (
-        <g
-          key={fishData.id}
-          transform={`translate(${pos.x}, ${pos.y})`}
-          onClick={() => handleFishClick(fishData.id)}
-          className="cursor-pointer"
-        >
-          {isStartMarker && (
-            <circle
-              r="28"
-              fill="none"
-              stroke="#22c55e"
-              strokeWidth="3"
-              strokeDasharray="5,3"
-              className="animate-pulse"
-            />
-          )}
-          <text
-            fontSize="36"
-            textAnchor="middle"
-            dominantBaseline="central"
-            className={`transition-all duration-300 ${
-              isCounted ? 'opacity-50' : 'hover:scale-110'
-            }`}
-            style={{ 
-              transformOrigin: 'center',
-              transform: isCounted ? 'scale(0.8)' : 'scale(1)'
-            }}
-          >
-            🐟
-          </text>
-          {isCounted && (
-            <text
-              y="-20"
-              fontSize="16"
-              textAnchor="middle"
-              fill="#22c55e"
-              fontWeight="bold"
+          return (
+            <div
+              key={i}
+              className="absolute flex flex-col items-center animate-in zoom-in duration-300"
+              style={{ ...style, animationDelay: `${i * 0.1}s` }}
             >
-              {countedFish.indexOf(fishData.id) + 1}
-            </text>
-          )}
-        </g>
-      );
-    });
-  };
-
-  const restart = () => {
-    setPhase('intro');
-    setFishCount(6);
-    setConfiguration('circle');
-    setCountedFish([]);
-    setShowShark(false);
-    setSelectedNumeral(null);
-    setShowFeedback(false);
-    setPracticeRound(0);
-    setStartMarker(null);
+              <div className={`w-20 h-20 rounded-full flex items-center justify-center text-5xl shadow-lg border-4 border-white ${i < 5 ? 'bg-orange-500' : 'bg-yellow-500'} text-white`}>
+                <Fish className="w-12 h-12" />
+              </div>
+              <span className="text-3xl font-bold mt-2 text-blue-900 font-fredoka drop-shadow-sm">{i + 1}</span>
+            </div>
+          );
+        })}
+      </div>
+    );
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-cyan-400 via-blue-500 to-blue-700 p-4">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate('/')}
-          className="text-white hover:bg-white/20"
-        >
-          <ArrowLeft className="h-6 w-6 mr-2" />
-          Back
-        </Button>
-        <h1 className="text-2xl font-bold text-white text-center">
-          Lesson 9: Arrange and Count
-        </h1>
-        <Button
-          variant="ghost"
-          onClick={restart}
-          className="text-white hover:bg-white/20"
-        >
-          <RotateCcw className="h-6 w-6" />
-        </Button>
-      </div>
-
-      {/* Main Content */}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-white p-4 font-fredoka overflow-x-hidden">
       <div className="max-w-4xl mx-auto">
-        {phase === 'intro' && (
-          <div className="bg-white/90 rounded-3xl p-8 text-center shadow-xl">
-            <h2 className="text-3xl font-bold text-blue-600 mb-6">
-              🐠 Underwater Fish Counting! 🐠
-            </h2>
-            <p className="text-xl text-gray-700 mb-6">
-              Fish swim in different ways - in circles, in lines, and in groups!
-            </p>
-            <p className="text-lg text-gray-600 mb-8">
-              Let's discover something amazing: <span className="font-bold text-blue-600">
-              the number of fish stays the same</span> no matter how they swim!
-            </p>
-            
-            <div className="flex justify-center gap-8 mb-8">
-              <div className="text-center">
-                <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mb-2">
-                  <Circle className="h-10 w-10 text-blue-500" />
-                </div>
-                <span className="text-sm text-gray-600">Circle</span>
-              </div>
-              <div className="text-center">
-                <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mb-2">
-                  <ArrowRight className="h-10 w-10 text-blue-500" />
-                </div>
-                <span className="text-sm text-gray-600">Line</span>
-              </div>
-              <div className="text-center">
-                <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mb-2">
-                  <Grid className="h-10 w-10 text-blue-500" />
-                </div>
-                <span className="text-sm text-gray-600">Array</span>
-              </div>
+        <div className="flex items-center gap-4 mb-8">
+          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=3-arrange-count-9")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
+            <ArrowLeft className="w-5 h-5 text-blue-600" />
+          </Button>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-bold text-blue-600 bg-blue-100 px-3 py-1 rounded-full uppercase tracking-widest font-nunito">
+                Lesson 9
+              </span>
+              <h1 className="text-2xl font-bold text-blue-900 uppercase">Fish Shapes!</h1>
             </div>
-
-            <Button
-              onClick={startCounting}
-              className="bg-blue-500 hover:bg-blue-600 text-white text-xl px-8 py-6 rounded-full"
-            >
-              <Fish className="h-6 w-6 mr-2" />
-              Start Swimming!
-            </Button>
           </div>
-        )}
+        </div>
 
-        {(phase === 'counting' || phase === 'rearrange') && (
-          <div className="space-y-4">
-            {/* Underwater Scene */}
-            <div className="bg-gradient-to-b from-blue-300 to-blue-600 rounded-3xl p-4 shadow-xl relative overflow-hidden">
-              {/* Bubbles decoration */}
-              <div className="absolute inset-0 pointer-events-none">
-                {[...Array(10)].map((_, i) => (
+        {!showGame ? (
+          <Card className="border-4 border-white bg-white/60 backdrop-blur-md shadow-2xl rounded-[3rem] overflow-hidden text-center p-10 space-y-8 animate-in fade-in zoom-in duration-700 relative">
+            <div className="mx-auto w-24 h-24 bg-gradient-to-tr from-blue-500 to-cyan-500 rounded-3xl flex items-center justify-center mb-6 rotate-3 shadow-lg">
+              <Fish className="w-12 h-12 text-white" />
+            </div>
+            <h2 className="text-5xl text-blue-900 leading-tight">Count the School!</h2>
+            <p className="text-2xl text-blue-800 font-nunito leading-relaxed max-w-2xl mx-auto">
+              Fish love to swim together in schools!
+              <br />
+              They switch shapes, but the number of fish stays the same!
+            </p>
+            <Button
+              onClick={() => setShowGame(true)}
+              className="bg-blue-600 hover:bg-blue-700 text-white text-3xl px-16 py-10 rounded-full shadow-2xl transition-all hover:scale-105 active:scale-95 border-b-8 border-blue-800"
+            >
+              Play! 🐠
+            </Button>
+            <p className="text-sm text-blue-400 font-bold uppercase tracking-widest pt-4 font-nunito">Topic B: Numeral Matching to 7</p>
+          </Card>
+        ) : (
+          <div className="space-y-6">
+            {currentStep !== 'complete' && (
+              <div className="flex justify-center gap-3 mb-4">
+                {['line', 'circle', 'array'].map((step, idx) => (
                   <div
-                    key={i}
-                    className="absolute rounded-full bg-white/20 animate-pulse"
-                    style={{
-                      width: Math.random() * 20 + 10,
-                      height: Math.random() * 20 + 10,
-                      left: `${Math.random() * 100}%`,
-                      top: `${Math.random() * 100}%`,
-                      animationDelay: `${Math.random() * 2}s`
-                    }}
+                    key={step}
+                    className={`h-3 rounded-full transition-all ${['line', 'circle', 'array'].indexOf(currentStep) >= idx
+                      ? 'bg-blue-500 w-12 shadow-sm'
+                      : 'bg-blue-100 w-3'
+                      }`}
                   />
                 ))}
               </div>
+            )}
 
-              {/* Seaweed decoration */}
-              <div className="absolute bottom-0 left-4 text-4xl">🌿</div>
-              <div className="absolute bottom-0 right-8 text-4xl">🌿</div>
-              <div className="absolute bottom-0 left-1/4 text-3xl">🪸</div>
-              <div className="absolute bottom-0 right-1/4 text-3xl">🪸</div>
+            {currentStep !== 'complete' && (
+              <Card className="bg-white/80 border-4 border-white shadow-2xl rounded-[3rem] p-10 text-center space-y-10 animate-in slide-in-from-bottom-8">
+                <h3 className="text-4xl text-blue-700">
+                  {currentStep === 'line' ? 'Swimming in a line!' : currentStep === 'circle' ? 'Swimming in a circle!' : 'Swimming in a group!'}
+                </h3>
 
-              {/* Configuration indicator */}
-              <div className="absolute top-4 left-4 bg-white/80 rounded-full px-4 py-2 flex items-center gap-2">
-                {configuration === 'circle' && <Circle className="h-5 w-5 text-blue-500" />}
-                {configuration === 'line' && <ArrowRight className="h-5 w-5 text-blue-500" />}
-                {configuration === 'array' && <Grid className="h-5 w-5 text-blue-500" />}
-                <span className="font-bold text-blue-600 capitalize">{configuration}</span>
-              </div>
+                {renderFish(7, currentStep)}
 
-              {/* Shark */}
-              {showShark && (
-                <div className="absolute top-1/2 right-0 transform -translate-y-1/2 animate-bounce text-6xl z-10">
-                  🦈
+                <div className="bg-blue-50 p-8 rounded-[2.5rem] border-4 border-white shadow-inner max-w-xl mx-auto font-nunito">
+                  <p className="text-4xl text-blue-800 leading-relaxed">
+                    There are <span className="font-fredoka text-6xl text-blue-600 drop-shadow-sm font-bold">7</span> fish!
+                  </p>
                 </div>
-              )}
 
-              {/* Fish SVG */}
-              <svg 
-                viewBox="0 0 320 280" 
-                className="w-full h-64 md:h-80"
-              >
-                {renderFish()}
-              </svg>
-            </div>
+                <Button onClick={() => setShowFeedback('correct')} className="bg-blue-600 hover:bg-blue-700 text-white py-12 px-16 text-4xl rounded-[2rem] shadow-xl border-b-8 border-blue-800 transition-all active:scale-95">
+                  Still 7? ✅
+                </Button>
+              </Card>
+            )}
 
-            {/* Instructions */}
-            <div className="bg-white/90 rounded-2xl p-4 text-center">
-              {configuration === 'circle' && startMarker === null ? (
-                <p className="text-lg text-gray-700">
-                  👆 Tap one fish to mark where you'll start counting!
+            {currentStep === 'complete' && (
+              <Card className="bg-gradient-to-br from-blue-600 via-cyan-600 to-indigo-600 shadow-2xl rounded-[4rem] overflow-hidden p-16 text-center text-white space-y-10 animate-in zoom-in-95 duration-700">
+                <div className="text-9xl animate-bounce">🐬</div>
+                <h2 className="text-7xl drop-shadow-xl">Ocean Master!</h2>
+                <p className="text-3xl font-nunito max-w-2xl mx-auto leading-relaxed">
+                  You know that 7 is always 7,
+                  no matter how they swim! You are a brilliant mathematician!
                 </p>
-              ) : countedFish.length < fishCount ? (
-                <p className="text-lg text-gray-700">
-                  🐟 Tap each fish to count! ({countedFish.length} of {fishCount})
-                </p>
-              ) : (
-                <p className="text-lg text-green-600 font-bold">
-                  ✨ You counted {fishCount} fish! The number stays the same!
-                </p>
-              )}
-            </div>
-
-            {/* Controls */}
-            <div className="flex justify-center gap-4">
-              {showFeedback && !showShark && (
-                <>
-                  <Button
-                    onClick={triggerShark}
-                    className="bg-gray-500 hover:bg-gray-600 text-white text-lg px-6 py-4 rounded-full"
-                  >
-                    🦈 Here comes a shark!
+                <div className="flex gap-4 w-full pt-8">
+                  <Button onClick={resetActivity} className="h-24 flex-1 bg-white/10 hover:bg-white/20 text-white text-3xl rounded-[2rem] border-4 border-white/20">
+                    Again! 🔄
                   </Button>
-                  <Button
-                    onClick={() => setPhase('practice')}
-                    className="bg-green-500 hover:bg-green-600 text-white text-lg px-6 py-4 rounded-full"
-                  >
-                    Match the numeral! ✨
+                  <Button onClick={() => navigate("/activities/module-3?last=3-arrange-count-9")} className="h-24 flex-1 bg-white text-blue-600 hover:bg-blue-50 text-3xl rounded-[2rem] shadow-2xl">
+                    Finish! ✨
                   </Button>
-                </>
-              )}
-            </div>
-          </div>
-        )}
+                </div>
+              </Card>
+            )}
 
-        {phase === 'practice' && (
-          <div className="space-y-6">
-            {/* Fish display */}
-            <div className="bg-gradient-to-b from-blue-300 to-blue-600 rounded-3xl p-4 shadow-xl relative overflow-hidden">
-              <div className="absolute top-4 left-4 bg-white/80 rounded-full px-4 py-2">
-                <span className="font-bold text-blue-600">Round {practiceRound + 1} of 3</span>
-              </div>
-              
-              <svg viewBox="0 0 320 280" className="w-full h-56">
-                {renderFish()}
-              </svg>
-            </div>
-
-            {/* Question */}
-            <div className="bg-white/90 rounded-2xl p-6 text-center">
-              <p className="text-xl text-gray-700 mb-6">
-                How many fish are there? Tap the correct number!
-              </p>
-
-              {/* Numeral choices */}
-              <div className="flex justify-center gap-6">
-                {[5, 6, 7].map(num => (
-                  <button
-                    key={num}
-                    onClick={() => handleNumeralSelect(num)}
-                    className={`w-20 h-20 text-4xl font-bold rounded-2xl transition-all duration-300 ${
-                      selectedNumeral === num
-                        ? num === fishCount
-                          ? 'bg-green-500 text-white scale-110'
-                          : 'bg-red-400 text-white shake'
-                        : 'bg-blue-100 text-blue-600 hover:bg-blue-200 hover:scale-105'
-                    }`}
+            {showFeedback && (
+              <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/40 backdrop-blur-md animate-in fade-in duration-300">
+                <Card className={`max-w-md w-full p-12 text-center shadow-[0_0_50px_rgba(0,0,0,0.3)] rounded-[4rem] border-8 animate-in zoom-in duration-300 ${showFeedback === 'correct' ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'
+                  }`}>
+                  <div className="text-9xl mb-8">
+                    {showFeedback === 'correct' ? '🌟' : '🧐'}
+                  </div>
+                  <h4 className={`text-6xl font-fredoka mb-8 ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'
+                    }`}>
+                    {showFeedback === 'correct' ? 'Correct!' : 'Try Again!'}
+                  </h4>
+                  <Button
+                    onClick={showFeedback === 'correct' ? nextStep : () => setShowFeedback(null)}
+                    className={`w-full py-12 text-4xl rounded-[2rem] shadow-xl border-b-8 ${showFeedback === 'correct' ? 'bg-green-600 hover:bg-green-700 border-green-800 text-white' : 'bg-red-600 hover:bg-red-700 border-red-800 text-white'
+                      }`}
                   >
-                    {num}
-                  </button>
-                ))}
+                    {showFeedback === 'correct' ? 'NextWay! ➡️' : 'OK! 👍'}
+                  </Button>
+                </Card>
               </div>
-            </div>
+            )}
 
-            {/* Restart counting option */}
-            <div className="flex justify-center">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setCountedFish([]);
-                  setStartMarker(null);
-                  setPhase('counting');
-                }}
-                className="text-blue-600 border-blue-400"
-              >
-                Count the fish again
+            {currentStep !== 'complete' && (
+              <Button onClick={() => setShowGame(false)} variant="ghost" className="text-blue-400 hover:text-blue-600 w-full py-2 font-bold font-nunito">
+                ← Back to Instructions
               </Button>
-            </div>
+            )}
           </div>
         )}
-
-        {phase === 'complete' && (
-          <div className="bg-white/90 rounded-3xl p-8 text-center shadow-xl">
-            <div className="text-6xl mb-6">🎉🐠🌟</div>
-            <h2 className="text-3xl font-bold text-blue-600 mb-4">
-              Amazing Job!
-            </h2>
-            <p className="text-xl text-gray-700 mb-6">
-              You discovered an important secret about counting!
-            </p>
-            <div className="bg-blue-50 rounded-2xl p-6 mb-8">
-              <p className="text-lg text-blue-700 font-bold">
-                🐟 The number of fish stays the same no matter if they swim in a circle, a line, or a group!
-              </p>
-            </div>
-            
-            <div className="flex justify-center gap-4">
-              <Button
-                onClick={restart}
-                className="bg-blue-500 hover:bg-blue-600 text-white text-lg px-6 py-4 rounded-full"
-              >
-                Play Again! 🐠
-              </Button>
-              <Button
-                onClick={() => navigate('/')}
-                variant="outline"
-                className="text-blue-600 border-blue-400 text-lg px-6 py-4 rounded-full"
-              >
-                Back to Lessons
-              </Button>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Objective reminder */}
-      <div className="max-w-4xl mx-auto mt-6">
-        <div className="bg-white/20 backdrop-blur rounded-xl p-3 text-center">
-          <p className="text-white text-sm">
-            <strong>Objective:</strong> Arrange and count 6 and 7 objects in varied configurations
-          </p>
-        </div>
       </div>
     </div>
   );

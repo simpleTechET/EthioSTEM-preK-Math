@@ -1,485 +1,226 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, ArrowRight, Volume2, RotateCcw, Eye, EyeOff } from "lucide-react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { ArrowLeft, RefreshCw, Home, Star, Sparkles, Smile, Eye, Waves } from "lucide-react";
 
 const Introduce8Lesson12 = () => {
   const navigate = useNavigate();
-  const [phase, setPhase] = useState<"intro" | "discover" | "practice" | "complete">("intro");
-  const [hiddenArm, setHiddenArm] = useState(true);
-  const [countingActive, setCountingActive] = useState(false);
-  const [highlightedArm, setHighlightedArm] = useState(-1);
-  const [counters, setCounters] = useState<boolean[]>(Array(8).fill(false));
-  const [hurtArm, setHurtArm] = useState(-1);
-  const [showStickers, setShowStickers] = useState<boolean[]>(Array(8).fill(false));
+  const [showGame, setShowGame] = useState(false);
+  const [currentStep, setCurrentStep] = useState<'count7' | 'reveal' | 'count8' | 'complete'>('count7');
+  const [showFeedback, setShowFeedback] = useState<'correct' | 'incorrect' | null>(null);
 
-  const speakText = (text: string) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.8;
-    utterance.pitch = 1.1;
-    speechSynthesis.speak(utterance);
-  };
-
-  useEffect(() => {
-    if (phase === "intro") {
-      setTimeout(() => {
-        speakText("Meet Ollie Octopus! Let's count his arms to discover the number 8!");
-      }, 500);
-    }
-  }, [phase]);
-
-  const countArms = () => {
-    if (countingActive) return;
-    setCountingActive(true);
-    setHighlightedArm(-1);
-    
-    const totalArms = hiddenArm ? 7 : 8;
-    let armIndex = 0;
-    
-    const interval = setInterval(() => {
-      if (armIndex < totalArms) {
-        setHighlightedArm(armIndex);
-        speakText(String(armIndex + 1));
-        
-        // Add sticker during discovery phase
-        if (phase === "discover") {
-          setShowStickers(prev => {
-            const newStickers = [...prev];
-            newStickers[armIndex] = true;
-            return newStickers;
-          });
-        }
-        
-        armIndex++;
-      } else {
-        clearInterval(interval);
-        setCountingActive(false);
-        
-        if (hiddenArm) {
-          speakText(`Ollie has ${totalArms} arms. But wait... there's 1 more hiding!`);
-        } else {
-          speakText(`Ollie has 8 arms! 7 and 1 more is 8!`);
-        }
-      }
-    }, 700);
-  };
-
-  const revealHiddenArm = () => {
-    setHiddenArm(false);
-    speakText("Look! Ollie has 1 more arm! 7 and 1 more is... 8!");
-  };
-
-  const toggleCounter = (index: number) => {
-    if (countingActive) return;
-    
-    const newCounters = [...counters];
-    newCounters[index] = !newCounters[index];
-    setCounters(newCounters);
-    
-    if (newCounters[index]) {
-      speakText(String(newCounters.filter(c => c).length));
+  const markLessonComplete = () => {
+    const saved = localStorage.getItem("ethio-stem-m3-completed");
+    const completed = saved ? JSON.parse(saved) : [];
+    if (!completed.includes("3-introduce-8-12")) {
+      completed.push("3-introduce-8-12");
+      localStorage.setItem("ethio-stem-m3-completed", JSON.stringify(completed));
     }
   };
 
-  const setHurtArmIndex = (index: number) => {
-    setHurtArm(index);
-    speakText(`Ollie has a scrape on arm ${index + 1}! Now count all 8 arms.`);
+  const nextStep = () => {
+    setShowFeedback(null);
+    if (currentStep === 'count7') setCurrentStep('reveal');
+    else if (currentStep === 'reveal') setCurrentStep('count8');
+    else if (currentStep === 'count8') {
+      markLessonComplete();
+      setCurrentStep('complete');
+    }
   };
 
-  const resetLesson = () => {
-    setPhase("intro");
-    setHiddenArm(true);
-    setCountingActive(false);
-    setHighlightedArm(-1);
-    setCounters(Array(8).fill(false));
-    setHurtArm(-1);
-    setShowStickers(Array(8).fill(false));
+  const resetActivity = () => {
+    setShowGame(false);
+    setCurrentStep('count7');
+    setShowFeedback(null);
   };
 
-  // Octopus arm positions (arranged in a circle pattern)
-  const armPositions = [
-    { x: 50, y: 15, rotation: -45 },   // Top left
-    { x: 70, y: 20, rotation: -20 },   // Top
-    { x: 85, y: 35, rotation: 15 },    // Right top
-    { x: 90, y: 55, rotation: 45 },    // Right
-    { x: 80, y: 75, rotation: 75 },    // Right bottom
-    { x: 55, y: 85, rotation: 110 },   // Bottom
-    { x: 30, y: 75, rotation: 140 },   // Left bottom
-    { x: 15, y: 50, rotation: 180 },   // Left (hidden arm)
-  ];
-
-  const renderOctopus = (interactive: boolean = false) => {
-    const visibleArms = hiddenArm ? 7 : 8;
-    
+  const renderOctopus = (visibleCount: number, highlighting8: boolean = false) => {
+    const radius = 100;
     return (
-      <div className="relative w-64 h-64 mx-auto">
-        {/* Octopus Body */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-24 bg-purple-500 rounded-full shadow-lg">
-          {/* Face */}
-          <div className="absolute top-4 left-4 w-5 h-5 bg-white rounded-full">
-            <div className="absolute top-1 left-1 w-3 h-3 bg-black rounded-full" />
-          </div>
-          <div className="absolute top-4 right-4 w-5 h-5 bg-white rounded-full">
-            <div className="absolute top-1 left-1 w-3 h-3 bg-black rounded-full" />
-          </div>
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-8 h-4 bg-purple-600 rounded-full" />
+      <div className="relative w-full max-w-md mx-auto h-[400px] flex items-center justify-center bg-blue-100/30 rounded-[4rem] border-8 border-white shadow-inner mb-8 overflow-hidden group">
+        <div className="absolute inset-0 opacity-20 pointer-events-none">
+          <Waves className="w-full h-full text-blue-400" />
         </div>
-        
-        {/* Arms */}
-        {armPositions.map((pos, index) => {
-          const isHiddenArm = index === 7;
-          const isVisible = !isHiddenArm || !hiddenArm;
-          const isHighlighted = highlightedArm === index;
-          const hasSticker = showStickers[index];
-          const hasCounter = counters[index];
-          const isHurt = hurtArm === index;
-          
-          if (!isVisible) return null;
-          
+
+        {/* Octopus Body */}
+        <div className="absolute z-20 w-32 h-32 bg-purple-500 rounded-full border-4 border-white shadow-xl flex flex-col items-center justify-center">
+          <div className="flex gap-4 mb-2">
+            <div className="w-4 h-4 bg-white rounded-full flex items-center justify-center">
+              <div className="w-2 h-2 bg-black rounded-full" />
+            </div>
+            <div className="w-4 h-4 bg-white rounded-full flex items-center justify-center">
+              <div className="w-2 h-2 bg-black rounded-full" />
+            </div>
+          </div>
+          <div className="w-8 h-4 bg-purple-600 rounded-full" />
+        </div>
+
+        {Array.from({ length: 8 }).map((_, i) => {
+          const isVisible = i < visibleCount;
+          const is8th = i === 7;
+          const angle = (i * 360) / 8 - 90;
+          const x = Math.cos((angle * Math.PI) / 180) * radius;
+          const y = Math.sin((angle * Math.PI) / 180) * radius;
+
+          if (!isVisible && !highlighting8) return null;
+
           return (
             <div
-              key={index}
-              className={`absolute transition-all duration-300 ${
-                isHighlighted ? "scale-125 z-10" : ""
-              } ${interactive ? "cursor-pointer hover:scale-110" : ""}`}
+              key={i}
+              className={`absolute flex flex-col items-center animate-in zoom-in duration-500 ${!isVisible ? 'opacity-20 grayscale scale-75' : ''}`}
               style={{
-                left: `${pos.x}%`,
-                top: `${pos.y}%`,
-                transform: `translate(-50%, -50%) rotate(${pos.rotation}deg)`,
+                left: `calc(50% + ${x * 1.4}px)`,
+                top: `calc(50% + ${y * 1.4}px)`,
+                transform: 'translate(-50%, -50%)',
+                animationDelay: `${i * 0.1}s`
               }}
-              onClick={() => interactive && toggleCounter(index)}
             >
-              {/* Arm */}
-              <div
-                className={`w-16 h-4 rounded-full transition-colors ${
-                  isHiddenArm && !hiddenArm
-                    ? "bg-purple-400 ring-2 ring-yellow-400"
-                    : isHurt
-                    ? "bg-red-400"
-                    : "bg-purple-400"
-                } ${isHighlighted ? "bg-yellow-400" : ""}`}
-              >
-                {/* Suckers */}
-                <div className="flex justify-around items-center h-full px-1">
-                  {[1, 2, 3].map((s) => (
-                    <div key={s} className="w-2 h-2 bg-purple-300 rounded-full" />
-                  ))}
-                </div>
+              <div className={`w-20 h-20 rounded-2xl flex items-center justify-center text-4xl shadow-lg border-4 border-white ${is8th ? 'bg-amber-400' : 'bg-purple-400'} text-white`}>
+                {is8th && !isVisible ? '?' : '🐙'}
               </div>
-              
-              {/* Sticker */}
-              {hasSticker && (
-                <div className="absolute -top-2 left-1/2 -translate-x-1/2 text-lg">
-                  ⭐
-                </div>
-              )}
-              
-              {/* Counter */}
-              {hasCounter && (
-                <div className={`absolute -top-3 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full ${
-                  isHurt ? "bg-red-500" : "bg-green-500"
-                } flex items-center justify-center text-white text-xs font-bold`}>
-                  {index + 1}
-                </div>
-              )}
-              
-              {/* Number label */}
-              {isHighlighted && (
-                <div
-                  className="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-blue-500 text-white px-2 py-1 rounded-full text-sm font-bold"
-                  style={{ transform: `translate(-50%, 0) rotate(-${pos.rotation}deg)` }}
-                >
-                  {index + 1}
-                </div>
+              {isVisible && (
+                <span className={`text-3xl font-bold mt-2 font-fredoka drop-shadow-sm ${is8th ? 'text-amber-600' : 'text-purple-600'}`}>
+                  {i + 1}
+                </span>
               )}
             </div>
           );
         })}
-        
-        {/* Hidden arm indicator */}
-        {hiddenArm && phase === "discover" && (
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 text-2xl animate-pulse">
-            ❓
-          </div>
-        )}
       </div>
     );
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-300 via-cyan-200 to-blue-400 p-4">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <Button
-          variant="ghost"
-          onClick={() => navigate("/")}
-          className="flex items-center gap-2"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back
-        </Button>
-        <h1 className="text-xl md:text-2xl font-bold text-blue-800">
-          Lesson 12: Introduce 8
-        </h1>
-        <Button variant="ghost" onClick={resetLesson}>
-          <RotateCcw className="w-4 h-4" />
-        </Button>
-      </div>
-
-      {/* Main Content */}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-white p-4 font-fredoka overflow-x-hidden">
       <div className="max-w-4xl mx-auto">
-        {/* Phase: Intro */}
-        {phase === "intro" && (
-          <Card className="mb-6">
-            <CardContent className="p-6 text-center">
-              <div className="text-6xl mb-4">🐙</div>
-              <h2 className="text-2xl font-bold text-purple-700 mb-4">
-                Meet Ollie Octopus!
-              </h2>
-              <p className="text-lg text-gray-600 mb-6">
-                Ollie has many arms. Let's count them to discover a new number!
-              </p>
-              <Button
-                onClick={() => {
-                  setPhase("discover");
-                  speakText("Let's count Ollie's arms! But wait... one arm is hiding!");
-                }}
-                className="bg-purple-500 hover:bg-purple-600 text-white px-8 py-4 text-xl"
-              >
-                Start Counting
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Phase: Discover */}
-        {phase === "discover" && (
-          <div className="space-y-6">
-            <Card className="bg-white/90">
-              <CardContent className="p-6">
-                <div className="text-center mb-4">
-                  <h2 className="text-xl font-bold text-purple-700">
-                    Count Ollie's Arms
-                  </h2>
-                  <p className="text-gray-600">
-                    {hiddenArm 
-                      ? "Touch to count each arm. How many can you see?"
-                      : "7 and 1 more is 8! Count all of Ollie's arms!"
-                    }
-                  </p>
-                </div>
-
-                {/* Octopus Display */}
-                <div className="bg-gradient-to-b from-blue-200 to-blue-300 rounded-xl p-6 mb-6">
-                  {renderOctopus()}
-                </div>
-
-                {/* Count Display */}
-                <div className="text-center mb-4">
-                  <div className="inline-flex items-center gap-4 bg-purple-100 px-6 py-3 rounded-full">
-                    <span className="text-2xl font-bold text-purple-700">
-                      Arms: {hiddenArm ? "7" : "8"}
-                    </span>
-                    {!hiddenArm && (
-                      <span className="text-lg text-purple-600 bg-yellow-200 px-3 py-1 rounded-full">
-                        7 + 1 = 8
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Key Learning */}
-                {!hiddenArm && (
-                  <div className="bg-yellow-50 p-4 rounded-lg text-center mb-4">
-                    <p className="text-xl font-bold text-purple-700">
-                      🌟 7 and 1 more is 8! 🌟
-                    </p>
-                  </div>
-                )}
-
-                {/* Controls */}
-                <div className="flex justify-center gap-4 flex-wrap">
-                  <Button
-                    onClick={countArms}
-                    disabled={countingActive}
-                    className="bg-green-500 hover:bg-green-600 text-white px-6 py-3"
-                  >
-                    <Volume2 className="w-5 h-5 mr-2" />
-                    Count Arms
-                  </Button>
-                  
-                  {hiddenArm && (
-                    <Button
-                      onClick={revealHiddenArm}
-                      disabled={countingActive}
-                      className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3"
-                    >
-                      <Eye className="w-5 h-5 mr-2" />
-                      Find Hidden Arm
-                    </Button>
-                  )}
-                  
-                  {!hiddenArm && (
-                    <Button
-                      onClick={() => {
-                        setPhase("practice");
-                        setCounters(Array(8).fill(false));
-                        setHurtArm(-1);
-                        speakText("Now let's practice! Put a counter on each of Ollie's arms.");
-                      }}
-                      className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3"
-                    >
-                      Practice
-                      <ArrowRight className="w-5 h-5 ml-2" />
-                    </Button>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+        <div className="flex items-center gap-4 mb-8">
+          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=3-introduce-8-12")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
+            <ArrowLeft className="w-5 h-5 text-purple-600" />
+          </Button>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-bold text-purple-600 bg-purple-100 px-3 py-1 rounded-full uppercase tracking-widest font-nunito">
+                Lesson 12
+              </span>
+              <h1 className="text-2xl font-bold text-purple-900 uppercase">Super 8!</h1>
+            </div>
           </div>
-        )}
+        </div>
 
-        {/* Phase: Practice */}
-        {phase === "practice" && (
+        {!showGame ? (
+          <Card className="border-4 border-white bg-white/60 backdrop-blur-md shadow-2xl rounded-[3rem] overflow-hidden text-center p-10 space-y-8 animate-in fade-in zoom-in duration-700 relative">
+            <div className="mx-auto w-24 h-24 bg-gradient-to-tr from-purple-500 to-indigo-500 rounded-3xl flex items-center justify-center mb-6 rotate-3 shadow-lg">
+              <span className="text-5xl text-white">🐙</span>
+            </div>
+            <h2 className="text-5xl text-purple-900 leading-tight">Meet Ollie Octopus!</h2>
+            <p className="text-2xl text-purple-800 font-nunito leading-relaxed max-w-2xl mx-auto">
+              Ollie has many arms. Let's count them!
+              <br />
+              We'll find a brand new number hiding in the ocean.
+            </p>
+            <Button
+              onClick={() => setShowGame(true)}
+              className="bg-purple-600 hover:bg-purple-700 text-white text-3xl px-16 py-10 rounded-full shadow-2xl transition-all hover:scale-105 active:scale-95 border-b-8 border-purple-800"
+            >
+              Play! 🌊
+            </Button>
+            <p className="text-sm text-purple-400 font-bold uppercase tracking-widest pt-4 font-nunito">Topic C: How Many with 8 Objects</p>
+          </Card>
+        ) : (
           <div className="space-y-6">
-            <Card className="bg-white/90">
-              <CardContent className="p-6">
-                <div className="text-center mb-4">
-                  <h2 className="text-xl font-bold text-purple-700">
-                    Practice: Count Ollie's Arms
-                  </h2>
-                  <p className="text-gray-600">
-                    {hurtArm === -1 
-                      ? "Click on each arm to place a counter!"
-                      : "Count all 8 arms - 7 green and 1 red (hurt)!"
-                    }
-                  </p>
-                </div>
-
-                {/* Interactive Octopus */}
-                <div className="bg-gradient-to-b from-blue-200 to-blue-300 rounded-xl p-6 mb-6">
-                  {renderOctopus(true)}
-                </div>
-
-                {/* Counter Status */}
-                <div className="flex justify-center gap-2 mb-4">
-                  {counters.map((hasCounter, index) => (
-                    <div
-                      key={index}
-                      className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-all ${
-                        hasCounter
-                          ? hurtArm === index
-                            ? "bg-red-500 text-white"
-                            : "bg-green-500 text-white"
-                          : "bg-gray-200 text-gray-400"
+            {currentStep !== 'complete' && (
+              <div className="flex justify-center gap-3 mb-4">
+                {['count7', 'reveal', 'count8'].map((step, idx) => (
+                  <div
+                    key={step}
+                    className={`h-3 rounded-full transition-all ${['count7', 'reveal', 'count8'].indexOf(currentStep) >= idx
+                      ? 'bg-purple-500 w-12 shadow-sm'
+                      : 'bg-purple-100 w-3'
                       }`}
-                    >
-                      {index + 1}
-                    </div>
-                  ))}
-                </div>
+                  />
+                ))}
+              </div>
+            )}
 
-                {/* Count Display */}
-                <div className="text-center mb-4">
-                  <p className="text-lg">
-                    Counters placed: {counters.filter(c => c).length} / 8
+            {currentStep !== 'complete' && (
+              <Card className="bg-white/80 border-4 border-white shadow-2xl rounded-[3rem] p-10 text-center space-y-8 animate-in slide-in-from-bottom-8">
+                <h3 className="text-4xl text-purple-700">
+                  {currentStep === 'count7' ? "How many arms can you see?" :
+                    currentStep === 'reveal' ? "Wait! One more is hiding..." :
+                      "Seven and One more is EIGHT!"}
+                </h3>
+
+                {renderOctopus(currentStep === 'count7' ? 7 : 8, currentStep === 'reveal')}
+
+                <div className="bg-purple-50 p-8 rounded-[2.5rem] border-4 border-white shadow-inner max-w-2xl mx-auto font-nunito">
+                  <p className="text-4xl text-purple-800 leading-relaxed">
+                    {currentStep === 'count7' ? "I see 7 arms!" :
+                      currentStep === 'reveal' ? "Tap to find the hidden arm!" :
+                        "We counted all the way to 8!"}
                   </p>
-                  {counters.every(c => c) && (
-                    <p className="text-xl font-bold text-green-600 mt-2">
-                      🎉 All 8 arms have counters! 7 and 1 more is 8!
-                    </p>
+                  {currentStep === 'count8' && (
+                    <p className="text-8xl font-fredoka text-amber-600 animate-bounce mt-4 font-bold drop-shadow-md">8</p>
                   )}
                 </div>
 
-                {/* Controls */}
-                <div className="flex justify-center gap-4 flex-wrap">
-                  {hurtArm === -1 && counters.filter(c => c).length >= 7 && (
-                    <Button
-                      onClick={() => setHurtArmIndex(7)}
-                      className="bg-red-400 hover:bg-red-500 text-white px-6 py-3"
-                    >
-                      Add Hurt Arm Story
-                    </Button>
-                  )}
-                  
-                  <Button
-                    onClick={() => setCounters(Array(8).fill(false))}
-                    variant="outline"
-                    className="px-6 py-3"
-                  >
-                    <RotateCcw className="w-4 h-4 mr-2" />
-                    Clear Counters
-                  </Button>
-                  
-                  {counters.every(c => c) && (
-                    <Button
-                      onClick={() => {
-                        setPhase("complete");
-                        speakText("Wonderful! You learned that 7 and 1 more is 8!");
-                      }}
-                      className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3"
-                    >
-                      Finish
-                      <ArrowRight className="w-5 h-5 ml-2" />
-                    </Button>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
+                <Button
+                  onClick={() => setShowFeedback('correct')}
+                  className={`${currentStep === 'reveal' ? 'bg-amber-500 hover:bg-amber-600 border-amber-800' : 'bg-purple-600 hover:bg-purple-700 border-purple-800'} text-white py-12 px-16 text-4xl rounded-[2rem] shadow-xl border-b-8 transition-all active:scale-95`}
+                >
+                  {currentStep === 'reveal' ? 'Find it! 🔍' : 'Check! ✅'}
+                </Button>
+              </Card>
+            )}
 
-        {/* Phase: Complete */}
-        {phase === "complete" && (
-          <Card className="bg-gradient-to-br from-purple-100 to-blue-100">
-            <CardContent className="p-8 text-center">
-              <div className="text-6xl mb-4">🐙🌟🎉</div>
-              <h2 className="text-3xl font-bold text-purple-700 mb-4">
-                Amazing Job!
-              </h2>
-              <p className="text-xl text-gray-600 mb-4">
-                You learned the number 8 with Ollie Octopus!
-              </p>
-              
-              <div className="bg-white/80 p-6 rounded-xl mb-6 inline-block">
-                <p className="text-2xl font-bold text-purple-700 mb-2">
-                  7 and 1 more is 8!
+            {currentStep === 'complete' && (
+              <Card className="bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 shadow-2xl rounded-[4rem] overflow-hidden p-16 text-center text-white space-y-10 animate-in zoom-in-95 duration-700">
+                <div className="text-9xl animate-bounce">🐙</div>
+                <h2 className="text-7xl drop-shadow-xl">Number 8 Star!</h2>
+                <p className="text-3xl font-nunito max-w-2xl mx-auto leading-relaxed">
+                  You discovered the number 8 with Ollie!
+                  <br />
+                  Remember: 7 and 1 more is always 8!
                 </p>
-                <div className="flex justify-center items-center gap-2 mt-4">
-                  {/* Visual: 7 purple + 1 yellow */}
-                  {[1,2,3,4,5,6,7].map(i => (
-                    <div key={i} className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                      {i}
-                    </div>
-                  ))}
-                  <span className="text-xl mx-2">+</span>
-                  <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-sm ring-2 ring-yellow-300">
-                    8
-                  </div>
+                <div className="flex gap-4 w-full pt-8">
+                  <Button onClick={resetActivity} className="h-24 flex-1 bg-white/10 hover:bg-white/20 text-white text-3xl rounded-[2rem] border-4 border-white/20">
+                    Again! 🔄
+                  </Button>
+                  <Button onClick={() => navigate("/activities/module-3?last=3-introduce-8-12")} className="h-24 flex-1 bg-white text-purple-600 hover:bg-purple-50 text-3xl rounded-[2rem] shadow-2xl">
+                    Yay! ✨
+                  </Button>
                 </div>
+              </Card>
+            )}
+
+            {showFeedback && (
+              <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/40 backdrop-blur-md animate-in fade-in duration-300">
+                <Card className={`max-w-md w-full p-12 text-center shadow-[0_0_50px_rgba(0,0,0,0.3)] rounded-[4rem] border-8 animate-in zoom-in duration-300 ${showFeedback === 'correct' ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'
+                  }`}>
+                  <div className="text-9xl mb-8">
+                    {showFeedback === 'correct' ? '🌟' : '🧐'}
+                  </div>
+                  <h4 className={`text-6xl font-fredoka mb-8 ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'
+                    }`}>
+                    {showFeedback === 'correct' ? 'Correct!' : 'Try Again!'}
+                  </h4>
+                  <Button
+                    onClick={showFeedback === 'correct' ? nextStep : () => setShowFeedback(null)}
+                    className={`w-full py-12 text-4xl rounded-[2rem] shadow-xl border-b-8 ${showFeedback === 'correct' ? 'bg-green-600 hover:bg-green-700 border-green-800 text-white' : 'bg-red-600 hover:bg-red-700 border-red-800 text-white'
+                      }`}
+                  >
+                    {showFeedback === 'correct' ? 'Next! ➡️' : 'OK! 👍'}
+                  </Button>
+                </Card>
               </div>
-              
-              <div className="flex justify-center gap-4">
-                <Button
-                  onClick={resetLesson}
-                  variant="outline"
-                  className="px-6 py-3"
-                >
-                  <RotateCcw className="w-4 h-4 mr-2" />
-                  Practice Again
-                </Button>
-                <Button
-                  onClick={() => navigate("/")}
-                  className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3"
-                >
-                  Back to Lessons
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+            )}
+
+            {currentStep !== 'complete' && (
+              <Button onClick={() => setShowGame(false)} variant="ghost" className="text-purple-400 hover:text-purple-600 w-full py-2 font-bold font-nunito">
+                ← Back to Instructions
+              </Button>
+            )}
+          </div>
         )}
       </div>
     </div>

@@ -17,6 +17,21 @@ const TopicMatching = lazy(() => import("./pages/TopicMatching"));
 const TopicSorting = lazy(() => import("./pages/TopicSorting"));
 const TopicCounting3 = lazy(() => import("./pages/TopicCounting3"));
 const TopicNumbers3 = lazy(() => import("./pages/TopicNumbers3"));
+const TowersThirty30 = lazy(() => import("./pages/3TowersThirty30"));
+const StairsThirtyOne31 = lazy(() => import("./pages/3StairsThirtyOne31"));
+const ClimbStairsThirtyTwo32 = lazy(() => import("./pages/3ClimbStairsThirtyTwo32"));
+const DescendingStairsThirtyThree33 = lazy(() => import("./pages/3DescendingStairsThirtyThree33"));
+const PennyStaircaseThirtyFour34 = lazy(() => import("./pages/3PennyStaircaseThirtyFour34"));
+const LittleCrabsThirtyFive35 = lazy(() => import("./pages/3LittleCrabsThirtyFive35"));
+const LittleFishiesThirtySix36 = lazy(() => import("./pages/3LittleFishiesThirtySix36"));
+const CulminatingThirtySeven37 = lazy(() => import("./pages/3CulminatingThirtySeven37"));
+const CircularTenThirtyEight38 = lazy(() => import("./pages/3CircularTenThirtyEight38"));
+const VariedTenThirtyNine39 = lazy(() => import("./pages/3VariedTenThirtyNine39"));
+const TallyTenForty40 = lazy(() => import("./pages/3TallyTenForty40"));
+const CountOutTenFortyOne41 = lazy(() => import("./pages/3CountOutTenFortyOne41"));
+const NumberBookFortyTwo42 = lazy(() => import("./pages/3NumberBookFortyTwo42"));
+
+// Topic G: Building Number Stairs
 const MatchingActivity1 = lazy(() => import("./pages/1MatchingActivity1"));
 const MatchingActivity2 = lazy(() => import("./pages/1MatchingActivity2"));
 const MatchingActivity3 = lazy(() => import("./pages/1MatchingActivity3"));
@@ -203,6 +218,19 @@ const App = () => (
                 <Route path="/3-circle-count-8" element={<CircleCount8 />} />
                 <Route path="/3-arrange-count-9" element={<ArrangeCount9 />} />
                 <Route path="/3-tally-10" element={<Tally10 />} />
+                <Route path="/3-towers-30" element={<TowersThirty30 />} />
+                <Route path="/3-stairs-31" element={<StairsThirtyOne31 />} />
+                <Route path="/3-climb-stairs-32" element={<ClimbStairsThirtyTwo32 />} />
+                <Route path="/3-descending-stairs-33" element={<DescendingStairsThirtyThree33 />} />
+                <Route path="/3-penny-staircase-34" element={<PennyStaircaseThirtyFour34 />} />
+                <Route path="/3-little-crabs-35" element={<LittleCrabsThirtyFive35 />} />
+                <Route path="/3-little-fishies-thirty-six-36" element={<LittleFishiesThirtySix36 />} />
+                <Route path="/3-culminating-thirty-seven-37" element={<CulminatingThirtySeven37 />} />
+                <Route path="/3-circular-ten-thirty-eight-38" element={<CircularTenThirtyEight38 />} />
+                <Route path="/3-varied-ten-thirty-nine-39" element={<VariedTenThirtyNine39 />} />
+                <Route path="/3-tally-ten-forty-40" element={<TallyTenForty40 />} />
+                <Route path="/3-count-out-ten-forty-one-41" element={<CountOutTenFortyOne41 />} />
+                <Route path="/3-number-book-forty-two-42" element={<NumberBookFortyTwo42 />} />
                 <Route path="/3-count-out-11" element={<CountOut11 />} />
                 <Route path="/3-introduce-8-12" element={<Introduce8Lesson12 />} />
                 <Route path="/3-linear-count-13" element={<LinearCount13 />} />

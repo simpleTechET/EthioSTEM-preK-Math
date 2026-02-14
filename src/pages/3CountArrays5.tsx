@@ -1,329 +1,182 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { RotateCcw, Volume2, Home, Shuffle } from "lucide-react";
-import { Link } from "react-router-dom";
-
-type ItemType = "sock" | "shirt" | "shoe";
-
-interface ArrayItem {
-  id: number;
-  type: ItemType;
-  color: string;
-  counted: boolean;
-}
-
-const COLORS = {
-  sock: ["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4", "#FFEAA7", "#DDA0DD"],
-  shirt: ["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4"],
-  shoe: ["#8B4513", "#2F4F4F", "#4A4A4A", "#1E3A5F"],
-};
-
-const SockSVG = ({ color, size = 60 }: { color: string; size?: number }) => (
-  <svg width={size} height={size * 1.2} viewBox="0 0 60 72" className="drop-shadow-md">
-    <path
-      d="M15 5 L15 35 Q15 45 25 50 L45 50 Q55 50 55 40 L55 35 Q55 30 50 30 L35 30 L35 5 Q35 2 25 2 Q15 2 15 5"
-      fill={color}
-      stroke={`${color}88`}
-      strokeWidth="2"
-    />
-    <path d="M15 20 L35 20" stroke="white" strokeWidth="3" strokeLinecap="round" opacity="0.4" />
-    <path d="M15 25 L35 25" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.3" />
-  </svg>
-);
-
-const ShirtSVG = ({ color, size = 70 }: { color: string; size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 70 70" className="drop-shadow-md">
-    <path
-      d="M20 10 L15 5 L5 15 L12 22 L12 60 L58 60 L58 22 L65 15 L55 5 L50 10 Q45 15 35 15 Q25 15 20 10"
-      fill={color}
-      stroke={`${color}88`}
-      strokeWidth="2"
-    />
-    <path d="M28 15 L28 25" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
-    <path d="M35 15 L35 25" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
-    <path d="M42 15 L42 25" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
-  </svg>
-);
-
-const ShoeSVG = ({ color, size = 70 }: { color: string; size?: number }) => (
-  <svg width={size} height={size * 0.6} viewBox="0 0 70 42" className="drop-shadow-md">
-    <path
-      d="M10 30 L10 15 Q10 5 20 5 L30 5 L30 15 Q35 12 45 12 L60 15 Q68 18 68 28 L68 35 Q68 40 60 40 L15 40 Q10 40 10 35 Z"
-      fill={color}
-      stroke={`${color}88`}
-      strokeWidth="2"
-    />
-    <ellipse cx="25" cy="38" rx="10" ry="3" fill="#333" opacity="0.3" />
-  </svg>
-);
-
-const ItemDisplay = ({ item, size }: { item: ArrayItem; size?: number }) => {
-  switch (item.type) {
-    case "sock":
-      return <SockSVG color={item.color} size={size} />;
-    case "shirt":
-      return <ShirtSVG color={item.color} size={size} />;
-    case "shoe":
-      return <ShoeSVG color={item.color} size={size} />;
-  }
-};
+import { Card } from "@/components/ui/card";
+import { ArrowLeft, RefreshCw, Home, Star, Sparkles, Smile, Shirt, Boxes } from "lucide-react";
 
 const CountArrays5 = () => {
-  const [items, setItems] = useState<ArrayItem[]>([]);
-  const [countedOrder, setCountedOrder] = useState<number[]>([]);
-  const [showCelebration, setShowCelebration] = useState(false);
-  const [currentPhase, setCurrentPhase] = useState<"pairs" | "counting" | "done">("pairs");
-  const [selectedSet, setSelectedSet] = useState<"socks" | "shirts" | "shoes" | null>(null);
+  const navigate = useNavigate();
+  const [showGame, setShowGame] = useState(false);
+  const [currentStep, setCurrentStep] = useState<'intro' | 'count6' | 'complete'>('intro');
+  const [showFeedback, setShowFeedback] = useState<'correct' | 'incorrect' | null>(null);
 
-  const countedCount = countedOrder.length;
-
-  const generatePairs = (type: ItemType, count: number): ArrayItem[] => {
-    const colors = COLORS[type];
-    const pairs: ArrayItem[] = [];
-    for (let i = 0; i < count; i++) {
-      const color = colors[i % colors.length];
-      pairs.push({ id: i * 2, type, color, counted: false });
-      pairs.push({ id: i * 2 + 1, type, color, counted: false });
-    }
-    return pairs;
-  };
-
-  const initializeSocks = () => {
-    setItems(generatePairs("sock", 3));
-    setSelectedSet("socks");
-    setCurrentPhase("counting");
-    setCountedOrder([]);
-    setShowCelebration(false);
-  };
-
-  const initializeShirts = () => {
-    setItems(generatePairs("shirt", 3));
-    setSelectedSet("shirts");
-    setCurrentPhase("counting");
-    setCountedOrder([]);
-    setShowCelebration(false);
-  };
-
-  const initializeShoes = () => {
-    setItems(generatePairs("shoe", 3));
-    setSelectedSet("shoes");
-    setCurrentPhase("counting");
-    setCountedOrder([]);
-    setShowCelebration(false);
-  };
-
-  const handleItemClick = (index: number) => {
-    if (items[index].counted) return;
-
-    const newItems = [...items];
-    newItems[index].counted = true;
-    setItems(newItems);
-    setCountedOrder([...countedOrder, index]);
-    speakNumber(countedOrder.length + 1);
-  };
-
-  const speakNumber = (num: number) => {
-    if ("speechSynthesis" in window) {
-      const utterance = new SpeechSynthesisUtterance(num.toString());
-      utterance.rate = 0.8;
-      utterance.pitch = 1.2;
-      window.speechSynthesis.speak(utterance);
+  const markLessonComplete = () => {
+    const saved = localStorage.getItem("ethio-stem-m3-completed");
+    const completed = saved ? JSON.parse(saved) : [];
+    if (!completed.includes("3-count-arrays-5")) {
+      completed.push("3-count-arrays-5");
+      localStorage.setItem("ethio-stem-m3-completed", JSON.stringify(completed));
     }
   };
 
-  const resetGame = () => {
-    setItems([]);
-    setCountedOrder([]);
-    setShowCelebration(false);
-    setCurrentPhase("pairs");
-    setSelectedSet(null);
-  };
-
-  const shuffleItems = () => {
-    const shuffled = [...items].sort(() => Math.random() - 0.5).map(item => ({ ...item, counted: false }));
-    setItems(shuffled);
-    setCountedOrder([]);
-  };
-
-  useEffect(() => {
-    if (countedCount === 6 && items.length === 6) {
-      setShowCelebration(true);
-      setCurrentPhase("done");
-      if ("speechSynthesis" in window) {
-        setTimeout(() => {
-          const utterance = new SpeechSynthesisUtterance("Great job! You counted 6 objects!");
-          utterance.rate = 0.9;
-          utterance.pitch = 1.1;
-          window.speechSynthesis.speak(utterance);
-        }, 500);
-      }
+  const nextStep = () => {
+    setShowFeedback(null);
+    if (currentStep === 'intro') setCurrentStep('count6');
+    else if (currentStep === 'count6') {
+      markLessonComplete();
+      setCurrentStep('complete');
     }
-  }, [countedCount, items.length]);
+  };
+
+  const resetActivity = () => {
+    setShowGame(false);
+    setCurrentStep('intro');
+    setShowFeedback(null);
+  };
+
+  const renderArray = (count: number) => (
+    <div className="grid grid-cols-3 gap-6 my-8 py-12 bg-indigo-100/30 rounded-[4rem] border-8 border-white shadow-inner relative overflow-hidden max-w-2xl mx-auto">
+      {Array.from({ length: count }).map((_, i) => (
+        <div key={i} className="flex flex-col items-center animate-in zoom-in duration-300 relative z-10" style={{ animationDelay: `${i * 0.1}s` }}>
+          <div className={`w-28 h-28 rounded-[2rem] flex items-center justify-center text-5xl shadow-lg border-4 border-white transform hover:scale-110 transition-transform bg-indigo-500 text-white`}>
+            <Shirt className="w-14 h-14" />
+          </div>
+          <span className="text-3xl font-bold mt-4 text-indigo-900 font-fredoka drop-shadow-sm">{i + 1}</span>
+        </div>
+      ))}
+    </div>
+  );
 
   return (
-    <div className="min-h-screen gradient-sky overflow-hidden relative">
-      {/* Clouds */}
-      <div className="absolute top-8 left-10 w-20 h-10 bg-white/60 rounded-full blur-sm animate-float" />
-      <div className="absolute top-16 right-20 w-28 h-12 bg-white/50 rounded-full blur-sm animate-float" style={{ animationDelay: "1s" }} />
-
-      {/* Sun */}
-      <div className="absolute top-6 right-8 w-16 h-16 bg-primary rounded-full shadow-lg flex items-center justify-center">
-        <div className="w-12 h-12 bg-primary/80 rounded-full" />
-      </div>
-
-      <div className="container mx-auto px-4 py-6 relative z-10">
-        <header className="text-center mb-6">
-          <Link to="/" className="inline-flex items-center gap-2 text-foreground/60 hover:text-foreground mb-2 font-nunito text-sm">
-            <Home className="w-4 h-4" /> Back to Lessons
-          </Link>
-          <h1 className="font-fredoka text-3xl md:text-4xl text-foreground text-shadow-playful mb-2">🧦 Counting in Arrays! 🧦</h1>
-          <p className="font-nunito text-lg text-foreground/80">Lesson 5: Count 6 objects in array configurations</p>
-        </header>
-
-        {currentPhase === "pairs" && (
-          <div className="max-w-2xl mx-auto">
-            <div className="bg-card/90 backdrop-blur-sm rounded-2xl p-6 mb-6 shadow-soft">
-              <h2 className="font-fredoka text-2xl text-foreground mb-4 text-center">Choose what to count!</h2>
-              <p className="font-nunito text-center text-muted-foreground mb-6">
-                Each item comes in pairs. Let's count 3 pairs to make 6!
-              </p>
-              <div className="grid grid-cols-3 gap-4">
-                <button
-                  onClick={initializeSocks}
-                  className="bg-card hover:bg-accent rounded-2xl p-6 transition-all hover:scale-105 shadow-soft flex flex-col items-center gap-3"
-                >
-                  <SockSVG color="#FF6B6B" size={50} />
-                  <span className="font-fredoka text-lg text-foreground">Socks</span>
-                </button>
-                <button
-                  onClick={initializeShirts}
-                  className="bg-card hover:bg-accent rounded-2xl p-6 transition-all hover:scale-105 shadow-soft flex flex-col items-center gap-3"
-                >
-                  <ShirtSVG color="#4ECDC4" size={50} />
-                  <span className="font-fredoka text-lg text-foreground">Shirts</span>
-                </button>
-                <button
-                  onClick={initializeShoes}
-                  className="bg-card hover:bg-accent rounded-2xl p-6 transition-all hover:scale-105 shadow-soft flex flex-col items-center gap-3"
-                >
-                  <ShoeSVG color="#8B4513" size={50} />
-                  <span className="font-fredoka text-lg text-foreground">Shoes</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Demo Array */}
-            <div className="bg-card/80 backdrop-blur-sm rounded-2xl p-6 shadow-soft">
-              <h3 className="font-fredoka text-xl text-foreground mb-4 text-center">What is an Array?</h3>
-              <p className="font-nunito text-center text-muted-foreground mb-4">
-                Objects arranged in rows and columns! Count left to right, top to bottom.
-              </p>
-              <div className="grid grid-cols-2 gap-4 max-w-xs mx-auto">
-                {[1, 2, 3, 4, 5, 6].map((num) => (
-                  <div key={num} className="bg-accent/50 rounded-xl p-3 flex items-center justify-center">
-                    <span className="font-fredoka text-2xl text-primary">{num}</span>
-                  </div>
-                ))}
-              </div>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-blue-50 to-white p-4 font-nunito overflow-x-hidden">
+      <div className="max-w-4xl mx-auto">
+        <div className="flex items-center gap-4 mb-8">
+          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=3-count-arrays-5")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
+            <ArrowLeft className="w-5 h-5" />
+          </Button>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-bold text-indigo-600 bg-indigo-100 px-3 py-1 rounded-full font-fredoka">
+                Lesson 5
+              </span>
+              <h1 className="text-2xl font-bold text-foreground font-fredoka uppercase tracking-wide">Array Counting!</h1>
             </div>
           </div>
-        )}
-
-        {currentPhase === "counting" && (
-          <>
-            <div className="bg-card/90 backdrop-blur-sm rounded-2xl p-4 mb-6 max-w-2xl mx-auto shadow-soft">
-              <p className="font-nunito text-center text-foreground">
-                <span className="font-bold text-primary">Tap each {selectedSet?.slice(0, -1)}</span> to count them! Go left to right, top to bottom.
-              </p>
-            </div>
-
-            {/* Count Display */}
-            <div className="text-center mb-6">
-              <div className="inline-flex items-center gap-3 bg-card rounded-full px-6 py-3 shadow-soft">
-                <span className="font-nunito text-foreground">Counted:</span>
-                <span className="font-fredoka text-4xl text-primary">{countedCount}</span>
-                <span className="font-nunito text-foreground">/ 6</span>
-              </div>
-            </div>
-
-            {/* Array Display - 3 rows x 2 columns */}
-            <div className="max-w-md mx-auto bg-card/80 backdrop-blur-sm rounded-2xl p-6 shadow-soft mb-6">
-              <div className="grid grid-cols-2 gap-6">
-                {items.map((item, index) => (
-                  <button
-                    key={item.id}
-                    onClick={() => handleItemClick(index)}
-                    disabled={item.counted}
-                    className={`relative p-4 rounded-xl transition-all ${
-                      item.counted
-                        ? "bg-accent/50 scale-95"
-                        : "bg-card hover:bg-accent hover:scale-105 cursor-pointer"
-                    } shadow-soft flex items-center justify-center`}
-                  >
-                    <ItemDisplay item={item} />
-                    {item.counted && (
-                      <div className="absolute top-2 right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center animate-chick-bounce">
-                        <span className="font-fredoka text-primary-foreground text-sm">
-                          {countedOrder.indexOf(index) + 1}
-                        </span>
-                      </div>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex justify-center gap-4">
-              <Button variant="outline" onClick={resetGame} className="font-nunito gap-2">
-                <RotateCcw className="w-4 h-4" /> Choose Different
-              </Button>
-              <Button variant="secondary" onClick={shuffleItems} className="font-nunito gap-2" disabled={countedCount > 0}>
-                <Shuffle className="w-4 h-4" /> Shuffle
-              </Button>
-              <Button variant="secondary" onClick={() => speakNumber(countedCount)} className="font-nunito gap-2">
-                <Volume2 className="w-4 h-4" /> Hear Count
-              </Button>
-            </div>
-          </>
-        )}
-
-        {/* Celebration */}
-        {showCelebration && (
-          <div className="fixed inset-0 flex items-center justify-center bg-foreground/20 backdrop-blur-sm z-50">
-            <div className="bg-card rounded-3xl p-8 text-center shadow-lg max-w-md mx-4 animate-celebrate">
-              <div className="text-6xl mb-4">🎉🧦🎉</div>
-              <h2 className="font-fredoka text-3xl text-primary mb-2">Great Job!</h2>
-              <p className="font-nunito text-lg text-foreground mb-6">
-                You counted <span className="font-bold text-primary">6</span> {selectedSet}!<br />
-                3 pairs make 6!
-              </p>
-              <div className="flex gap-3 justify-center flex-wrap">
-                <Button onClick={resetGame} size="lg" className="font-fredoka text-lg gap-2">
-                  <RotateCcw className="w-5 h-5" /> Try Another!
-                </Button>
-                <Link to="/">
-                  <Button variant="outline" size="lg" className="font-fredoka text-lg gap-2">
-                    <Home className="w-5 h-5" /> More Lessons
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Grass at bottom */}
-        <div className="fixed bottom-0 left-0 right-0 h-16 gradient-grass z-0">
-          <svg viewBox="0 0 100 20" preserveAspectRatio="none" className="w-full h-full">
-            {[...Array(30)].map((_, i) => (
-              <path
-                key={i}
-                d={`M${i * 3.5} 20 Q${i * 3.5 + 1} 10 ${i * 3.5 + 1.5} ${5 + Math.random() * 5} Q${i * 3.5 + 2} 10 ${i * 3.5 + 3} 20`}
-                className="fill-grass-dark/60 grass-blade"
-                style={{ animationDelay: `${i * 0.1}s` }}
-              />
-            ))}
-          </svg>
         </div>
+
+        {!showGame ? (
+          <Card className="border-4 border-white bg-white/60 backdrop-blur-md shadow-2xl rounded-[3rem] overflow-hidden text-center p-10 space-y-8 animate-in fade-in zoom-in duration-700 relative">
+            <div className="mx-auto w-24 h-24 bg-gradient-to-tr from-indigo-500 to-blue-500 rounded-3xl flex items-center justify-center mb-6 rotate-3 shadow-lg">
+              <Boxes className="w-12 h-12 text-white" />
+            </div>
+            <h2 className="text-5xl font-fredoka text-indigo-900 leading-tight">Rows and Columns!</h2>
+            <p className="text-2xl text-indigo-800 font-nunito leading-relaxed max-w-2xl mx-auto">
+              Sometimes things are lined up in neat rows!
+              <br />
+              Let's count our shirts from left to right.
+            </p>
+            <Button
+              onClick={() => setShowGame(true)}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white text-3xl px-16 py-10 rounded-full shadow-2xl font-fredoka transition-all hover:scale-105 active:scale-95 border-b-8 border-indigo-800"
+            >
+              Play! 👕
+            </Button>
+            <p className="text-sm text-indigo-400 font-bold uppercase tracking-widest pt-4">Topic A: Count up to 7</p>
+          </Card>
+        ) : (
+          <div className="space-y-6">
+            {currentStep !== 'complete' && (
+              <div className="flex justify-center mb-4">
+                <div className="h-3 rounded-full bg-indigo-500 w-24 shadow-sm" />
+              </div>
+            )}
+
+            {currentStep === 'intro' && (
+              <Card className="bg-white/80 border-4 border-white shadow-2xl rounded-[3rem] p-10 text-center space-y-10 animate-in slide-in-from-bottom-8">
+                <h3 className="text-4xl font-fredoka text-indigo-700">The Array!</h3>
+                <div className="grid grid-cols-3 gap-6 max-w-xl mx-auto py-12 bg-indigo-50 rounded-[3rem]">
+                  {[1, 2, 3, 4, 5, 6].map(i => (
+                    <div key={i} className="w-24 h-24 mx-auto bg-indigo-200 rounded-2xl flex items-center justify-center text-3xl font-bold text-indigo-700 shadow-sm border-2 border-white">?</div>
+                  ))}
+                </div>
+                <div className="p-8 bg-indigo-50 border-4 border-white rounded-[2.5rem] shadow-inner max-w-xl mx-auto">
+                  <p className="text-3xl font-fredoka text-indigo-800">
+                    Count from left to right, then go to the next row!
+                  </p>
+                </div>
+                <Button onClick={() => setShowFeedback('correct')} className="bg-indigo-600 hover:bg-indigo-700 text-white py-12 px-16 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-indigo-800 transition-all active:scale-95">
+                  I'm Ready! ➡️
+                </Button>
+              </Card>
+            )}
+
+            {currentStep === 'count6' && (
+              <Card className="bg-white/80 border-4 border-white shadow-2xl rounded-[3rem] p-10 text-center space-y-10 animate-in zoom-in-95">
+                <h3 className="text-4xl font-fredoka text-indigo-700">Count the Array!</h3>
+                {renderArray(6)}
+                <div className="p-8 bg-indigo-50 border-4 border-white rounded-[2.5rem] shadow-inner max-w-2xl mx-auto">
+                  <p className="text-4xl font-fredoka text-indigo-800 font-bold">
+                    There are <span className="text-7xl text-indigo-600 drop-shadow-sm">6</span> shirts!
+                  </p>
+                </div>
+                <Button
+                  onClick={() => setShowFeedback('correct')}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white py-12 px-16 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-indigo-800 transition-all active:scale-95"
+                >
+                  Finish! ✨
+                </Button>
+              </Card>
+            )}
+
+            {currentStep === 'complete' && (
+              <Card className="bg-gradient-to-br from-indigo-600 via-blue-600 to-purple-600 shadow-2xl rounded-[4rem] overflow-hidden p-16 text-center text-white space-y-10 animate-in zoom-in-95 duration-700">
+                <div className="text-9xl animate-bounce">🎖️</div>
+                <h2 className="text-7xl font-fredoka drop-shadow-xl">Array Hero!</h2>
+                <p className="text-3xl font-nunito max-w-2xl mx-auto leading-relaxed">
+                  You can count things in rows and columns!
+                  <br />
+                  You counted <span className="font-fredoka text-5xl text-yellow-300">6</span> items. You're a math star! 🌟
+                </p>
+                <div className="flex gap-4 w-full pt-8">
+                  <Button onClick={resetActivity} className="h-24 flex-1 bg-white/10 hover:bg-white/20 text-white text-3xl font-fredoka rounded-[2rem] border-4 border-white/20">
+                    Again! 🔄
+                  </Button>
+                  <Button onClick={() => navigate("/activities/module-3?last=3-count-arrays-5")} className="h-24 flex-1 bg-white text-indigo-600 hover:bg-indigo-50 text-3xl font-fredoka rounded-[2rem] shadow-2xl">
+                    Topic Complete! ✨
+                  </Button>
+                </div>
+              </Card>
+            )}
+
+            {showFeedback && (
+              <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/40 backdrop-blur-md animate-in fade-in duration-300">
+                <Card className={`max-w-md w-full p-12 text-center shadow-[0_0_50px_rgba(0,0,0,0.3)] rounded-[4rem] border-8 animate-in zoom-in duration-300 ${showFeedback === 'correct' ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'
+                  }`}>
+                  <div className="text-9xl mb-8">
+                    {showFeedback === 'correct' ? '🌟' : '🧐'}
+                  </div>
+                  <h4 className={`text-6xl font-fredoka mb-8 ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'
+                    }`}>
+                    {showFeedback === 'correct' ? 'Excellent!' : 'Try Again!'}
+                  </h4>
+                  <Button
+                    onClick={showFeedback === 'correct' ? nextStep : () => setShowFeedback(null)}
+                    className={`w-full py-12 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 ${showFeedback === 'correct' ? 'bg-green-600 hover:bg-green-700 border-green-800 text-white' : 'bg-red-600 hover:bg-red-700 border-red-800 text-white'
+                      }`}
+                  >
+                    {showFeedback === 'correct' ? 'Next! ➡️' : 'OK! 👍'}
+                  </Button>
+                </Card>
+              </div>
+            )}
+
+            {currentStep !== 'complete' && (
+              <Button onClick={() => setShowGame(false)} variant="ghost" className="text-indigo-400 hover:text-indigo-600 w-full py-2 font-bold font-nunito">
+                ← Back to Instructions
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

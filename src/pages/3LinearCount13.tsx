@@ -1,426 +1,205 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, ArrowRight, Volume2, RotateCcw, Plus } from "lucide-react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { ArrowLeft, RefreshCw, Home, Star, Sparkles, Smile, Footprints, Waves } from "lucide-react";
 
 const LinearCount13 = () => {
   const navigate = useNavigate();
-  const [phase, setPhase] = useState<"intro" | "counting" | "practice" | "complete">("intro");
+  const [showGame, setShowGame] = useState(false);
+  const [currentStep, setCurrentStep] = useState<'intro' | 'adventure' | 'complete'>('intro');
   const [rockCount, setRockCount] = useState(5);
-  const [explorerPosition, setExplorerPosition] = useState(-1);
-  const [countingActive, setCountingActive] = useState(false);
-  const [practiceRound, setPracticeRound] = useState(0);
-  const [showCelebration, setShowCelebration] = useState(false);
+  const [showFeedback, setShowFeedback] = useState<'correct' | 'incorrect' | null>(null);
 
-  const speakText = (text: string) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.8;
-    utterance.pitch = 1.1;
-    speechSynthesis.speak(utterance);
-  };
-
-  useEffect(() => {
-    if (phase === "intro") {
-      setTimeout(() => {
-        speakText("An explorer needs to cross a creek by stepping on rocks. Let's help her count the rocks!");
-      }, 500);
-    }
-  }, [phase]);
-
-  const startCounting = () => {
-    if (countingActive) return;
-    setCountingActive(true);
-    setExplorerPosition(-1);
-    
-    let position = 0;
-    const interval = setInterval(() => {
-      if (position < rockCount) {
-        setExplorerPosition(position);
-        speakText(String(position + 1));
-        position++;
-      } else {
-        clearInterval(interval);
-        setCountingActive(false);
-        speakText(`There are ${rockCount} rocks!`);
-        
-        if (phase === "counting" && rockCount === 8) {
-          setTimeout(() => {
-            setShowCelebration(true);
-            speakText("The explorer crossed the creek! She walked on 8 rocks!");
-            setTimeout(() => {
-              setShowCelebration(false);
-              setPhase("practice");
-              setRockCount(5);
-              setExplorerPosition(-1);
-              setPracticeRound(0);
-            }, 3000);
-          }, 1000);
-        }
-      }
-    }, 800);
-  };
-
-  const addRock = () => {
-    if (rockCount < 8 && !countingActive) {
-      const newCount = rockCount + 1;
-      setRockCount(newCount);
-      speakText(`Adding 1 more rock. Now there are ${newCount} rocks.`);
-      setExplorerPosition(-1);
+  const markLessonComplete = () => {
+    const saved = localStorage.getItem("ethio-stem-m3-completed");
+    const completed = saved ? JSON.parse(saved) : [];
+    if (!completed.includes("3-linear-count-13")) {
+      completed.push("3-linear-count-13");
+      localStorage.setItem("ethio-stem-m3-completed", JSON.stringify(completed));
     }
   };
 
-  const handlePracticeAdd = () => {
-    if (rockCount < 8 && !countingActive) {
-      const newCount = rockCount + 1;
-      setRockCount(newCount);
-      speakText(`1 more rock! Now count all the rocks.`);
-      setExplorerPosition(-1);
-      setPracticeRound(prev => prev + 1);
-      
-      if (newCount === 8) {
-        setTimeout(() => {
-          speakText("Great job! You helped the explorer cross with 8 rocks!");
-          setPhase("complete");
-        }, 2000);
-      }
+  const nextStep = () => {
+    setShowFeedback(null);
+    if (rockCount < 8) {
+      setRockCount(prev => prev + 1);
+    } else {
+      markLessonComplete();
+      setCurrentStep('complete');
     }
   };
 
-  const renderCreek = () => {
-    const rocks = [];
-    const originalRocks = 5;
-    
-    for (let i = 0; i < rockCount; i++) {
-      const isOriginal = i < originalRocks;
-      const isExplorerHere = explorerPosition === i;
-      
-      rocks.push(
-        <div key={i} className="relative flex flex-col items-center">
-          {/* Rock */}
-          <div
-            className={`w-14 h-10 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg transition-all duration-300 ${
-              isOriginal 
-                ? "bg-gray-700" 
-                : "bg-amber-600 ring-2 ring-amber-400"
-            } ${isExplorerHere ? "ring-4 ring-green-400 scale-110" : ""}`}
-          >
-            {i + 1}
-          </div>
-          
-          {/* Explorer */}
-          {isExplorerHere && (
-            <div className="absolute -top-12 text-4xl animate-bounce">
-              🧗‍♀️
-            </div>
-          )}
-        </div>
-      );
-    }
-    
-    return rocks;
-  };
-
-  const resetLesson = () => {
-    setPhase("intro");
+  const resetActivity = () => {
+    setShowGame(false);
+    setCurrentStep('intro');
     setRockCount(5);
-    setExplorerPosition(-1);
-    setCountingActive(false);
-    setPracticeRound(0);
-    setShowCelebration(false);
+    setShowFeedback(null);
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-200 via-blue-100 to-green-200 p-4">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <Button
-          variant="ghost"
-          onClick={() => navigate("/")}
-          className="flex items-center gap-2"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back
-        </Button>
-        <h1 className="text-xl md:text-2xl font-bold text-blue-800">
-          Lesson 13: Count 8 in a Line
-        </h1>
-        <Button variant="ghost" onClick={resetLesson}>
-          <RotateCcw className="w-4 h-4" />
-        </Button>
+  const renderCreek = (count: number) => (
+    <div className="relative w-full max-w-4xl mx-auto h-64 flex items-center justify-between px-12 bg-blue-400/20 rounded-[4rem] border-8 border-white shadow-inner mb-8 overflow-hidden group">
+      <div className="absolute inset-0 bg-blue-400/30 opacity-40 pointer-events-none">
+        <Waves className="w-full h-full text-blue-200" />
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto">
-        {/* Celebration Overlay */}
-        {showCelebration && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-2xl p-8 text-center animate-bounce">
-              <div className="text-6xl mb-4">🎉🌟🎊</div>
-              <h2 className="text-3xl font-bold text-green-600">
-                The Explorer Crossed!
-              </h2>
-              <p className="text-xl text-gray-600 mt-2">
-                She stepped on 8 rocks!
-              </p>
+      {/* Banks */}
+      <div className="absolute left-0 top-0 bottom-0 w-16 bg-emerald-600 rounded-l-[3.5rem] border-r-4 border-white/20 z-10" />
+      <div className="absolute right-0 top-0 bottom-0 w-16 bg-emerald-600 rounded-r-[3.5rem] border-l-4 border-white/20 z-10" />
+
+      <div className="flex-1 flex justify-center gap-4 z-20">
+        {Array.from({ length: 8 }).map((_, i) => {
+          const isVisible = i < count;
+          return (
+            <div
+              key={i}
+              className={`relative flex flex-col items-center animate-in zoom-in duration-500 ${!isVisible ? 'opacity-20 scale-75 blur-[1px]' : ''}`}
+              style={{ animationDelay: `${i * 0.1}s` }}
+            >
+              <div className={`w-20 h-16 rounded-full flex items-center justify-center text-3xl shadow-lg border-4 border-white ${isVisible ? (i < 5 ? 'bg-zinc-600' : 'bg-amber-600') : 'bg-zinc-400'} text-white`}>
+                {isVisible ? '🪨' : '?'}
+              </div>
+              {isVisible && (
+                <span className="text-2xl font-bold mt-2 text-blue-900 font-fredoka drop-shadow-sm">
+                  {i + 1}
+                </span>
+              )}
+              {isVisible && i === count - 1 && (
+                <div className="absolute -top-12 text-5xl animate-bounce">🧗‍♀️</div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-emerald-50 to-white p-4 font-fredoka overflow-x-hidden">
+      <div className="max-w-5xl mx-auto">
+        <div className="flex items-center gap-4 mb-8">
+          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=3-linear-count-13")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
+            <ArrowLeft className="w-5 h-5 text-emerald-600" />
+          </Button>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-bold text-emerald-600 bg-emerald-100 px-3 py-1 rounded-full uppercase tracking-widest font-nunito">
+                Lesson 13
+              </span>
+              <h1 className="text-2xl font-bold text-emerald-900 uppercase">Creek Crossing!</h1>
             </div>
           </div>
-        )}
+        </div>
 
-        {/* Phase: Intro */}
-        {phase === "intro" && (
-          <Card className="mb-6">
-            <CardContent className="p-6 text-center">
-              <div className="text-6xl mb-4">🧗‍♀️🌊</div>
-              <h2 className="text-2xl font-bold text-blue-700 mb-4">
-                Help the Explorer Cross the Creek!
-              </h2>
-              <p className="text-lg text-gray-600 mb-6">
-                The explorer needs to step on rocks to cross. There are 5 rocks,
-                but she needs more to reach the other side!
-              </p>
-              <Button
-                onClick={() => {
-                  setPhase("counting");
-                  speakText("Let's start with 5 rocks and add more to help her cross!");
-                }}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 text-xl"
-              >
-                Start Adventure
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </CardContent>
+        {!showGame ? (
+          <Card className="border-4 border-white bg-white/60 backdrop-blur-md shadow-2xl rounded-[3rem] overflow-hidden text-center p-10 space-y-8 animate-in fade-in zoom-in duration-700 relative">
+            <div className="mx-auto w-24 h-24 bg-gradient-to-tr from-emerald-500 to-teal-500 rounded-3xl flex items-center justify-center mb-6 rotate-3 shadow-lg">
+              <Footprints className="w-12 h-12 text-white" />
+            </div>
+            <h2 className="text-5xl text-emerald-900 leading-tight">Help the Explorer!</h2>
+            <p className="text-2xl text-emerald-800 font-nunito leading-relaxed max-w-2xl mx-auto">
+              The traveler needs to step on rocks to cross the water.
+              <br />
+              We have 5 rocks, but we need more to reach the other side!
+            </p>
+            <Button
+              onClick={() => setShowGame(true)}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white text-3xl px-16 py-10 rounded-full shadow-2xl transition-all hover:scale-105 active:scale-95 border-b-8 border-emerald-800"
+            >
+              Play! 🧗‍♀️
+            </Button>
+            <p className="text-sm text-emerald-400 font-bold uppercase tracking-widest pt-4 font-nunito">Topic C: How Many with 8 Objects</p>
           </Card>
-        )}
-
-        {/* Phase: Counting */}
-        {phase === "counting" && (
+        ) : (
           <div className="space-y-6">
-            <Card className="bg-white/90">
-              <CardContent className="p-6">
-                <div className="text-center mb-4">
-                  <h2 className="text-xl font-bold text-blue-700">
-                    Count the Rocks to Cross the Creek
-                  </h2>
-                  <p className="text-gray-600">
-                    {rockCount < 8 
-                      ? `We have ${rockCount} rocks. Add more to help the explorer!`
-                      : "Perfect! 8 rocks to cross the creek!"
-                    }
-                  </p>
-                </div>
-
-                {/* Creek Visualization */}
-                <div className="relative bg-gradient-to-r from-green-300 via-blue-400 to-green-300 rounded-xl p-6 mb-6">
-                  {/* Banks */}
-                  <div className="absolute left-0 top-0 bottom-0 w-8 bg-green-500 rounded-l-xl flex items-center justify-center">
-                    <span className="text-2xl">🌿</span>
-                  </div>
-                  <div className="absolute right-0 top-0 bottom-0 w-8 bg-green-500 rounded-r-xl flex items-center justify-center">
-                    <span className="text-2xl">🌳</span>
-                  </div>
-                  
-                  {/* Rocks */}
-                  <div className="flex items-center justify-center gap-2 py-8 px-12">
-                    {renderCreek()}
-                  </div>
-                  
-                  {/* Water effect */}
-                  <div className="absolute inset-0 pointer-events-none opacity-20">
-                    <div className="w-full h-full bg-gradient-to-b from-transparent via-blue-300 to-transparent" />
-                  </div>
-                </div>
-
-                {/* Legend */}
-                <div className="flex justify-center gap-6 mb-4 text-sm">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-4 bg-gray-700 rounded-full" />
-                    <span>Original rocks (5)</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-4 bg-amber-600 rounded-full ring-2 ring-amber-400" />
-                    <span>New rocks</span>
-                  </div>
-                </div>
-
-                {/* Count Display */}
-                <div className="text-center mb-4">
-                  <div className="inline-flex items-center gap-2 bg-blue-100 px-6 py-3 rounded-full">
-                    <span className="text-2xl font-bold text-blue-700">
-                      Total: {rockCount} rocks
-                    </span>
-                    {rockCount > 5 && (
-                      <span className="text-lg text-gray-600">
-                        (5 + {rockCount - 5})
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Controls */}
-                <div className="flex justify-center gap-4">
-                  <Button
-                    onClick={startCounting}
-                    disabled={countingActive}
-                    className="bg-green-500 hover:bg-green-600 text-white px-6 py-3"
-                  >
-                    <Volume2 className="w-5 h-5 mr-2" />
-                    Count Rocks
-                  </Button>
-                  
-                  {rockCount < 8 && (
-                    <Button
-                      onClick={addRock}
-                      disabled={countingActive}
-                      className="bg-amber-500 hover:bg-amber-600 text-white px-6 py-3"
-                    >
-                      <Plus className="w-5 h-5 mr-2" />
-                      Add 1 More Rock
-                    </Button>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {/* Phase: Practice */}
-        {phase === "practice" && (
-          <div className="space-y-6">
-            <Card className="bg-white/90">
-              <CardContent className="p-6">
-                <div className="text-center mb-4">
-                  <h2 className="text-xl font-bold text-green-700">
-                    Your Turn! Help Another Explorer
-                  </h2>
-                  <p className="text-gray-600">
-                    Start with 5 rocks and add more until you have 8!
-                  </p>
-                </div>
-
-                {/* Creek Visualization */}
-                <div className="relative bg-gradient-to-r from-green-300 via-blue-400 to-green-300 rounded-xl p-6 mb-6">
-                  <div className="absolute left-0 top-0 bottom-0 w-8 bg-green-500 rounded-l-xl flex items-center justify-center">
-                    <span className="text-2xl">🧗‍♀️</span>
-                  </div>
-                  <div className="absolute right-0 top-0 bottom-0 w-8 bg-green-500 rounded-r-xl flex items-center justify-center">
-                    <span className="text-2xl">🏕️</span>
-                  </div>
-                  
-                  <div className="flex items-center justify-center gap-2 py-8 px-12">
-                    {renderCreek()}
-                  </div>
-                </div>
-
-                {/* Progress */}
-                <div className="flex justify-center gap-2 mb-4">
-                  {[5, 6, 7, 8].map((num) => (
-                    <div
-                      key={num}
-                      className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg ${
-                        rockCount >= num
-                          ? "bg-green-500 text-white"
-                          : "bg-gray-200 text-gray-400"
+            {currentStep !== 'complete' && (
+              <div className="flex justify-center gap-3 mb-4">
+                {[5, 6, 7, 8].map((num) => (
+                  <div
+                    key={num}
+                    className={`h-3 rounded-full transition-all ${rockCount >= num
+                      ? 'bg-emerald-500 w-12 shadow-sm'
+                      : 'bg-emerald-100 w-3'
                       }`}
-                    >
-                      {num}
-                    </div>
-                  ))}
-                </div>
+                  />
+                ))}
+              </div>
+            )}
 
-                {/* Pattern Display */}
-                <div className="text-center mb-4 bg-yellow-50 p-3 rounded-lg">
-                  <p className="text-lg font-medium text-gray-700">
-                    {rockCount === 5 && "5 rocks. Add 1 more!"}
-                    {rockCount === 6 && "5 and 1 more is 6! Add 1 more!"}
-                    {rockCount === 7 && "6 and 1 more is 7! Add 1 more!"}
-                    {rockCount === 8 && "7 and 1 more is 8! Perfect!"}
+            {currentStep !== 'complete' && (
+              <Card className="bg-white/80 border-4 border-white shadow-2xl rounded-[3rem] p-10 text-center space-y-10 animate-in slide-in-from-bottom-8">
+                <h3 className="text-4xl text-emerald-700">
+                  {rockCount < 8 ? "Keep adding rocks!" : "She can cross now!"}
+                </h3>
+
+                {renderCreek(rockCount)}
+
+                <div className="bg-emerald-50 p-8 rounded-[2.5rem] border-4 border-white shadow-inner max-w-2xl mx-auto font-nunito">
+                  <p className="text-4xl text-emerald-800 leading-relaxed">
+                    {rockCount === 5 ? "We have 5 rocks." :
+                      rockCount < 8 ? `Now we have ${rockCount} rocks!` :
+                        "We finally have 8!"}
                   </p>
+                  <p className="text-8xl font-fredoka text-emerald-600 mt-4 font-bold drop-shadow-sm">{rockCount}</p>
                 </div>
 
-                {/* Controls */}
-                <div className="flex justify-center gap-4">
-                  <Button
-                    onClick={startCounting}
-                    disabled={countingActive}
-                    className="bg-green-500 hover:bg-green-600 text-white px-6 py-3"
-                  >
-                    <Volume2 className="w-5 h-5 mr-2" />
-                    Count All Rocks
+                <Button
+                  onClick={() => setShowFeedback('correct')}
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white py-12 px-16 text-4xl rounded-[2rem] shadow-xl border-b-8 border-emerald-800 transition-all active:scale-95"
+                >
+                  {rockCount < 8 ? 'Add 1 More! ➕' : 'Cross Now! ✅'}
+                </Button>
+              </Card>
+            )}
+
+            {currentStep === 'complete' && (
+              <Card className="bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 shadow-2xl rounded-[4rem] overflow-hidden p-16 text-center text-white space-y-10 animate-in zoom-in-95 duration-700">
+                <div className="text-9xl animate-bounce">🏞️</div>
+                <h2 className="text-7xl drop-shadow-xl">Travel Guide!</h2>
+                <p className="text-3xl font-nunito max-w-2xl mx-auto leading-relaxed">
+                  You helped the explorer cross the creek!
+                  <br />
+                  You know that 5 and 3 more makes 8!
+                </p>
+                <div className="flex gap-4 w-full pt-8">
+                  <Button onClick={resetActivity} className="h-24 flex-1 bg-white/10 hover:bg-white/20 text-white text-3xl rounded-[2rem] border-4 border-white/20">
+                    Again! 🔄
                   </Button>
-                  
-                  {rockCount < 8 && (
-                    <Button
-                      onClick={handlePracticeAdd}
-                      disabled={countingActive}
-                      className="bg-amber-500 hover:bg-amber-600 text-white px-6 py-3"
-                    >
-                      <Plus className="w-5 h-5 mr-2" />
-                      Add 1 More
-                    </Button>
-                  )}
+                  <Button onClick={() => navigate("/activities/module-3?last=3-linear-count-13")} className="h-24 flex-1 bg-white text-emerald-600 hover:bg-emerald-50 text-3xl rounded-[2rem] shadow-2xl">
+                    Yay! ✨
+                  </Button>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
+              </Card>
+            )}
 
-        {/* Phase: Complete */}
-        {phase === "complete" && (
-          <Card className="bg-gradient-to-br from-green-100 to-blue-100">
-            <CardContent className="p-8 text-center">
-              <div className="text-6xl mb-4">🏆🌟🎉</div>
-              <h2 className="text-3xl font-bold text-green-700 mb-4">
-                Wonderful Job!
-              </h2>
-              <p className="text-xl text-gray-600 mb-2">
-                You learned that 8 is 5 and 3 more!
-              </p>
-              <div className="bg-white/80 p-4 rounded-xl mb-6 inline-block">
-                <p className="text-lg font-medium text-blue-700">
-                  5 + 1 = 6
-                </p>
-                <p className="text-lg font-medium text-blue-700">
-                  6 + 1 = 7
-                </p>
-                <p className="text-lg font-medium text-blue-700">
-                  7 + 1 = 8
-                </p>
-              </div>
-              
-              {/* Visual representation */}
-              <div className="flex justify-center gap-1 mb-6">
-                {[1,2,3,4,5].map(i => (
-                  <div key={i} className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                    {i}
+            {showFeedback && (
+              <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/40 backdrop-blur-md animate-in fade-in duration-300">
+                <Card className={`max-w-md w-full p-12 text-center shadow-[0_0_50px_rgba(0,0,0,0.3)] rounded-[4rem] border-8 animate-in zoom-in duration-300 ${showFeedback === 'correct' ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'
+                  }`}>
+                  <div className="text-9xl mb-8">
+                    {showFeedback === 'correct' ? '🌟' : '🧐'}
                   </div>
-                ))}
-                {[6,7,8].map(i => (
-                  <div key={i} className="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                    {i}
-                  </div>
-                ))}
+                  <h4 className={`text-6xl font-fredoka mb-8 ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'
+                    }`}>
+                    {showFeedback === 'correct' ? 'Awesome!' : 'Try Again!'}
+                  </h4>
+                  <Button
+                    onClick={showFeedback === 'correct' ? nextStep : () => setShowFeedback(null)}
+                    className={`w-full py-12 text-4xl rounded-[2rem] shadow-xl border-b-8 ${showFeedback === 'correct' ? 'bg-green-600 hover:bg-green-700 border-green-800 text-white' : 'bg-red-600 hover:bg-red-700 border-red-800 text-white'
+                      }`}
+                  >
+                    {showFeedback === 'correct' ? (rockCount < 8 ? 'One More! ➡️' : 'Finish! ➡️') : 'OK! 👍'}
+                  </Button>
+                </Card>
               </div>
-              
-              <div className="flex justify-center gap-4">
-                <Button
-                  onClick={resetLesson}
-                  variant="outline"
-                  className="px-6 py-3"
-                >
-                  <RotateCcw className="w-4 h-4 mr-2" />
-                  Practice Again
-                </Button>
-                <Button
-                  onClick={() => navigate("/")}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3"
-                >
-                  Back to Lessons
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+            )}
+
+            {currentStep !== 'complete' && (
+              <Button onClick={() => setShowGame(false)} variant="ghost" className="text-emerald-400 hover:text-emerald-600 w-full py-2 font-bold font-nunito">
+                ← Back to Instructions
+              </Button>
+            )}
+          </div>
         )}
       </div>
     </div>
