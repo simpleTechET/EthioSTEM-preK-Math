@@ -115,7 +115,7 @@ const CountingTo7Linear = () => {
                     We have <span className="text-6xl text-blue-600 drop-shadow-sm">5</span> stones!
                   </p>
                 </div>
-                <Button onClick={() => setShowFeedback('correct')} className="bg-blue-600 hover:bg-blue-700 text-white py-12 px-12 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-blue-800 transition-all active:scale-95">
+                <Button onClick={nextStep} className="bg-blue-600 hover:bg-blue-700 text-white py-12 px-12 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-blue-800 transition-all active:scale-95">
                   Need More? 🥾
                 </Button>
               </Card>
@@ -133,7 +133,7 @@ const CountingTo7Linear = () => {
                   </p>
                 </div>
                 <Button
-                  onClick={() => setShowFeedback('correct')}
+                  onClick={nextStep}
                   className="bg-rose-500 hover:bg-rose-600 text-white py-12 px-16 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-rose-800 transition-all active:scale-95"
                 >
                   Drop Stone! ➕
@@ -150,7 +150,7 @@ const CountingTo7Linear = () => {
                     Now we have <span className="text-6xl text-blue-600 drop-shadow-sm">{currentStep === 'rocks6' ? '6' : '7'}</span>!
                   </p>
                 </div>
-                <Button onClick={() => setShowFeedback('correct')} className="bg-blue-600 hover:bg-blue-700 text-white py-12 px-12 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-blue-800 transition-all active:scale-95">
+                <Button onClick={nextStep} className="bg-blue-600 hover:bg-blue-700 text-white py-12 px-12 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-blue-800 transition-all active:scale-95">
                   {currentStep === 'rocks6' ? 'One More? ➡️' : 'Cross Now! 🏞️'}
                 </Button>
               </Card>

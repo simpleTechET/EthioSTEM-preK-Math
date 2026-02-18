@@ -128,7 +128,7 @@ const FingerCounting6 = () => {
                     Count: <span className="text-6xl text-amber-600 drop-shadow-sm">1</span>
                   </p>
                 </div>
-                <Button onClick={() => setShowFeedback('correct')} className="bg-amber-600 hover:bg-amber-700 text-white py-12 px-12 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-amber-800 transition-all active:scale-95">
+                <Button onClick={nextStep} className="bg-amber-600 hover:bg-amber-700 text-white py-12 px-12 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-amber-800 transition-all active:scale-95">
                   Hatch More! 🐥
                 </Button>
               </Card>
@@ -146,7 +146,7 @@ const FingerCounting6 = () => {
                   </p>
                 </div>
                 <Button
-                  onClick={() => setShowFeedback('correct')}
+                  onClick={nextStep}
                   className="bg-yellow-500 hover:bg-yellow-600 text-white py-12 px-16 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-yellow-800 transition-all active:scale-95"
                 >
                   Next Nest! 🪺
@@ -163,7 +163,7 @@ const FingerCounting6 = () => {
                     5 and 1 more is... <span className="text-6xl text-amber-600 drop-shadow-sm font-bold">6</span>!
                   </p>
                 </div>
-                <Button onClick={() => setShowFeedback('correct')} className="bg-amber-600 hover:bg-amber-700 text-white py-12 px-12 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-amber-800 transition-all active:scale-95">
+                <Button onClick={nextStep} className="bg-amber-600 hover:bg-amber-700 text-white py-12 px-12 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-amber-800 transition-all active:scale-95">
                   All Done! ✨
                 </Button>
               </Card>
