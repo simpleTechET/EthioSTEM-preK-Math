@@ -128,7 +128,7 @@ const FingerCounting6 = () => {
                     Count: <span className="text-6xl text-amber-600 drop-shadow-sm">1</span>
                   </p>
                 </div>
-                <Button onClick={nextStep} className="bg-amber-600 hover:bg-amber-700 text-white py-12 px-12 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-amber-800 transition-all active:scale-95">
+                <Button onClick={() => setShowFeedback('correct')} className="bg-amber-600 hover:bg-amber-700 text-white py-12 px-12 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-amber-800 transition-all active:scale-95">
                   Hatch More! 🐥
                 </Button>
               </Card>
@@ -146,7 +146,7 @@ const FingerCounting6 = () => {
                   </p>
                 </div>
                 <Button
-                  onClick={nextStep}
+                  onClick={() => setShowFeedback('correct')}
                   className="bg-yellow-500 hover:bg-yellow-600 text-white py-12 px-16 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-yellow-800 transition-all active:scale-95"
                 >
                   Next Nest! 🪺
@@ -163,7 +163,7 @@ const FingerCounting6 = () => {
                     5 and 1 more is... <span className="text-6xl text-amber-600 drop-shadow-sm font-bold">6</span>!
                   </p>
                 </div>
-                <Button onClick={nextStep} className="bg-amber-600 hover:bg-amber-700 text-white py-12 px-12 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-amber-800 transition-all active:scale-95">
+                <Button onClick={() => setShowFeedback('correct')} className="bg-amber-600 hover:bg-amber-700 text-white py-12 px-12 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-amber-800 transition-all active:scale-95">
                   All Done! ✨
                 </Button>
               </Card>
@@ -189,22 +189,19 @@ const FingerCounting6 = () => {
             )}
 
             {showFeedback && (
-              <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/40 backdrop-blur-md animate-in fade-in duration-300">
-                <Card className={`max-w-md w-full p-12 text-center shadow-[0_0_50px_rgba(0,0,0,0.3)] rounded-[4rem] border-8 animate-in zoom-in duration-300 ${showFeedback === 'correct' ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'
-                  }`}>
-                  <div className="text-9xl mb-8">
-                    {showFeedback === 'correct' ? '🌟' : '🧐'}
+              <div className="fixed bottom-6 right-6 z-[100] animate-in slide-in-from-right-4 fade-in duration-300">
+                <Card className={`flex items-center gap-4 px-6 py-4 shadow-2xl rounded-2xl border-4 ${showFeedback === 'correct' ? 'bg-green-50 border-green-400' : 'bg-red-50 border-red-400'}`}>
+                  <span className="text-4xl">{showFeedback === 'correct' ? '🌟' : '🧐'}</span>
+                  <div className="flex flex-col">
+                    <span className={`text-2xl font-fredoka font-bold ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
+                      {showFeedback === 'correct' ? 'Amazing!' : 'Try Again!'}
+                    </span>
                   </div>
-                  <h4 className={`text-6xl font-fredoka mb-8 ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'
-                    }`}>
-                    {showFeedback === 'correct' ? 'Amazing!' : 'Try Again!'}
-                  </h4>
                   <Button
                     onClick={showFeedback === 'correct' ? nextStep : () => setShowFeedback(null)}
-                    className={`w-full py-12 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 ${showFeedback === 'correct' ? 'bg-green-600 hover:bg-green-700 border-green-800 text-white' : 'bg-red-600 hover:bg-red-700 border-red-800 text-white'
-                      }`}
+                    className={`ml-2 px-5 py-3 text-xl font-fredoka rounded-xl border-b-4 ${showFeedback === 'correct' ? 'bg-green-600 hover:bg-green-700 border-green-800 text-white' : 'bg-red-500 hover:bg-red-600 border-red-700 text-white'}`}
                   >
-                    {showFeedback === 'correct' ? 'Next! ➡️' : 'OK! 👍'}
+                    {showFeedback === 'correct' ? 'Next ➡️' : 'OK 👍'}
                   </Button>
                 </Card>
               </div>
