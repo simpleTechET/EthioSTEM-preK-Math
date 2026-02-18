@@ -111,7 +111,7 @@ const CountingTo7Intro = () => {
                     We have <span className="text-6xl text-indigo-600 drop-shadow-sm">5</span> players!
                   </p>
                 </div>
-                <Button onClick={() => setShowFeedback('correct')} className="bg-indigo-600 hover:bg-indigo-700 text-white py-12 px-12 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-indigo-800 transition-all active:scale-95">
+                <Button onClick={nextStep} className="bg-indigo-600 hover:bg-indigo-700 text-white py-12 px-12 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-indigo-800 transition-all active:scale-95">
                   Ready for More? ➡️
                 </Button>
               </Card>
@@ -127,7 +127,7 @@ const CountingTo7Intro = () => {
                   </p>
                 </div>
                 <Button
-                  onClick={() => setShowFeedback('correct')}
+                  onClick={nextStep}
                   className="bg-orange-500 hover:bg-orange-600 text-white py-12 px-16 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-orange-800 transition-all active:scale-95"
                 >
                   Add Player! ➕
@@ -144,8 +144,8 @@ const CountingTo7Intro = () => {
                     Now we have <span className="text-6xl text-indigo-600 drop-shadow-sm">{currentStep === 'count6' ? '6' : '7'}</span>!
                   </p>
                 </div>
-                <Button onClick={() => setShowFeedback('correct')} className="bg-indigo-600 hover:bg-indigo-700 text-white py-12 px-12 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-indigo-800 transition-all active:scale-95">
-                  Keep Local! ➡️
+                <Button onClick={nextStep} className="bg-indigo-600 hover:bg-indigo-700 text-white py-12 px-12 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-indigo-800 transition-all active:scale-95">
+                  Keep Going! ➡️
                 </Button>
               </Card>
             )}

@@ -194,14 +194,14 @@ const NumberBookFortyTwo42 = () => {
                                         >
                                             <ArrowLeft className="mr-3 w-8 h-8" /> Back
                                         </Button>
-                                        {currentData.added && (
-                                            <Button
-                                                onClick={nextPage}
-                                                className={`px-16 h-20 text-3xl font-fredoka rounded-[2rem] shadow-2xl transition-all hover:scale-105 border-b-8 ${currentPage === bookState.length - 1 ? 'bg-emerald-600 hover:bg-emerald-700 border-emerald-800' : 'bg-indigo-600 hover:bg-indigo-700 border-indigo-800'} text-white`}
-                                            >
-                                                {currentPage === bookState.length - 1 ? "Finish Book! 🏆" : "Next Page! ➡️"}
-                                            </Button>
-                                        )}
+                        {currentData.added && (
+                            <Button
+                                onClick={nextStep}
+                                className={`px-16 h-20 text-3xl font-fredoka rounded-[2rem] shadow-2xl transition-all hover:scale-105 border-b-8 ${currentPage === bookState.length - 1 ? 'bg-emerald-600 hover:bg-emerald-700 border-emerald-800' : 'bg-indigo-600 hover:bg-indigo-700 border-indigo-800'} text-white`}
+                            >
+                                {currentPage === bookState.length - 1 ? "Finish Book! 🏆" : "Next Page! ➡️"}
+                            </Button>
+                        )}
                                     </div>
                                 </Card>
                             </div>
