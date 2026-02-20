@@ -17,15 +17,10 @@ const ActivitiesModule3 = () => {
 
   // Topic A: How Many Questions with up to 7 Objects (Lessons 1-5)
   const topicALessons = [
-    { id: 301, title: "Lesson 1: Introduce 6 and 7", description: "Relate 6 to 5 and 1 more, 7 to 6 and 1 more", icon: Hash, duration: "25 min", path: "/activity/counting-to-seven-1" },
-    { id: 302, title: "Lesson 2: Linear Configurations", description: "Count 6 and 7 in relation to 5", icon: Calculator, duration: "25 min", path: "/activity/counting-to-seven-2" },
-    { id: 303, title: "Lesson 3: Finger Counting to 6", description: "Count to 6 left to right with fingers", icon: Hand, duration: "25 min", path: null },
-    /* REMOTE origin/main alternatives for these lessons (kept commented):
-    { id: 301, title: "Lesson 1: Introduce 6 and 7", description: "Relate 6 to 5 and 1 more, 7 to 6 and 1 more", icon: Hash, duration: "25 min", path: "/activity/counting-to-7-intro" },
-    { id: 302, title: "Lesson 2: Linear Configurations", description: "Count 6 and 7 in relation to 5", icon: Calculator, duration: "25 min", path: "/activity/counting-to-7-linear" },
-    { id: 303, title: "Lesson 3: Finger Counting to 6", description: "Count to 6 left to right with fingers", icon: Hand, duration: "25 min", path: "/activity/finger-counting-6" },
-    */
-    { id: 304, title: "Lesson 4: Finger Counting to 7", description: "Count to 7 left to right with fingers", icon: Hand, duration: "25 min", path: null },
+    { id: 301, title: "Lesson 1: Introduce 6 and 7", description: "Relate 6 to 5 and 1 more, 7 to 6 and 1 more", icon: Hash, duration: "25 min", path: "/3-introduce-6-7-lesson-1" },
+    { id: 302, title: "Lesson 2: Linear Configurations", description: "Count 6 and 7 in relation to 5", icon: Calculator, duration: "25 min", path: "/3-crossing-creek-lesson-2" },
+    { id: 303, title: "Lesson 3: Finger Counting to 6", description: "Count to 6 left to right with fingers", icon: Hand, duration: "25 min", path: "/3-finger-counting-6-lesson-3" },
+    { id: 304, title: "Lesson 4: Finger Counting to 7", description: "Count to 7 left to right with fingers", icon: Hand, duration: "25 min", path: "/3-finger-counting-7-lesson-4" },
     { id: 305, title: "Lesson 5: Array Configurations", description: "Count 6 objects in array configurations", icon: Grid3X3, duration: "25 min", path: null },
   ];
 

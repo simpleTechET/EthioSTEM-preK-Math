@@ -93,6 +93,7 @@ const Module3Index = lazy(() => import("./pages/Module3Index"));
 const Introduce6And7Lesson1 = lazy(() => import("./pages/CountingToSeven1"));
 const CrossingCreekLesson2 = lazy(() => import("./pages/CountingToSeven2"));
 const FingerCounting6Lesson3 = lazy(() => import("./pages/FingerCountingSix3"));
+const FingerCounting7Lesson4 = lazy(() => import("./pages/FingerCountingSeven4"));
 const CountEggs4 = lazy(() => import("./pages/3CountEggs4"));
 const CountArrays5 = lazy(() => import("./pages/3CountArrays5"));
 const ComposeSix6 = lazy(() => import("./pages/3ComposeSix6"));
@@ -211,6 +212,7 @@ const App = () => (
                 <Route path="/3-introduce-6-7-lesson-1" element={<Introduce6And7Lesson1 />} />
                 <Route path="/3-crossing-creek-lesson-2" element={<CrossingCreekLesson2 />} />
                 <Route path="/3-finger-counting-6-lesson-3" element={<FingerCounting6Lesson3 />} />
+                <Route path="/3-finger-counting-7-lesson-4" element={<FingerCounting7Lesson4 />} />
                 <Route path="/3-count-eggs-4" element={<CountEggs4 />} />
                 <Route path="/3-count-arrays-5" element={<CountArrays5 />} />
                 <Route path="/3-compose-six-6" element={<ComposeSix6 />} />
