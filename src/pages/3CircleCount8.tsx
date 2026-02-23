@@ -1,8 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, RefreshCw, Home, Star, Sparkles, Smile, RotateCcw, Volume2, Flag } from "lucide-react";
+import { ArrowLeft, RefreshCw } from "lucide-react";
 
 const CircleCount8 = () => {
   const navigate = useNavigate();
@@ -10,6 +10,7 @@ const CircleCount8 = () => {
   const [currentStep, setCurrentStep] = useState<'count' | 'celebrate'>('count');
   const [showFeedback, setShowFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [themeIdx, setThemeIdx] = useState(0);
+  const [clickedCount, setClickedCount] = useState(0);
 
   const themes = [
     { emoji: "🐿️", count: 6, name: "Squirrels", color: "bg-amber-500" },
@@ -28,6 +29,7 @@ const CircleCount8 = () => {
 
   const nextStep = () => {
     setShowFeedback(null);
+    setClickedCount(0);
     if (themeIdx < themes.length - 1) {
       setThemeIdx(prev => prev + 1);
     } else {
@@ -41,36 +43,64 @@ const CircleCount8 = () => {
     setCurrentStep('count');
     setThemeIdx(0);
     setShowFeedback(null);
+    setClickedCount(0);
   };
 
   const currentTheme = themes[themeIdx];
+
+  const handleItemClick = (index: number) => {
+    if (index === clickedCount) {
+      const newCount = clickedCount + 1;
+      setClickedCount(newCount);
+      if ("speechSynthesis" in window) {
+        const utterance = new SpeechSynthesisUtterance(newCount.toString());
+        utterance.rate = 0.8;
+        utterance.pitch = 1.2;
+        window.speechSynthesis.speak(utterance);
+      }
+      if (newCount === currentTheme.count) {
+        setTimeout(() => setShowFeedback('correct'), 400);
+      }
+    }
+  };
 
   const renderCircle = (count: number, emoji: string, color: string) => {
     const radius = 140;
     return (
       <div className="relative w-[340px] h-[340px] mx-auto flex items-center justify-center bg-white/40 rounded-full border-8 border-white shadow-inner mb-8">
         <div className="absolute w-64 h-64 rounded-full border-4 border-dashed border-indigo-200" />
+        <div className="text-center">
+          <span className="font-fredoka text-6xl text-indigo-600 font-bold">{clickedCount}</span>
+          <p className="text-sm text-indigo-400 font-nunito">counted</p>
+        </div>
         {Array.from({ length: count }).map((_, i) => {
           const angle = (i * 360) / count - 90;
           const x = Math.cos((angle * Math.PI) / 180) * radius;
           const y = Math.sin((angle * Math.PI) / 180) * radius;
+          const isClicked = i < clickedCount;
+          const isNext = i === clickedCount;
           return (
             <div
               key={i}
-              className="absolute flex flex-col items-center animate-in zoom-in duration-300 transform"
+              onClick={() => handleItemClick(i)}
+              className={`absolute flex flex-col items-center transition-all duration-300 ${isNext ? 'cursor-pointer hover:scale-110' : isClicked ? '' : 'opacity-60 grayscale'}`}
               style={{
                 left: `calc(50% + ${x}px - 2rem)`,
                 top: `calc(50% + ${y}px - 2rem)`,
-                animationDelay: `${i * 0.1}s`
               }}
             >
-              <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-4xl shadow-lg border-2 border-white ${color}`}>
+              <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-4xl shadow-lg border-2 ${isClicked ? `${color} border-white ring-4 ring-yellow-300` : isNext ? `${color} border-yellow-400 animate-pulse` : `bg-gray-200 border-gray-300`}`}>
                 {emoji}
                 {i === 0 && (
                   <div className="absolute -top-4 -right-2 text-2xl animate-bounce">🚩</div>
                 )}
               </div>
-              <span className="text-2xl font-bold mt-1 text-indigo-900 font-fredoka">{i + 1}</span>
+              {isClicked && (
+                <span className="text-2xl font-bold mt-1 text-indigo-900 font-fredoka animate-in zoom-in duration-200">{i + 1}</span>
+              )}
+              {isNext && !isClicked && (
+                <span className="text-xs font-nunito text-indigo-400 mt-1 animate-pulse">Tap!</span>
+              )}
             </div>
           );
         })}
@@ -132,19 +162,17 @@ const CircleCount8 = () => {
 
             {currentStep === 'count' && (
               <Card className="bg-white/80 border-4 border-white shadow-2xl rounded-[3rem] p-10 text-center space-y-8 animate-in slide-in-from-bottom-8">
-                <h3 className="text-4xl text-indigo-700">Count around the circle!</h3>
+                <h3 className="text-4xl text-indigo-700">Tap each {currentTheme.name.toLowerCase().slice(0, -1)} starting from the 🚩!</h3>
 
                 {renderCircle(currentTheme.count, currentTheme.emoji, currentTheme.color)}
 
-                <div className="bg-indigo-50 p-8 rounded-[2.5rem] border-4 border-white shadow-inner max-w-xl mx-auto">
-                  <p className="text-4xl text-indigo-800 font-nunito leading-relaxed">
-                    We counted <span className="font-fredoka text-6xl text-indigo-600 drop-shadow-sm font-bold">{currentTheme.count}</span> {currentTheme.name.toLowerCase()}!
-                  </p>
-                </div>
-
-                <Button onClick={() => setShowFeedback('correct')} className="bg-indigo-600 hover:bg-indigo-700 text-white py-12 px-16 text-4xl rounded-[2rem] shadow-xl border-b-8 border-indigo-800 transition-all active:scale-95">
-                  Matches {currentTheme.count}? ✅
-                </Button>
+                {clickedCount === currentTheme.count && (
+                  <div className="bg-indigo-50 p-8 rounded-[2.5rem] border-4 border-white shadow-inner max-w-xl mx-auto animate-in zoom-in duration-300">
+                    <p className="text-4xl text-indigo-800 font-nunito leading-relaxed">
+                      You counted <span className="font-fredoka text-6xl text-indigo-600 drop-shadow-sm font-bold">{currentTheme.count}</span> {currentTheme.name.toLowerCase()}!
+                    </p>
+                  </div>
+                )}
               </Card>
             )}
 
@@ -182,7 +210,7 @@ const CircleCount8 = () => {
             )}
 
             {currentStep !== 'celebrate' && (
-              <Button onClick={() => setShowGame(false)} variant="ghost" className="text-indigo-400 hover:text-indigo-600 w-full py-2 font-bold font-nunito">
+              <Button onClick={() => { setShowGame(false); setClickedCount(0); }} variant="ghost" className="text-indigo-400 hover:text-indigo-600 w-full py-2 font-bold font-nunito">
                 ← Back to Instructions
               </Button>
             )}
