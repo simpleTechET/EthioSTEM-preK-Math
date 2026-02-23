@@ -1,8 +1,17 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, RefreshCw, Home, Star, Sparkles, Smile, Coffee, Waves } from "lucide-react";
+
+const speakNumber = (num: number) => {
+  if ("speechSynthesis" in window) {
+    const utterance = new SpeechSynthesisUtterance(num.toString());
+    utterance.rate = 0.8;
+    utterance.pitch = 1.2;
+    window.speechSynthesis.speak(utterance);
+  }
+};
 
 const Tally19 = () => {
   const navigate = useNavigate();
@@ -10,7 +19,6 @@ const Tally19 = () => {
   const [currentStep, setCurrentStep] = useState<'seat' | 'tally' | 'complete'>('seat');
   const [beesSeated, setBeesSeated] = useState(0);
   const [tallies, setTallies] = useState(0);
-  const [showFeedback, setShowFeedback] = useState<'correct' | 'incorrect' | null>(null);
 
   const markLessonComplete = () => {
     const saved = localStorage.getItem("ethio-stem-m3-completed");
@@ -21,22 +29,38 @@ const Tally19 = () => {
     }
   };
 
-  const handleAction = () => {
-    if (currentStep === 'seat') {
-      if (beesSeated < 8) setBeesSeated(prev => prev + 1);
-      else setShowFeedback('correct');
-    } else {
-      if (tallies < 8) setTallies(prev => prev + 1);
-      else setShowFeedback('correct');
+  // Auto-advance when seating complete
+  useEffect(() => {
+    if (currentStep === 'seat' && beesSeated === 8) {
+      const timer = setTimeout(() => setCurrentStep('tally'), 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [beesSeated, currentStep]);
+
+  // Complete when tallying done
+  useEffect(() => {
+    if (currentStep === 'tally' && tallies === 8) {
+      const timer = setTimeout(() => {
+        markLessonComplete();
+        setCurrentStep('complete');
+      }, 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [tallies, currentStep]);
+
+  const handleSeatClick = (index: number) => {
+    if (index === beesSeated && beesSeated < 8) {
+      const next = beesSeated + 1;
+      setBeesSeated(next);
+      speakNumber(next);
     }
   };
 
-  const nextStep = () => {
-    setShowFeedback(null);
-    if (currentStep === 'seat') setCurrentStep('tally');
-    else if (currentStep === 'tally') {
-      markLessonComplete();
-      setCurrentStep('complete');
+  const handleTallyClick = () => {
+    if (tallies < 8) {
+      const next = tallies + 1;
+      setTallies(next);
+      speakNumber(next);
     }
   };
 
@@ -45,7 +69,6 @@ const Tally19 = () => {
     setCurrentStep('seat');
     setBeesSeated(0);
     setTallies(0);
-    setShowFeedback(null);
   };
 
   const renderTallies = (count: number) => {
@@ -53,21 +76,30 @@ const Tally19 = () => {
     const remaining = count % 5;
 
     return (
-      <div className="flex gap-12 items-center justify-center h-24">
-        {Array.from({ length: bundles }).map((_, b) => (
-          <div key={b} className="relative flex gap-2">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="w-2 h-16 bg-amber-800 rounded-full" />
+      <div
+        onClick={handleTallyClick}
+        className="flex gap-12 items-center justify-center h-32 cursor-pointer hover:bg-amber-100/50 rounded-3xl transition-all active:scale-[0.98] min-w-[200px]"
+      >
+        {count === 0 ? (
+          <p className="text-2xl text-amber-300 font-fredoka animate-pulse">Tap to tally!</p>
+        ) : (
+          <>
+            {Array.from({ length: bundles }).map((_, b) => (
+              <div key={b} className="relative flex gap-2">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="w-2 h-16 bg-amber-800 rounded-full" />
+                ))}
+                <div className="absolute top-1/2 left-0 w-[120%] h-2 bg-amber-800 rounded-full -rotate-45 -translate-y-1/2" />
+              </div>
             ))}
-            <div className="absolute top-1/2 left-0 w-[120%] h-2 bg-amber-800 rounded-full -rotate-45 -translate-y-1/2" />
-          </div>
-        ))}
-        {remaining > 0 && (
-          <div className="flex gap-2">
-            {Array.from({ length: remaining }).map((_, i) => (
-              <div key={i} className="w-2 h-16 bg-amber-800 rounded-full" />
-            ))}
-          </div>
+            {remaining > 0 && (
+              <div className="flex gap-2">
+                {Array.from({ length: remaining }).map((_, i) => (
+                  <div key={i} className="w-2 h-16 bg-amber-800 rounded-full animate-in slide-in-from-top-4" />
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
     );
@@ -128,17 +160,30 @@ const Tally19 = () => {
             {currentStep !== 'complete' && (
               <Card className="bg-white/80 border-4 border-white shadow-2xl rounded-[3rem] p-10 text-center space-y-10 animate-in slide-in-from-bottom-8">
                 <h3 className="text-4xl text-amber-700 uppercase tracking-widest">
-                  {currentStep === 'seat' ? "Seat the Bees!" : "Take the Tally!"}
+                  {currentStep === 'seat' ? "Tap each seat!" : "Tap to tally!"}
                 </h3>
 
                 <div className="flex justify-center gap-4 py-8 bg-amber-100/30 rounded-[3rem] border-8 border-white shadow-inner min-h-[250px] items-center px-8">
                   {currentStep === 'seat' ? (
                     <div className="flex flex-wrap justify-center gap-4">
-                      {Array.from({ length: 8 }).map((_, i) => (
-                        <div key={i} className={`w-16 h-20 rounded-2xl border-4 border-white shadow-lg flex items-center justify-center text-4xl transition-all ${i < beesSeated ? 'bg-yellow-400' : 'bg-white opacity-40'}`}>
-                          {i < beesSeated ? '🐝' : '🪑'}
-                        </div>
-                      ))}
+                      {Array.from({ length: 8 }).map((_, i) => {
+                        const isSeated = i < beesSeated;
+                        const isNext = i === beesSeated;
+                        return (
+                          <div
+                            key={i}
+                            onClick={() => handleSeatClick(i)}
+                            className={`w-16 h-20 rounded-2xl border-4 border-white shadow-lg flex items-center justify-center text-4xl transition-all cursor-pointer ${isSeated ? 'bg-yellow-400 ring-4 ring-yellow-300' : isNext ? 'bg-white animate-pulse hover:scale-110' : 'bg-white opacity-40'}`}
+                          >
+                            {isSeated ? '🐝' : isNext ? '🪑' : '🪑'}
+                            {isSeated && (
+                              <span className="absolute -top-2 -right-2 bg-amber-600 text-white w-7 h-7 rounded-full text-sm flex items-center justify-center font-bold border-2 border-white">
+                                {i + 1}
+                              </span>
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
                   ) : (
                     renderTallies(tallies)
@@ -147,19 +192,12 @@ const Tally19 = () => {
 
                 <div className="bg-amber-50 p-8 rounded-[2.5rem] border-4 border-white shadow-inner max-w-2xl mx-auto font-nunito">
                   <p className="text-4xl text-amber-800 leading-relaxed font-bold">
-                    {currentStep === 'seat' ? `Seated bees: ${beesSeated}` : `Flower orders: ${tallies}`}
+                    {currentStep === 'seat' ? `Seated: ${beesSeated} / 8` : `Tallied: ${tallies} / 8`}
                   </p>
                   <p className="text-8xl font-fredoka text-amber-600 mt-4 font-bold drop-shadow-sm">
                     {currentStep === 'seat' ? beesSeated : tallies}
                   </p>
                 </div>
-
-                <Button
-                  onClick={handleAction}
-                  className="bg-amber-600 hover:bg-amber-700 text-white py-12 px-16 text-4xl rounded-[2rem] shadow-xl border-b-8 border-amber-800 transition-all active:scale-95"
-                >
-                  {currentStep === 'seat' ? (beesSeated < 8 ? 'Seat One! 🪑' : 'Ready! ✅') : (tallies < 8 ? 'Record! ✏️' : 'Order Up! ✅')}
-                </Button>
               </Card>
             )}
 
@@ -181,20 +219,6 @@ const Tally19 = () => {
                   </Button>
                 </div>
               </Card>
-            )}
-
-            {showFeedback && (
-              <div className="fixed bottom-[33%] right-[25%] z-[100] animate-in slide-in-from-right-4 fade-in duration-300">
-                <Card className={`flex items-center gap-4 px-6 py-4 shadow-2xl rounded-2xl border-4 ${showFeedback === 'correct' ? 'bg-green-50 border-green-400' : 'bg-red-50 border-red-400'}`}>
-                  <span className="text-4xl">{showFeedback === 'correct' ? '🌟' : '🧐'}</span>
-                  <h4 className={`text-2xl font-fredoka ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
-                    {showFeedback === 'correct' ? 'Brilliant!' : 'Try Again!'}
-                  </h4>
-                  <Button onClick={nextStep} size="sm" className={`ml-2 rounded-xl text-lg px-4 py-2 ${showFeedback === 'correct' ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'}`}>
-                    {currentStep === 'seat' ? 'Next! ➡️' : 'Finish! ➡️'}
-                  </Button>
-                </Card>
-              </div>
             )}
 
             {currentStep !== 'complete' && (

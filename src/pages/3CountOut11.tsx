@@ -1,14 +1,25 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, RefreshCw, Home, Star, Sparkles, Smile, Fish, Waves } from "lucide-react";
+import { ArrowLeft, Fish, Waves } from "lucide-react";
+
+const speakNumber = (num: number) => {
+  if ("speechSynthesis" in window) {
+    const utterance = new SpeechSynthesisUtterance(num.toString());
+    utterance.rate = 0.8;
+    utterance.pitch = 1.2;
+    window.speechSynthesis.speak(utterance);
+  }
+};
 
 const CountOut11 = () => {
   const navigate = useNavigate();
   const [showGame, setShowGame] = useState(false);
   const [currentStep, setCurrentStep] = useState<'feed6' | 'feed7' | 'complete'>('feed6');
-  const [showFeedback, setShowFeedback] = useState<'correct' | 'incorrect' | null>(null);
+  const [clickedCount, setClickedCount] = useState(0);
+
+  const targetCount = currentStep === 'feed6' ? 6 : 7;
 
   const markLessonComplete = () => {
     const saved = localStorage.getItem("ethio-stem-m3-completed");
@@ -19,36 +30,34 @@ const CountOut11 = () => {
     }
   };
 
-  const nextStep = () => {
-    setShowFeedback(null);
-    if (currentStep === 'feed6') setCurrentStep('feed7');
-    else if (currentStep === 'feed7') {
-      markLessonComplete();
-      setCurrentStep('complete');
+  const handleFishClick = (index: number) => {
+    if (index === clickedCount && clickedCount < targetCount) {
+      const next = clickedCount + 1;
+      setClickedCount(next);
+      speakNumber(next);
     }
   };
+
+  useEffect(() => {
+    if (clickedCount === targetCount && clickedCount > 0) {
+      const timer = setTimeout(() => {
+        if (currentStep === 'feed6') {
+          setCurrentStep('feed7');
+          setClickedCount(0);
+        } else {
+          markLessonComplete();
+          setCurrentStep('complete');
+        }
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [clickedCount, targetCount, currentStep]);
 
   const resetActivity = () => {
     setShowGame(false);
     setCurrentStep('feed6');
-    setShowFeedback(null);
+    setClickedCount(0);
   };
-
-  const renderFishBowl = (count: number) => (
-    <div className="flex flex-wrap justify-center gap-6 my-8 py-12 bg-cyan-100/30 rounded-[4rem] border-8 border-white shadow-inner relative overflow-hidden max-w-3xl mx-auto">
-      <div className="absolute inset-0 opacity-10 pointer-events-none">
-        <Waves className="w-full h-full text-cyan-400" />
-      </div>
-      {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="flex flex-col items-center animate-in zoom-in duration-300 relative z-10" style={{ animationDelay: `${i * 0.1}s` }}>
-          <div className={`w-24 h-24 rounded-full flex items-center justify-center text-5xl shadow-lg border-4 border-white transform hover:scale-110 transition-transform ${i < 5 ? 'bg-blue-500' : 'bg-orange-500'} text-white`}>
-            <Fish className="w-12 h-12" />
-          </div>
-          <span className="text-3xl font-bold mt-3 text-cyan-900 font-fredoka drop-shadow-sm">{i + 1}</span>
-        </div>
-      ))}
-    </div>
-  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-blue-50 to-white p-4 font-fredoka overflow-x-hidden">
@@ -76,7 +85,7 @@ const CountOut11 = () => {
             <p className="text-2xl text-cyan-800 font-nunito leading-relaxed max-w-2xl mx-auto">
               The dolphins and seals are hungry!
               <br />
-              Let's count out the exact number of fish they need.
+              Tap each fish to count them out!
             </p>
             <Button
               onClick={() => setShowGame(true)}
@@ -105,24 +114,42 @@ const CountOut11 = () => {
             {currentStep !== 'complete' && (
               <Card className="bg-white/80 border-4 border-white shadow-2xl rounded-[3rem] p-10 text-center space-y-10 animate-in slide-in-from-bottom-8">
                 <h3 className="text-4xl text-cyan-700">
-                  {currentStep === 'feed6' ? 'Dolphin needs 6 fish!' : 'Seal needs 7 fish!'}
+                  {currentStep === 'feed6' ? 'Tap 6 fish for the dolphin! 🐬' : 'Tap 7 fish for the seal! 🦭'}
                 </h3>
 
-                <div className="text-9xl animate-pulse">
-                  {currentStep === 'feed6' ? '🐬' : '🦭'}
+                <div className="flex flex-wrap justify-center gap-6 my-8 py-12 bg-cyan-100/30 rounded-[4rem] border-8 border-white shadow-inner relative overflow-hidden max-w-3xl mx-auto">
+                  <div className="absolute inset-0 opacity-10 pointer-events-none">
+                    <Waves className="w-full h-full text-cyan-400" />
+                  </div>
+                  {Array.from({ length: targetCount }).map((_, i) => {
+                    const isClicked = i < clickedCount;
+                    const isNext = i === clickedCount;
+                    return (
+                      <div
+                        key={i}
+                        onClick={() => handleFishClick(i)}
+                        className={`flex flex-col items-center relative z-10 cursor-pointer transition-all duration-300 ${isClicked ? 'scale-100' : isNext ? 'animate-pulse hover:scale-110' : 'opacity-40 grayscale'}`}
+                      >
+                        <div className={`w-24 h-24 rounded-full flex items-center justify-center text-5xl shadow-lg border-4 border-white transform transition-transform ${isClicked ? (i < 5 ? 'bg-blue-500 ring-4 ring-yellow-300' : 'bg-orange-500 ring-4 ring-yellow-300') : 'bg-white'} text-white`}>
+                          <Fish className="w-12 h-12" />
+                        </div>
+                        {isClicked && (
+                          <span className="text-3xl font-bold mt-3 text-cyan-900 font-fredoka drop-shadow-sm">{i + 1}</span>
+                        )}
+                        {isNext && !isClicked && (
+                          <span className="text-xs font-bold mt-2 text-cyan-400 animate-pulse">Tap!</span>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
-
-                {renderFishBowl(currentStep === 'feed6' ? 6 : 7)}
 
                 <div className="bg-cyan-50 p-8 rounded-[2.5rem] border-4 border-white shadow-inner max-w-2xl mx-auto font-nunito">
                   <p className="text-4xl text-cyan-800 leading-relaxed font-bold">
-                    You counted <span className="font-fredoka text-7xl text-cyan-600 drop-shadow-sm">{currentStep === 'feed6' ? '6' : '7'}</span> fish!
+                    {clickedCount === targetCount ? `You counted ${targetCount}! 🎉` : `Fish counted: ${clickedCount} / ${targetCount}`}
                   </p>
+                  <p className="text-7xl font-fredoka text-cyan-600 drop-shadow-sm mt-4">{clickedCount}</p>
                 </div>
-
-                <Button onClick={() => setShowFeedback('correct')} className="bg-cyan-600 hover:bg-cyan-700 text-white py-12 px-16 text-4xl rounded-[2rem] shadow-xl border-b-8 border-cyan-800 transition-all active:scale-95">
-                  Matches {currentStep === 'feed6' ? '6' : '7'}? ✅
-                </Button>
               </Card>
             )}
 
@@ -144,20 +171,6 @@ const CountOut11 = () => {
                   </Button>
                 </div>
               </Card>
-            )}
-
-            {showFeedback && (
-              <div className="fixed bottom-[33%] right-[25%] z-[100] animate-in slide-in-from-right-4 fade-in duration-300">
-                <Card className={`flex items-center gap-4 px-6 py-4 shadow-2xl rounded-2xl border-4 ${showFeedback === 'correct' ? 'bg-green-50 border-green-400' : 'bg-red-50 border-red-400'}`}>
-                  <span className="text-4xl">{showFeedback === 'correct' ? '🌟' : '🧐'}</span>
-                  <h4 className={`text-2xl font-fredoka ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
-                    {showFeedback === 'correct' ? 'Great Job!' : 'Try Again!'}
-                  </h4>
-                  <Button onClick={showFeedback === 'correct' ? nextStep : () => setShowFeedback(null)} size="sm" className={`ml-2 rounded-xl text-lg px-4 py-2 ${showFeedback === 'correct' ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'}`}>
-                    {showFeedback === 'correct' ? 'Next! ➡️' : 'OK! 👍'}
-                  </Button>
-                </Card>
-              </div>
             )}
 
             {currentStep !== 'complete' && (
