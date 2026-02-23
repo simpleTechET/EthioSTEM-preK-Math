@@ -1,14 +1,17 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, RefreshCw, Home, Star, Sparkles, Smile, Fish, Waves } from "lucide-react";
+import { ArrowLeft, Fish, Waves } from "lucide-react";
 
 const ArrangeCount9 = () => {
   const navigate = useNavigate();
   const [showGame, setShowGame] = useState(false);
   const [currentStep, setCurrentStep] = useState<'line' | 'circle' | 'array' | 'complete'>('line');
   const [showFeedback, setShowFeedback] = useState<'correct' | 'incorrect' | null>(null);
+  const [clickedCount, setClickedCount] = useState(0);
+
+  const FISH_COUNT = 7;
 
   const markLessonComplete = () => {
     const saved = localStorage.getItem("ethio-stem-m3-completed");
@@ -21,6 +24,7 @@ const ArrangeCount9 = () => {
 
   const nextStep = () => {
     setShowFeedback(null);
+    setClickedCount(0);
     if (currentStep === 'line') setCurrentStep('circle');
     else if (currentStep === 'circle') setCurrentStep('array');
     else if (currentStep === 'array') {
@@ -33,18 +37,43 @@ const ArrangeCount9 = () => {
     setShowGame(false);
     setCurrentStep('line');
     setShowFeedback(null);
+    setClickedCount(0);
+  };
+
+  const handleFishClick = (index: number) => {
+    if (index === clickedCount) {
+      const newCount = clickedCount + 1;
+      setClickedCount(newCount);
+      if ("speechSynthesis" in window) {
+        const utterance = new SpeechSynthesisUtterance(newCount.toString());
+        utterance.rate = 0.8;
+        utterance.pitch = 1.2;
+        window.speechSynthesis.speak(utterance);
+      }
+      if (newCount === FISH_COUNT) {
+        setTimeout(() => setShowFeedback('correct'), 400);
+      }
+    }
   };
 
   const renderFish = (count: number, config: 'line' | 'circle' | 'array') => {
     const radius = 120;
     return (
-      <div className={`relative w-full max-w-2xl mx-auto h-80 flex items-center justify-center bg-blue-100/30 rounded-[4rem] border-8 border-white shadow-inner mb-8 overflow-hidden`}>
+      <div className="relative w-full max-w-2xl mx-auto h-80 flex items-center justify-center bg-blue-100/30 rounded-[4rem] border-8 border-white shadow-inner mb-8 overflow-hidden">
         <div className="absolute inset-0 opacity-20 pointer-events-none">
           <Waves className="w-full h-full text-blue-400" />
         </div>
 
+        {/* Center counter */}
+        {config === 'circle' && (
+          <div className="text-center z-10">
+            <span className="font-fredoka text-5xl text-blue-600 font-bold">{clickedCount}</span>
+            <p className="text-sm text-blue-400 font-nunito">counted</p>
+          </div>
+        )}
+
         {Array.from({ length: count }).map((_, i) => {
-          let style = {};
+          let style: React.CSSProperties = {};
           if (config === 'line') {
             style = { left: `${(i + 1) * (100 / (count + 1))}%`, top: '50%', transform: 'translate(-50%, -50%)' };
           } else if (config === 'circle') {
@@ -59,16 +88,34 @@ const ArrangeCount9 = () => {
             style = { left: `${(col + 1) * 20 + 10}%`, top: `${(row + 1) * 30 + 10}%`, transform: 'translate(-50%, -50%)' };
           }
 
+          const isClicked = i < clickedCount;
+          const isNext = i === clickedCount;
+
           return (
             <div
               key={i}
-              className="absolute flex flex-col items-center animate-in zoom-in duration-300"
-              style={{ ...style, animationDelay: `${i * 0.1}s` }}
+              onClick={() => handleFishClick(i)}
+              className={`absolute flex flex-col items-center transition-all duration-300 ${isNext ? 'cursor-pointer hover:scale-110' : isClicked ? '' : 'opacity-50 grayscale'}`}
+              style={style}
             >
-              <div className={`w-20 h-20 rounded-full flex items-center justify-center text-5xl shadow-lg border-4 border-white ${i < 5 ? 'bg-orange-500' : 'bg-yellow-500'} text-white`}>
+              <div className={`w-20 h-20 rounded-full flex items-center justify-center text-5xl shadow-lg border-4 text-white transition-all ${
+                isClicked
+                  ? `${i < 5 ? 'bg-orange-500' : 'bg-yellow-500'} border-white ring-4 ring-yellow-300`
+                  : isNext
+                    ? `${i < 5 ? 'bg-orange-500' : 'bg-yellow-500'} border-yellow-400 animate-pulse`
+                    : 'bg-gray-300 border-gray-400'
+              }`}>
                 <Fish className="w-12 h-12" />
+                {config === 'circle' && i === 0 && (
+                  <div className="absolute -top-4 -right-2 text-2xl animate-bounce">🚩</div>
+                )}
               </div>
-              <span className="text-3xl font-bold mt-2 text-blue-900 font-fredoka drop-shadow-sm">{i + 1}</span>
+              {isClicked && (
+                <span className="text-3xl font-bold mt-2 text-blue-900 font-fredoka drop-shadow-sm animate-in zoom-in duration-200">{i + 1}</span>
+              )}
+              {isNext && !isClicked && (
+                <span className="text-xs font-nunito text-blue-400 mt-1 animate-pulse">Tap!</span>
+              )}
             </div>
           );
         })}
@@ -102,7 +149,7 @@ const ArrangeCount9 = () => {
             <p className="text-2xl text-blue-800 font-nunito leading-relaxed max-w-2xl mx-auto">
               Fish love to swim together in schools!
               <br />
-              They switch shapes, but the number of fish stays the same!
+              Tap each fish to count them, starting from the first one!
             </p>
             <Button
               onClick={() => setShowGame(true)}
@@ -131,20 +178,24 @@ const ArrangeCount9 = () => {
             {currentStep !== 'complete' && (
               <Card className="bg-white/80 border-4 border-white shadow-2xl rounded-[3rem] p-10 text-center space-y-10 animate-in slide-in-from-bottom-8">
                 <h3 className="text-4xl text-blue-700">
-                  {currentStep === 'line' ? 'Swimming in a line!' : currentStep === 'circle' ? 'Swimming in a circle!' : 'Swimming in a group!'}
+                  {currentStep === 'line' ? 'Tap each fish in the line!' : currentStep === 'circle' ? 'Tap each fish around the circle from the 🚩!' : 'Tap each fish in the group!'}
                 </h3>
 
-                {renderFish(7, currentStep)}
+                {renderFish(FISH_COUNT, currentStep)}
 
-                <div className="bg-blue-50 p-8 rounded-[2.5rem] border-4 border-white shadow-inner max-w-xl mx-auto font-nunito">
-                  <p className="text-4xl text-blue-800 leading-relaxed">
-                    There are <span className="font-fredoka text-6xl text-blue-600 drop-shadow-sm font-bold">7</span> fish!
-                  </p>
-                </div>
+                {clickedCount === FISH_COUNT && (
+                  <div className="bg-blue-50 p-8 rounded-[2.5rem] border-4 border-white shadow-inner max-w-xl mx-auto font-nunito animate-in zoom-in duration-300">
+                    <p className="text-4xl text-blue-800 leading-relaxed">
+                      You counted <span className="font-fredoka text-6xl text-blue-600 drop-shadow-sm font-bold">7</span> fish!
+                    </p>
+                  </div>
+                )}
 
-                <Button onClick={() => setShowFeedback('correct')} className="bg-blue-600 hover:bg-blue-700 text-white py-12 px-16 text-4xl rounded-[2rem] shadow-xl border-b-8 border-blue-800 transition-all active:scale-95">
-                  Still 7? ✅
-                </Button>
+                {clickedCount < FISH_COUNT && (
+                  <div className="bg-blue-50/50 px-6 py-3 rounded-2xl inline-block">
+                    <span className="text-2xl text-blue-600 font-nunito">Counted: <span className="font-fredoka text-4xl font-bold">{clickedCount}</span> / {FISH_COUNT}</span>
+                  </div>
+                )}
               </Card>
             )}
 
@@ -182,7 +233,7 @@ const ArrangeCount9 = () => {
             )}
 
             {currentStep !== 'complete' && (
-              <Button onClick={() => setShowGame(false)} variant="ghost" className="text-blue-400 hover:text-blue-600 w-full py-2 font-bold font-nunito">
+              <Button onClick={() => { setShowGame(false); setClickedCount(0); }} variant="ghost" className="text-blue-400 hover:text-blue-600 w-full py-2 font-bold font-nunito">
                 ← Back to Instructions
               </Button>
             )}
