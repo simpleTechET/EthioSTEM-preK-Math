@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, BookOpen } from "lucide-react";
-import estemLogo from "@/assets/estem-logo.png";
+import estemLogo from "@/assets/estem-logo-notext.png";
 
 const TopicMatching = () => {
   const navigate = useNavigate();
