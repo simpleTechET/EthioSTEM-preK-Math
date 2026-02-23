@@ -1,14 +1,25 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, RefreshCw, Home, Star, Sparkles, Smile, Pencil, Tractor } from "lucide-react";
 
+const speakNumber = (num: number) => {
+  if ("speechSynthesis" in window) {
+    const utterance = new SpeechSynthesisUtterance(num.toString());
+    utterance.rate = 0.8;
+    utterance.pitch = 1.2;
+    window.speechSynthesis.speak(utterance);
+  }
+};
+
 const Tally10 = () => {
   const navigate = useNavigate();
   const [showGame, setShowGame] = useState(false);
   const [currentStep, setCurrentStep] = useState<'learn5' | 'learn6' | 'learn7' | 'complete'>('learn5');
-  const [showFeedback, setShowFeedback] = useState<'correct' | 'incorrect' | null>(null);
+  const [tallyCount, setTallyCount] = useState(0);
+
+  const targetCount = currentStep === 'learn5' ? 5 : currentStep === 'learn6' ? 6 : 7;
 
   const markLessonComplete = () => {
     const saved = localStorage.getItem("ethio-stem-m3-completed");
@@ -19,52 +30,78 @@ const Tally10 = () => {
     }
   };
 
-  const nextStep = () => {
-    setShowFeedback(null);
-    if (currentStep === 'learn5') setCurrentStep('learn6');
-    else if (currentStep === 'learn6') setCurrentStep('learn7');
-    else if (currentStep === 'learn7') {
-      markLessonComplete();
-      setCurrentStep('complete');
+  const handleTallyClick = () => {
+    if (tallyCount < targetCount) {
+      const next = tallyCount + 1;
+      setTallyCount(next);
+      speakNumber(next);
     }
   };
+
+  useEffect(() => {
+    if (tallyCount === targetCount && tallyCount > 0) {
+      const timer = setTimeout(() => {
+        if (currentStep === 'learn5') {
+          setCurrentStep('learn6');
+          setTallyCount(0);
+        } else if (currentStep === 'learn6') {
+          setCurrentStep('learn7');
+          setTallyCount(0);
+        } else if (currentStep === 'learn7') {
+          markLessonComplete();
+          setCurrentStep('complete');
+        }
+      }, 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [tallyCount, targetCount, currentStep]);
 
   const resetActivity = () => {
     setShowGame(false);
     setCurrentStep('learn5');
-    setShowFeedback(null);
+    setTallyCount(0);
   };
 
-  const renderTallies = (count: number) => {
+  const renderTallies = (count: number, target: number) => {
     const bundle = count >= 5;
     const remainder = count - 5;
     return (
-      <div className="flex justify-center gap-12 my-8 py-12 bg-amber-100/30 rounded-[4rem] border-8 border-white shadow-inner max-w-2xl mx-auto items-center">
-        {bundle && (
-          <div className="relative w-32 h-44 flex items-center justify-center animate-in zoom-in duration-500">
-            {/* 4 Vertical lines */}
-            <div className="flex gap-4">
-              {[1, 2, 3, 4].map(i => (
-                <div key={i} className="w-3 h-40 bg-amber-800 rounded-full shadow-sm" />
-              ))}
-            </div>
-            {/* Diagonal line */}
-            <div className="absolute w-44 h-4 bg-amber-900/80 rounded-full shadow-md -rotate-[25deg] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-2 border-white/20" />
+      <div
+        onClick={handleTallyClick}
+        className={`flex justify-center gap-12 my-8 py-12 bg-amber-100/30 rounded-[4rem] border-8 border-white shadow-inner max-w-2xl mx-auto items-center min-h-[200px] cursor-pointer transition-all hover:bg-amber-100/50 active:scale-[0.98] ${count < target ? 'border-dashed' : ''}`}
+      >
+        {count === 0 ? (
+          <div className="text-amber-300 flex flex-col items-center gap-4 animate-pulse">
+            <Pencil className="w-16 h-16" />
+            <p className="text-2xl font-fredoka uppercase tracking-widest">Tap to add a tally!</p>
           </div>
-        )}
-        {!bundle && (
-          <div className="flex gap-4">
-            {Array.from({ length: count }).map((_, i) => (
-              <div key={i} className="w-3 h-40 bg-amber-800 rounded-full shadow-sm animate-in slide-in-from-top-4" style={{ animationDelay: `${i * 0.1}s` }} />
-            ))}
-          </div>
-        )}
-        {bundle && remainder > 0 && (
-          <div className="flex gap-4">
-            {Array.from({ length: remainder }).map((_, i) => (
-              <div key={i} className="w-3 h-40 bg-emerald-700 rounded-full shadow-sm animate-in slide-in-from-top-4" style={{ animationDelay: `${i * 0.1}s` }} />
-            ))}
-          </div>
+        ) : (
+          <>
+            {bundle && (
+              <div className="relative w-32 h-44 flex items-center justify-center animate-in zoom-in duration-500">
+                <div className="flex gap-4">
+                  {[1, 2, 3, 4].map(i => (
+                    <div key={i} className="w-3 h-40 bg-amber-800 rounded-full shadow-sm" />
+                  ))}
+                </div>
+                <div className="absolute w-44 h-4 bg-amber-900/80 rounded-full shadow-md -rotate-[25deg] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-2 border-white/20" />
+              </div>
+            )}
+            {!bundle && (
+              <div className="flex gap-4">
+                {Array.from({ length: count }).map((_, i) => (
+                  <div key={i} className="w-3 h-40 bg-amber-800 rounded-full shadow-sm animate-in slide-in-from-top-4" style={{ animationDelay: `${i * 0.1}s` }} />
+                ))}
+              </div>
+            )}
+            {bundle && remainder > 0 && (
+              <div className="flex gap-4">
+                {Array.from({ length: remainder }).map((_, i) => (
+                  <div key={i} className="w-3 h-40 bg-emerald-700 rounded-full shadow-sm animate-in slide-in-from-top-4" style={{ animationDelay: `${i * 0.1}s` }} />
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
     );
@@ -125,25 +162,21 @@ const Tally10 = () => {
             {currentStep !== 'complete' && (
               <Card className="bg-white/80 border-4 border-white shadow-2xl rounded-[3rem] p-10 text-center space-y-10 animate-in slide-in-from-bottom-8">
                 <h3 className="text-4xl text-amber-700">
-                  {currentStep === 'learn5' ? 'The Secret of 5!' : currentStep === 'learn6' ? 'Six Little Sheep!' : 'Seven Big Horses!'}
+                  {currentStep === 'learn5' ? 'Tally to 5!' : currentStep === 'learn6' ? 'Now tally to 6!' : 'Tally to 7!'}
                 </h3>
 
-                {renderTallies(currentStep === 'learn5' ? 5 : currentStep === 'learn6' ? 6 : 7)}
+                {renderTallies(tallyCount, targetCount)}
 
                 <div className="bg-amber-50 p-8 rounded-[2.5rem] border-4 border-white shadow-inner max-w-2xl mx-auto font-nunito">
                   <p className="text-4xl text-amber-800 leading-relaxed">
-                    {currentStep === 'learn5' ? 'When we have 5, we bundle them!' :
-                      currentStep === 'learn6' ? '6 is a bundle of 5 and 1 more!' :
-                        '7 is a bundle of 5 and 2 more!'}
+                    {tallyCount === 0 ? 'Tap the area to start tallying!' :
+                      tallyCount === targetCount ? (currentStep === 'learn5' ? 'Bundle of 5! 🎉' : `${targetCount} tallies! 🎉`) :
+                        `Keep going! ${tallyCount} of ${targetCount}`}
                   </p>
                   <p className="text-7xl font-fredoka text-amber-600 drop-shadow-sm font-bold mt-4">
-                    {currentStep === 'learn5' ? '5' : currentStep === 'learn6' ? '6' : '7'}
+                    {tallyCount}
                   </p>
                 </div>
-
-                <Button onClick={() => setShowFeedback('correct')} className="bg-amber-600 hover:bg-amber-700 text-white py-12 px-16 text-4xl rounded-[2rem] shadow-xl border-b-8 border-amber-800 transition-all active:scale-95">
-                  Got it! ✅
-                </Button>
               </Card>
             )}
 
@@ -165,20 +198,6 @@ const Tally10 = () => {
                   </Button>
                 </div>
               </Card>
-            )}
-
-            {showFeedback && (
-              <div className="fixed bottom-[33%] right-[25%] z-[100] animate-in slide-in-from-right-4 fade-in duration-300">
-                <Card className={`flex items-center gap-4 px-6 py-4 shadow-2xl rounded-2xl border-4 ${showFeedback === 'correct' ? 'bg-green-50 border-green-400' : 'bg-red-50 border-red-400'}`}>
-                  <span className="text-4xl">{showFeedback === 'correct' ? '🌟' : '🧐'}</span>
-                  <h4 className={`text-2xl font-fredoka ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
-                    {showFeedback === 'correct' ? 'Amazing!' : 'Try Again!'}
-                  </h4>
-                  <Button onClick={showFeedback === 'correct' ? nextStep : () => setShowFeedback(null)} size="sm" className={`ml-2 rounded-xl text-lg px-4 py-2 ${showFeedback === 'correct' ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'}`}>
-                    {showFeedback === 'correct' ? 'Next! ➡️' : 'OK! 👍'}
-                  </Button>
-                </Card>
-              </div>
             )}
 
             {currentStep !== 'complete' && (

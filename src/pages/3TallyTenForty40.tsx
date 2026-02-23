@@ -147,13 +147,13 @@ const TallyTenForty40 = () => {
                                     </h3>
                                     <p className="text-2xl text-teal-600">Tap the button to add a mark!</p>
                                 </div>
-                                <div className="bg-teal-50/30 w-full max-w-2xl mx-auto rounded-[3rem] p-16 flex flex-col items-center justify-center min-h-[300px] border-4 border-dashed border-teal-100 shadow-inner">
+                                <div onClick={handleAddTally} className="bg-teal-50/30 w-full max-w-2xl mx-auto rounded-[3rem] p-16 flex flex-col items-center justify-center min-h-[300px] border-4 border-dashed border-teal-100 shadow-inner cursor-pointer hover:bg-teal-50/50 active:scale-[0.98] transition-all">
                                     {tallyCount > 0 ? (
                                         renderTallies(tallyCount)
                                     ) : (
                                         <div className="text-teal-200 flex flex-col items-center gap-4">
                                             <HelpCircle className="w-24 h-24" />
-                                            <p className="text-2xl font-fredoka uppercase tracking-widest">Add your first mark!</p>
+                                            <p className="text-2xl font-fredoka uppercase tracking-widest animate-pulse">Tap here to add a tally!</p>
                                         </div>
                                     )}
                                 </div>
@@ -161,9 +161,6 @@ const TallyTenForty40 = () => {
                                     <p className="text-4xl font-fredoka text-teal-800">
                                         Total: <span className="text-6xl text-teal-600 drop-shadow-sm">{tallyCount}</span> / {targetCount}
                                     </p>
-                                    <Button onClick={handleAddTally} disabled={tallyCount >= targetCount || showFeedback !== null} className="w-full mt-8 bg-teal-600 hover:bg-teal-700 text-white py-12 text-4xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-teal-800 transition-all active:scale-95">
-                                        ADD TALLY 🖊️
-                                    </Button>
                                 </div>
                             </Card>
                         )}

@@ -1,14 +1,25 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, RefreshCw, Home, Star, Sparkles, Smile, Bug, Waves } from "lucide-react";
+import { ArrowLeft, Bug } from "lucide-react";
+
+const speakNumber = (num: number) => {
+  if ("speechSynthesis" in window) {
+    const utterance = new SpeechSynthesisUtterance(num.toString());
+    utterance.rate = 0.8;
+    utterance.pitch = 1.2;
+    window.speechSynthesis.speak(utterance);
+  }
+};
 
 const ArrayCount15 = () => {
   const navigate = useNavigate();
   const [showGame, setShowGame] = useState(false);
   const [currentStep, setCurrentStep] = useState<'ant' | 'spider' | 'complete'>('ant');
-  const [showFeedback, setShowFeedback] = useState<'correct' | 'incorrect' | null>(null);
+  const [clickedCount, setClickedCount] = useState(0);
+
+  const targetCount = currentStep === 'ant' ? 6 : 8;
 
   const markLessonComplete = () => {
     const saved = localStorage.getItem("ethio-stem-m3-completed");
@@ -19,35 +30,34 @@ const ArrayCount15 = () => {
     }
   };
 
-  const nextStep = () => {
-    setShowFeedback(null);
-    if (currentStep === 'ant') setCurrentStep('spider');
-    else if (currentStep === 'spider') {
-      markLessonComplete();
-      setCurrentStep('complete');
+  const handleLegClick = (index: number) => {
+    if (index === clickedCount && clickedCount < targetCount) {
+      const next = clickedCount + 1;
+      setClickedCount(next);
+      speakNumber(next);
     }
   };
+
+  useEffect(() => {
+    if (clickedCount === targetCount && clickedCount > 0) {
+      const timer = setTimeout(() => {
+        if (currentStep === 'ant') {
+          setCurrentStep('spider');
+          setClickedCount(0);
+        } else {
+          markLessonComplete();
+          setCurrentStep('complete');
+        }
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [clickedCount, targetCount, currentStep]);
 
   const resetActivity = () => {
     setShowGame(false);
     setCurrentStep('ant');
-    setShowFeedback(null);
+    setClickedCount(0);
   };
-
-  const renderLegs = (count: number, color: string) => (
-    <div className="flex flex-wrap justify-center gap-8 my-8 py-12 bg-lime-100/30 rounded-[4rem] border-8 border-white shadow-inner max-w-4xl mx-auto items-center px-12 overflow-hidden">
-      <div className="grid grid-cols-2 gap-x-12 gap-y-6">
-        {Array.from({ length: count }).map((_, i) => (
-          <div key={i} className="flex flex-col items-center animate-in zoom-in duration-500" style={{ animationDelay: `${i * 0.1}s` }}>
-            <div className={`w-28 h-8 rounded-full border-4 border-white shadow-lg transition-all duration-300 ${color} ${i % 2 === 0 ? '-rotate-12' : 'rotate-12'}`} />
-            <span className="text-2xl font-bold mt-2 text-emerald-900 font-fredoka drop-shadow-sm">
-              {i + 1}
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-lime-50 via-emerald-50 to-white p-4 font-fredoka overflow-x-hidden">
@@ -75,7 +85,7 @@ const ArrayCount15 = () => {
             <p className="text-2xl text-emerald-800 font-nunito leading-relaxed max-w-2xl mx-auto">
               Insects and spiders have legs in arrays!
               <br />
-              Let's count them in order: left to right, then top to bottom.
+              Tap each leg to count them in order.
             </p>
             <Button
               onClick={() => setShowGame(true)}
@@ -111,23 +121,38 @@ const ArrayCount15 = () => {
                   {currentStep === 'ant' ? '🐜' : '🕷️'}
                 </div>
 
-                {renderLegs(currentStep === 'ant' ? 6 : 8, currentStep === 'ant' ? 'bg-amber-800' : 'bg-zinc-800')}
+                <div className="flex flex-wrap justify-center gap-8 my-8 py-12 bg-lime-100/30 rounded-[4rem] border-8 border-white shadow-inner max-w-4xl mx-auto items-center px-12 overflow-hidden">
+                  <div className="grid grid-cols-2 gap-x-12 gap-y-6">
+                    {Array.from({ length: targetCount }).map((_, i) => {
+                      const isClicked = i < clickedCount;
+                      const isNext = i === clickedCount;
+                      const color = currentStep === 'ant' ? 'bg-amber-800' : 'bg-zinc-800';
+                      return (
+                        <div
+                          key={i}
+                          onClick={() => handleLegClick(i)}
+                          className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${isClicked ? '' : isNext ? 'animate-pulse hover:scale-110' : 'opacity-30'}`}
+                        >
+                          <div className={`w-28 h-8 rounded-full border-4 border-white shadow-lg transition-all duration-300 ${isClicked ? `${color} ring-4 ring-yellow-300` : isNext ? `${color} opacity-60` : 'bg-gray-300'} ${i % 2 === 0 ? '-rotate-12' : 'rotate-12'}`} />
+                          {isClicked && (
+                            <span className="text-2xl font-bold mt-2 text-emerald-900 font-fredoka drop-shadow-sm">{i + 1}</span>
+                          )}
+                          {isNext && !isClicked && (
+                            <span className="text-xs font-bold mt-1 text-emerald-400 animate-pulse">Tap!</span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
 
                 <div className="bg-emerald-50 p-8 rounded-[2.5rem] border-4 border-white shadow-inner max-w-2xl mx-auto font-nunito">
                   <p className="text-4xl text-emerald-800 leading-relaxed">
-                    {currentStep === 'ant' ? "An ant has 6 legs!" : "A spider has 8 legs!"}
+                    {clickedCount === targetCount ? `${targetCount} legs! 🎉` :
+                      `Legs counted: ${clickedCount} / ${targetCount}`}
                   </p>
-                  <p className="text-8xl font-fredoka text-emerald-600 mt-4 font-bold drop-shadow-sm">
-                    {currentStep === 'ant' ? '6' : '8'}
-                  </p>
+                  <p className="text-8xl font-fredoka text-emerald-600 mt-4 font-bold drop-shadow-sm">{clickedCount}</p>
                 </div>
-
-                <Button
-                  onClick={() => setShowFeedback('correct')}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white py-12 px-16 text-4xl rounded-[2rem] shadow-xl border-b-8 border-emerald-800 transition-all active:scale-95"
-                >
-                  Check! ✅
-                </Button>
               </Card>
             )}
 
@@ -149,20 +174,6 @@ const ArrayCount15 = () => {
                   </Button>
                 </div>
               </Card>
-            )}
-
-            {showFeedback && (
-              <div className="fixed bottom-[33%] right-[25%] z-[100] animate-in slide-in-from-right-4 fade-in duration-300">
-                <Card className={`flex items-center gap-4 px-6 py-4 shadow-2xl rounded-2xl border-4 ${showFeedback === 'correct' ? 'bg-green-50 border-green-400' : 'bg-red-50 border-red-400'}`}>
-                  <span className="text-4xl">{showFeedback === 'correct' ? '🌟' : '🧐'}</span>
-                  <h4 className={`text-2xl font-fredoka ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
-                    {showFeedback === 'correct' ? 'Great!' : 'Try Again!'}
-                  </h4>
-                  <Button onClick={showFeedback === 'correct' ? nextStep : () => setShowFeedback(null)} size="sm" className={`ml-2 rounded-xl text-lg px-4 py-2 ${showFeedback === 'correct' ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'}`}>
-                    {showFeedback === 'correct' ? 'Next! ➡️' : 'OK! 👍'}
-                  </Button>
-                </Card>
-              </div>
             )}
 
             {currentStep !== 'complete' && (
