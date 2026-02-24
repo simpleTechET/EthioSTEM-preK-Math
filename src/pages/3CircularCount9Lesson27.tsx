@@ -24,6 +24,15 @@ const CircularCount9Lesson27 = () => {
   const [phase, setPhase] = useState<Phase>("fluency");
   const [step, setStep] = useState(0);
 
+  const markComplete = () => {
+    const saved = localStorage.getItem("ethio-stem-m3-completed");
+    const completed = saved ? JSON.parse(saved) : [];
+    if (!completed.includes("3-circular-9-27")) {
+      completed.push("3-circular-9-27");
+      localStorage.setItem("ethio-stem-m3-completed", JSON.stringify(completed));
+    }
+  };
+
   // Fluency
   const [clapCount, setClapCount] = useState(-1); // -1 = not started, 0..10
   const [redBeans, setRedBeans] = useState(0);
@@ -385,7 +394,7 @@ const CircularCount9Lesson27 = () => {
               <Button variant="outline" onClick={() => { setPhase("fluency"); setStep(0); setClapCount(-1); setRedBeans(0); setWhiteBeans(0); setBeansJoined(false); setRhymeStep(0); setSnailsCounted(0); setMarkedStart(false); setOverCounted(false); setPlatesCounted(0); setPracticeCard(0); setPracticeCount(0); setPracticeMarked(false); setSelectedNumeral(null); }}>
                 <RotateCcw className="w-4 h-4 mr-1" /> Restart
               </Button>
-              <Button onClick={() => navigate("/learning")}>
+              <Button onClick={() => { markComplete(); navigate("/activities/module-3?last=3-circular-9-27"); }}>
                 Back to Lessons <ArrowRight className="w-4 h-4 ml-1" />
               </Button>
             </div>

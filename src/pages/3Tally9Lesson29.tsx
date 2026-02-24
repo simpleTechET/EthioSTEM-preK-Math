@@ -348,8 +348,16 @@ export default function Tally9Lesson29() {
               <div className="text-center pt-4">
                 <p className="text-amber-700 font-bold text-lg mb-3">🎉 Lesson 29 Complete!</p>
                 <div className="flex gap-2 justify-center">
-                  <Button variant="outline" onClick={() => navigate("/learning")}>Back to Lessons</Button>
-                  <Button onClick={() => setPhase("fluency")}>Restart Lesson</Button>
+                  <Button variant="outline" onClick={() => setPhase("fluency")}>Restart Lesson</Button>
+                  <Button onClick={() => {
+                    const saved = localStorage.getItem("ethio-stem-m3-completed");
+                    const completed = saved ? JSON.parse(saved) : [];
+                    if (!completed.includes("3-tally-9-29")) {
+                      completed.push("3-tally-9-29");
+                      localStorage.setItem("ethio-stem-m3-completed", JSON.stringify(completed));
+                    }
+                    navigate("/activities/module-3?last=3-tally-9-29");
+                  }}>Back to Lessons</Button>
                 </div>
               </div>
             </div>
