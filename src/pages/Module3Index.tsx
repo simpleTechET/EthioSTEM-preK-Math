@@ -9,6 +9,7 @@ interface Lesson {
   title: string;
   description: string;
   emoji: string;
+  completionId?: string;
 }
 
 interface Topic {
@@ -289,6 +290,7 @@ const topics: Topic[] = [
         title: "Compose 9",
         description: "Compose and decompose 9 with partners of 9",
         emoji: "🧩",
+        completionId: "3-compose-9-26",
       },
       {
         path: "/3-circular-count-9-lesson-27",
@@ -296,6 +298,7 @@ const topics: Topic[] = [
         title: "Circular Count 9",
         description: "Count 9 objects in circular configurations",
         emoji: "🐌",
+        completionId: "3-circular-9-27",
       },
       {
         path: "/3-arrange-count-28",
@@ -303,6 +306,7 @@ const topics: Topic[] = [
         title: "Arrange & Count 9",
         description: "Arrange 9 seeds in arrays, lines, and circles to count",
         emoji: "🌱",
+        completionId: "3-arrange-9-28",
       },
       {
         path: "/3-tally-9-lesson-29",
@@ -310,6 +314,7 @@ const topics: Topic[] = [
         title: "Tally 9 Objects",
         description: "Seat bees and tally pollen orders up to 9",
         emoji: "🐝",
+        completionId: "3-tally-9-29",
       },
     ],
   },
@@ -331,6 +336,7 @@ const topics: Topic[] = [
         title: "Building Towers",
         description: "Identify 1 more and build towers to 5",
         emoji: "🏗️",
+        completionId: "3-towers-30",
       },
       {
         path: "/3-stairs-31",
@@ -338,6 +344,7 @@ const topics: Topic[] = [
         title: "Number Stairs to 5",
         description: "Build number stairs by adding 1 more each time",
         emoji: "🪜",
+        completionId: "3-stairs-31",
       },
       {
         path: "/3-climb-stairs-32",
@@ -345,6 +352,7 @@ const topics: Topic[] = [
         title: "Climbing Stairs",
         description: "Practice counting up and down number stairs to 5",
         emoji: "🪜",
+        completionId: "3-climb-32",
       },
       {
         path: "/3-descending-stairs-33",
@@ -352,6 +360,7 @@ const topics: Topic[] = [
         title: "Descending Stairs",
         description: "Identify 1 less and build descending number stairs",
         emoji: "🪜",
+        completionId: "3-descending-33",
       },
     ],
   },
@@ -373,6 +382,7 @@ const topics: Topic[] = [
         title: "Penny Staircase",
         description: "Count down from 5 to 1 with pennies",
         emoji: "🪙",
+        completionId: "3-penny-34",
       },
       {
         path: "/3-little-crabs-35",
@@ -380,6 +390,7 @@ const topics: Topic[] = [
         title: "Five Little Crabs",
         description: "Counting back from 5 using crabs and riddles",
         emoji: "🦀",
+        completionId: "3-crabs-35",
       },
       {
         path: "/3-little-fishies-36",
@@ -387,6 +398,7 @@ const topics: Topic[] = [
         title: "Five Little Fishies",
         description: "Achieve fluency in counting down from 5 to 1",
         emoji: "🐠",
+        completionId: "3-fishies-36",
       },
       {
         path: "/3-culminating-thirty-seven-37",
@@ -394,6 +406,7 @@ const topics: Topic[] = [
         title: "Lesson 37: Culminating Task",
         description: "Sort, count, and build with 7 objects",
         emoji: "🎒",
+        completionId: "3-culminating-37",
       },
       {
         path: "/3-circular-ten-thirty-eight-38",
@@ -401,6 +414,7 @@ const topics: Topic[] = [
         title: "Lesson 38: Circular Ten",
         description: "Count 10 objects in a circle",
         emoji: "🔄",
+        completionId: "3-circular-38",
       },
       {
         path: "/3-varied-ten-thirty-nine-39",
@@ -408,6 +422,7 @@ const topics: Topic[] = [
         title: "Lesson 39: Varied Ten",
         description: "10 in lines, arrays, and circles",
         emoji: "✨",
+        completionId: "3-varied-39",
       },
       {
         path: "/3-tally-ten-forty-40",
@@ -415,6 +430,7 @@ const topics: Topic[] = [
         title: "Lesson 40: Tally Ten",
         description: "Represent 10 with tally marks",
         emoji: "🖊️",
+        completionId: "3-tally-40",
       },
       {
         path: "/3-count-out-ten-forty-one-41",
@@ -422,6 +438,7 @@ const topics: Topic[] = [
         title: "Count Out Ten",
         description: "Serve 10 friends in the café",
         emoji: "🥪",
+        completionId: "3-count-out-41",
       },
       {
         path: "/3-number-book-forty-two-42",
@@ -429,6 +446,7 @@ const topics: Topic[] = [
         title: "Number Book",
         description: "Represent numbers 6-10",
         emoji: "📖",
+        completionId: "3-number-book-42",
       },
     ],
   },
@@ -541,7 +559,7 @@ const Module3Index = () => {
                 {topic.lessons.length > 0 ? (
                   <div className="space-y-3">
                     {topic.lessons.map((lesson) => {
-                      const lessonId = lesson.path.split('/').pop() || "";
+                      const lessonId = lesson.completionId || lesson.path.split('/').pop() || "";
                       const isCompleted = completedLessons.includes(lessonId);
                       return (
                         <Link

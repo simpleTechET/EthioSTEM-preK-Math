@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen, Sparkles, Users, Target, ArrowRight, CheckCircle2, Lock } from "lucide-react";
+import logoNoText from "@/assets/estem-logo-notext.png";
+import logoFull from "@/assets/estem-logo.png";
 
 const Homepage = () => {
   return (
@@ -12,7 +14,7 @@ const Homepage = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <img
-                src="/logo_notxt.png"
+                src={logoNoText}
                 alt="Ethiopian STEM Academy"
                 className="w-12 h-12 object-contain"
               />
@@ -40,7 +42,7 @@ const Homepage = () => {
           <div className="max-w-4xl mx-auto text-center">
             <div className="mb-8">
               <img
-                src="/logo.png"
+                src={logoFull}
                 alt="Ethiopian STEM Academy"
                 className="w-56 h-56 mx-auto object-contain mb-4"
               />
@@ -343,7 +345,7 @@ const Homepage = () => {
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <img
-                  src="/logo_notxt.png"
+                  src={logoNoText}
                   alt="Ethiopian STEM Academy"
                   className="w-10 h-10 object-contain"
                 />
