@@ -16,7 +16,7 @@ const CountingMatching26 = () => {
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <Button
             variant="ghost"
-            onClick={() => navigate("/activities")}
+            onClick={() => navigate("/activities/module-1")}
             className="flex items-center gap-2 text-indigo-700 hover:text-indigo-900 hover:bg-indigo-100"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -506,7 +506,7 @@ const StudentDebrief = () => {
             </p>
           </div>
           <Button 
-            onClick={() => navigate("/activities")}
+            onClick={() => navigate("/activities/module-1")}
             className="bg-yellow-500 hover:bg-yellow-600"
           >
             Continue Learning →

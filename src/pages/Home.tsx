@@ -38,7 +38,7 @@ const Home = () => {
             and understand numbers 1 through 5 with fun activities and games.
           </p>
           <div className="flex flex-wrap gap-4 justify-center mt-8">
-            <Link to="/activities">
+            <Link to="/activities/module-1">
               <Button size="lg" className="text-lg px-8 py-6 shadow-playful hover:scale-105 transition-all">
                 <BookOpen className="w-5 h-5 mr-2" />
                 Start Learning

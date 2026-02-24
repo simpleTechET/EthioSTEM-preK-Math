@@ -233,7 +233,7 @@ const ActivitiesModule2 = () => {
       <p className="text-muted-foreground">Final evaluation of all Module 2 skills</p>
     </div>
   </div>
-  <Link to="/assessment/end-of-module-2">
+  <Link to="/module-2/end-assessment">
     <Card className="hover:shadow-playful transition-all duration-300 hover:scale-105 cursor-pointer border-2 hover:border-primary">
       <CardHeader>
         <div className="flex items-center justify-between mb-2">
@@ -268,7 +268,7 @@ const module2TopicALessons = [
     description: "Find and describe circles, rectangles, squares, and triangles without naming them.",
     icon: "🕵️",
     duration: "15-20 min",
-    path: "/activity/shapes-1",
+    path: "/module-2/shapes-1",
     unlocked: true,
     standards: ["PK.G.1", "PK.G.3"],
     objective: "Find and describe 2D shapes using informal language"
@@ -279,7 +279,7 @@ const module2TopicALessons = [
     description: "Identify, analyze, sort, compare, and position triangles.",
     icon: "🔺",
     duration: "15-20 min",
-    path: "/activity/shapes-2",
+    path: "/module-2/shapes-2",
     unlocked: true,
     standards: ["PK.G.2", "PK.G.3", "PK.MD.2"],
     objective: "Identify, analyze, sort, compare, and position triangles"
@@ -290,7 +290,7 @@ const module2TopicALessons = [
     description: "Identify, analyze, sort, compare, and position rectangles and squares.",
     icon: "🟦",
     duration: "15-20 min",
-    path: "/activity/shapes-3",
+    path: "/module-2/shapes-3",
     unlocked: true,
     standards: ["PK.G.2", "PK.G.3", "PK.MD.2"],
     objective: "Identify, analyze, sort, compare, and position rectangles and squares"
@@ -301,7 +301,7 @@ const module2TopicALessons = [
     description: "Identify, analyze, sort, compare, and position circles.",
     icon: "⭕",
     duration: "15-20 min",
-    path: "/activity/shapes-4",
+    path: "/module-2/shapes-4",
     unlocked: true,
     standards: ["PK.G.2", "PK.G.3", "PK.MD.2"],
     objective: "Identify, analyze, sort, compare, and position circles"
@@ -312,7 +312,7 @@ const module2TopicALessons = [
     description: "Identify, analyze, sort, compare, and position circles, rectangles, squares, and triangles in a park scene.",
     icon: "🏞️",
     duration: "15-20 min",
-    path: "/activity/shapes-5",
+    path: "/module-2/shapes-5",
     unlocked: true,
     standards: ["PK.G.1", "PK.G.2", "PK.G.3", "PK.MD.2"],
     objective: "Identify, analyze, sort, compare, and position multiple 2D shapes"
@@ -326,7 +326,7 @@ const module2TopicBLessons = [
     description: "Use straws and clay to construct a triangle with three sides and three corners.",
     icon: "🔺",
     duration: "15-20 min",
-    path: "/activity/shapes-6",
+    path: "/module-2/shapes-6",
     unlocked: true,
     standards: ["PK.G.4"],
     objective: "Construct a triangle from components"
@@ -337,7 +337,7 @@ const module2TopicBLessons = [
     description: "Use materials to construct rectangles and squares with four sides and corners.",
     icon: "⬜",
     duration: "15-20 min",
-    path: "/activity/shapes-7",
+    path: "/module-2/shapes-7",
     unlocked: true,
     standards: ["PK.G.4"],
     objective: "Construct a rectangle and a square"
@@ -348,7 +348,7 @@ const module2TopicBLessons = [
     description: "Create a circle using flexible materials to understand its round shape.",
     icon: "🔵",
     duration: "15-20 min",
-    path: "/activity/shapes-8",
+    path: "/module-2/shapes-8",
     unlocked: true,
     standards: ["PK.G.4"],
     objective: "Construct a circle"
@@ -362,7 +362,7 @@ const module2TopicCLessons = [
     description: "Find and describe solid shapes (3D objects) using informal language.",
     icon: "🔎",
     duration: "15-20 min",
-    path: "/activity/shapes-9",
+    path: "/module-2/shapes-9",
     unlocked: true,
     standards: ["PK.G.3"],
     objective: "Find and describe solid shapes using informal language"
@@ -373,7 +373,7 @@ const module2TopicCLessons = [
     description: "Match solid shapes to their two-dimensional faces by analyzing footprints.",
     icon: "👣",
     duration: "15-20 min",
-    path: "/activity/shapes-10",
+    path: "/module-2/shapes-10",
     unlocked: true,
     standards: ["PK.G.3", "PK.MD.2"],
     objective: "Match solid shapes to their 2D faces"
@@ -384,7 +384,7 @@ const module2TopicCLessons = [
     description: "Analyze, sort, compare, and build with solid shapes like cubes, spheres, and cylinders.",
     icon: "🧱",
     duration: "15-20 min",
-    path: "/activity/shapes-11",
+    path: "/module-2/shapes-11",
     unlocked: true,
     standards: ["PK.G.3", "PK.MD.2"],
     objective: "Identify, analyze, sort, compare, and build with solid shapes"
@@ -395,7 +395,7 @@ const module2TopicCLessons = [
     description: "Position solid shapes to create a model of a familiar place like a classroom or park.",
     icon: "🏗️",
     duration: "15-20 min",
-    path: "/activity/shapes-12",
+    path: "/module-2/shapes-12",
     unlocked: true,
     standards: ["PK.G.1"],
     objective: "Position solid shapes to create a model"

@@ -48,7 +48,7 @@ const CountingActivity8 = () => {
 
   const handleComplete = () => {
     markLessonComplete(8);
-    navigate("/activities");
+    navigate("/activities/module-1");
   };
   
   // Shuffled answer options for each question
@@ -89,7 +89,7 @@ const CountingActivity8 = () => {
       {/* Header */}
       <header className="border-b border-border bg-card">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/activities" className="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
+          <Link to="/activities/module-1" className="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
             <ArrowLeft className="w-5 h-5" />
             <span className="font-semibold">Back to Activities</span>
           </Link>

@@ -40,35 +40,35 @@ const topics: Topic[] = [
     waveFill: "#fffbeb",
     lessons: [
       {
-        path: "/3-introduce-6-7-lesson-1",
+        path: "/module-3/lesson-1",
         lessonNumber: 1,
         title: "Introduce 6 and 7",
         description: "Introduce 6 and 7, relate to 5 and 6 and 1 more",
         emoji: "⚽",
       },
       {
-        path: "/3-crossing-creek-lesson-2",
+        path: "/module-3/lesson-2",
         lessonNumber: 2,
         title: "Crossing the Creek",
         description: "Count rocks in a line to cross the creek",
         emoji: "🏞️",
       },
       {
-        path: "/3-finger-counting-6-lesson-3",
+        path: "/module-3/lesson-3",
         lessonNumber: 3,
         title: "Finger Counting to 6",
         description: "Count left to right with hatching chicks",
         emoji: "🐣",
       },
       {
-        path: "/3-count-eggs-4",
+        path: "/module-3/lesson-4",
         lessonNumber: 4,
         title: "Counting Chicks",
         description: "Count to 6 and 7 left to right with fingers",
         emoji: "🐣",
       },
       {
-        path: "/3-count-arrays-5",
+        path: "/module-3/lesson-5",
         lessonNumber: 5,
         title: "Counting in Arrays",
         description: "Count 6 objects in array configurations",
@@ -89,42 +89,42 @@ const topics: Topic[] = [
     waveFill: "#faf5ff",
     lessons: [
       {
-        path: "/3-compose-six-6",
+        path: "/module-3/lesson-6",
         lessonNumber: 6,
         title: "Partners of 6",
         description: "Compose 6, decompose into two parts, match to numeral 6",
         emoji: "🧱",
       },
       {
-        path: "/3-compose-seven-7",
+        path: "/module-3/lesson-7",
         lessonNumber: 7,
         title: "Partners of 7",
         description: "Compose 7, decompose into two parts, match to numeral 7",
         emoji: "📅",
       },
       {
-        path: "/3-circle-count-8",
+        path: "/module-3/lesson-8",
         lessonNumber: 8,
         title: "Circle Counting",
         description: "Count 6 and 7 objects in circular configurations",
         emoji: "🔵",
       },
       {
-        path: "/3-arrange-count-9",
+        path: "/module-3/lesson-9",
         lessonNumber: 9,
         title: "Arrange & Count",
         description: "Arrange and count 6 and 7 objects in varied configurations",
         emoji: "🐠",
       },
       {
-        path: "/3-tally-10",
+        path: "/module-3/lesson-10",
         lessonNumber: 10,
         title: "Tally Marks",
         description: "Tally 6 and 7 objects using bundled tally marks",
         emoji: "🌾",
       },
       {
-        path: "/3-count-out-11",
+        path: "/module-3/lesson-11",
         lessonNumber: 11,
         title: "Count Out Groups",
         description: "Look at a numeral and count out a group of up to 7 objects",
@@ -145,28 +145,28 @@ const topics: Topic[] = [
     waveFill: "#f0f9ff",
     lessons: [
       {
-        path: "/3-introduce-8-12",
+        path: "/module-3/lesson-12",
         lessonNumber: 12,
         title: "Introduce 8",
         description: "Introduce 8, and relate 8 to 7 and 1 more",
         emoji: "🐙",
       },
       {
-        path: "/3-linear-count-13",
+        path: "/module-3/lesson-13",
         lessonNumber: 13,
         title: "Linear Count to 8",
         description: "Use linear configurations to count 8 in relation to 5",
         emoji: "🪨",
       },
       {
-        path: "/3-finger-count-14",
+        path: "/module-3/lesson-14",
         lessonNumber: 14,
         title: "Finger Counting to 8",
         description: "Count to 8 from left to right with fingers",
         emoji: "🐣",
       },
       {
-        path: "/3-array-count-15",
+        path: "/module-3/lesson-15",
         lessonNumber: 15,
         title: "Array Configurations",
         description: "Count 8 objects in array configurations",
@@ -187,35 +187,35 @@ const topics: Topic[] = [
     waveFill: "#fff1f2",
     lessons: [
       {
-        path: "/3-compose-8-16",
+        path: "/module-3/lesson-16",
         lessonNumber: 16,
         title: "Compose & Decompose 8",
         description: "Compose 8, decompose into two parts, match to numeral 8",
         emoji: "🧩",
       },
       {
-        path: "/3-circular-count-17",
+        path: "/module-3/lesson-17",
         lessonNumber: 17,
         title: "Circular Counting to 8",
         description: "Count 8 objects in circular configurations",
         emoji: "🍎",
       },
       {
-        path: "/3-arrange-count-18",
+        path: "/module-3/lesson-18",
         lessonNumber: 18,
         title: "Arrange & Count 8",
         description: "Arrange and count 8 objects in varied configurations",
         emoji: "🌱",
       },
       {
-        path: "/3-tally-19",
+        path: "/module-3/lesson-19",
         lessonNumber: 19,
         title: "Tally 8 Objects",
         description: "Count and tally 8 objects in a garden",
         emoji: "🐝",
       },
       {
-        path: "/3-count-out-20",
+        path: "/module-3/lesson-20",
         lessonNumber: 20,
         title: "Count Out Up to 8",
         description: "Count out up to 8 objects in a cafe role-play",
@@ -236,35 +236,35 @@ const topics: Topic[] = [
     waveFill: "#ecfdf5",
     lessons: [
       {
-        path: "/3-introduce-zero-21",
+        path: "/module-3/lesson-21",
         lessonNumber: 21,
         title: "Introduce Zero",
         description: "Introduction to the concept of zero with counting flaps",
         emoji: "🎈",
       },
       {
-        path: "/3-introduce-9-lesson-22",
+        path: "/module-3/lesson-22",
         lessonNumber: 22,
         title: "Introduce 9",
         description: "Introduce the number 9 with clapping and building towers",
         emoji: "🏰",
       },
       {
-        path: "/3-linear-count-9-lesson-23",
+        path: "/module-3/lesson-23",
         lessonNumber: 23,
         title: "9 in Relation to 5",
         description: "Count 9 in linear configurations in relation to 5",
         emoji: "🌲",
       },
       {
-        path: "/3-finger-count-24",
+        path: "/module-3/lesson-24",
         lessonNumber: 24,
         title: "0-9 with Fingers",
         description: "Count from 0 up to 9 with fingers",
         emoji: "🖐️",
       },
       {
-        path: "/3-array-count-25",
+        path: "/module-3/lesson-25",
         lessonNumber: 25,
         title: "9 Objects in Arrays",
         description: "Count 9 objects in array configurations",
@@ -285,7 +285,7 @@ const topics: Topic[] = [
     waveFill: "#f0fdfa",
     lessons: [
       {
-        path: "/3-compose-9-lesson-26",
+        path: "/module-3/lesson-26",
         lessonNumber: 26,
         title: "Compose 9",
         description: "Compose and decompose 9 with partners of 9",
@@ -293,7 +293,7 @@ const topics: Topic[] = [
         completionId: "3-compose-9-26",
       },
       {
-        path: "/3-circular-count-9-lesson-27",
+        path: "/module-3/lesson-27",
         lessonNumber: 27,
         title: "Circular Count 9",
         description: "Count 9 objects in circular configurations",
@@ -301,7 +301,7 @@ const topics: Topic[] = [
         completionId: "3-circular-9-27",
       },
       {
-        path: "/3-arrange-count-28",
+        path: "/module-3/lesson-28",
         lessonNumber: 28,
         title: "Arrange & Count 9",
         description: "Arrange 9 seeds in arrays, lines, and circles to count",
@@ -309,7 +309,7 @@ const topics: Topic[] = [
         completionId: "3-arrange-9-28",
       },
       {
-        path: "/3-tally-9-lesson-29",
+        path: "/module-3/lesson-29",
         lessonNumber: 29,
         title: "Tally 9 Objects",
         description: "Seat bees and tally pollen orders up to 9",
@@ -331,7 +331,7 @@ const topics: Topic[] = [
     waveFill: "#eef2ff",
     lessons: [
       {
-        path: "/3-towers-30",
+        path: "/module-3/lesson-30",
         lessonNumber: 30,
         title: "Building Towers",
         description: "Identify 1 more and build towers to 5",
@@ -339,7 +339,7 @@ const topics: Topic[] = [
         completionId: "3-towers-30",
       },
       {
-        path: "/3-stairs-31",
+        path: "/module-3/lesson-31",
         lessonNumber: 31,
         title: "Number Stairs to 5",
         description: "Build number stairs by adding 1 more each time",
@@ -347,7 +347,7 @@ const topics: Topic[] = [
         completionId: "3-stairs-31",
       },
       {
-        path: "/3-climb-stairs-32",
+        path: "/module-3/lesson-32",
         lessonNumber: 32,
         title: "Climbing Stairs",
         description: "Practice counting up and down number stairs to 5",
@@ -355,7 +355,7 @@ const topics: Topic[] = [
         completionId: "3-climb-32",
       },
       {
-        path: "/3-descending-stairs-33",
+        path: "/module-3/lesson-33",
         lessonNumber: 33,
         title: "Descending Stairs",
         description: "Identify 1 less and build descending number stairs",
@@ -377,7 +377,7 @@ const topics: Topic[] = [
     waveFill: "#fdf4ff",
     lessons: [
       {
-        path: "/3-penny-staircase-34",
+        path: "/module-3/lesson-34",
         lessonNumber: 34,
         title: "Penny Staircase",
         description: "Count down from 5 to 1 with pennies",
@@ -385,7 +385,7 @@ const topics: Topic[] = [
         completionId: "3-penny-34",
       },
       {
-        path: "/3-little-crabs-35",
+        path: "/module-3/lesson-35",
         lessonNumber: 35,
         title: "Five Little Crabs",
         description: "Counting back from 5 using crabs and riddles",
@@ -393,7 +393,7 @@ const topics: Topic[] = [
         completionId: "3-crabs-35",
       },
       {
-        path: "/3-little-fishies-36",
+        path: "/module-3/lesson-36",
         lessonNumber: 36,
         title: "Five Little Fishies",
         description: "Achieve fluency in counting down from 5 to 1",
@@ -401,7 +401,7 @@ const topics: Topic[] = [
         completionId: "3-fishies-36",
       },
       {
-        path: "/3-culminating-thirty-seven-37",
+        path: "/module-3/lesson-37",
         lessonNumber: 37,
         title: "Lesson 37: Culminating Task",
         description: "Sort, count, and build with 7 objects",
@@ -409,7 +409,7 @@ const topics: Topic[] = [
         completionId: "3-culminating-37",
       },
       {
-        path: "/3-circular-ten-thirty-eight-38",
+        path: "/module-3/lesson-38",
         lessonNumber: 38,
         title: "Lesson 38: Circular Ten",
         description: "Count 10 objects in a circle",
@@ -417,7 +417,7 @@ const topics: Topic[] = [
         completionId: "3-circular-38",
       },
       {
-        path: "/3-varied-ten-thirty-nine-39",
+        path: "/module-3/lesson-39",
         lessonNumber: 39,
         title: "Lesson 39: Varied Ten",
         description: "10 in lines, arrays, and circles",
@@ -425,7 +425,7 @@ const topics: Topic[] = [
         completionId: "3-varied-39",
       },
       {
-        path: "/3-tally-ten-forty-40",
+        path: "/module-3/lesson-40",
         lessonNumber: 40,
         title: "Lesson 40: Tally Ten",
         description: "Represent 10 with tally marks",
@@ -433,7 +433,7 @@ const topics: Topic[] = [
         completionId: "3-tally-40",
       },
       {
-        path: "/3-count-out-ten-forty-one-41",
+        path: "/module-3/lesson-41",
         lessonNumber: 41,
         title: "Count Out Ten",
         description: "Serve 10 friends in the café",
@@ -441,7 +441,7 @@ const topics: Topic[] = [
         completionId: "3-count-out-41",
       },
       {
-        path: "/3-number-book-forty-two-42",
+        path: "/module-3/lesson-42",
         lessonNumber: 42,
         title: "Number Book",
         description: "Represent numbers 6-10",

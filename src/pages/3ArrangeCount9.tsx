@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -16,8 +16,8 @@ const ArrangeCount9 = () => {
   const markLessonComplete = () => {
     const saved = localStorage.getItem("ethio-stem-m3-completed");
     const completed = saved ? JSON.parse(saved) : [];
-    if (!completed.includes("3-arrange-count-9")) {
-      completed.push("3-arrange-count-9");
+    if (!completed.includes("lesson-9")) {
+      completed.push("lesson-9");
       localStorage.setItem("ethio-stem-m3-completed", JSON.stringify(completed));
     }
   };
@@ -58,6 +58,12 @@ const ArrangeCount9 = () => {
 
   const renderFish = (count: number, config: 'line' | 'circle' | 'array') => {
     const radius = 120;
+
+    // We use a separate useEffect for the feedback timer to avoid re-running on every click
+    // but since this is inside renderFish (which is called in the main component), 
+    // it's better to move this effect to the main component level normally.
+    // However, keeping consistent with the existing stashed structure for quick resolution.
+
     return (
       <div className="relative w-full max-w-2xl mx-auto h-80 flex items-center justify-center bg-blue-100/30 rounded-[4rem] border-8 border-white shadow-inner mb-8 overflow-hidden">
         <div className="absolute inset-0 opacity-20 pointer-events-none">
@@ -98,13 +104,12 @@ const ArrangeCount9 = () => {
               className={`absolute flex flex-col items-center transition-all duration-300 ${isNext ? 'cursor-pointer hover:scale-110' : isClicked ? '' : 'opacity-50 grayscale'}`}
               style={style}
             >
-              <div className={`w-20 h-20 rounded-full flex items-center justify-center text-5xl shadow-lg border-4 text-white transition-all ${
-                isClicked
+              <div className={`w-20 h-20 rounded-full flex items-center justify-center text-5xl shadow-lg border-4 text-white transition-all ${isClicked
                   ? `${i < 5 ? 'bg-orange-500' : 'bg-yellow-500'} border-white ring-4 ring-yellow-300`
                   : isNext
                     ? `${i < 5 ? 'bg-orange-500' : 'bg-yellow-500'} border-yellow-400 animate-pulse`
                     : 'bg-gray-300 border-gray-400'
-              }`}>
+                }`}>
                 <Fish className="w-12 h-12" />
                 {config === 'circle' && i === 0 && (
                   <div className="absolute -top-4 -right-2 text-2xl animate-bounce">🚩</div>
@@ -123,11 +128,18 @@ const ArrangeCount9 = () => {
     );
   };
 
+  useEffect(() => {
+    if (showFeedback === 'correct') {
+      const timer = setTimeout(() => { nextStep(); }, 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [showFeedback]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-white p-4 font-fredoka overflow-x-hidden">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center gap-4 mb-8">
-          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=3-arrange-count-9")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
+          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=lesson-9")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
             <ArrowLeft className="w-5 h-5 text-blue-600" />
           </Button>
           <div>
@@ -211,7 +223,7 @@ const ArrangeCount9 = () => {
                   <Button onClick={resetActivity} className="h-24 flex-1 bg-white/10 hover:bg-white/20 text-white text-3xl rounded-[2rem] border-4 border-white/20">
                     Again! 🔄
                   </Button>
-                  <Button onClick={() => navigate("/activities/module-3?last=3-arrange-count-9")} className="h-24 flex-1 bg-white text-blue-600 hover:bg-blue-50 text-3xl rounded-[2rem] shadow-2xl">
+                  <Button onClick={() => navigate("/activities/module-3?last=lesson-9")} className="h-24 flex-1 bg-white text-blue-600 hover:bg-blue-50 text-3xl rounded-[2rem] shadow-2xl">
                     Finish! ✨
                   </Button>
                 </div>
@@ -219,15 +231,17 @@ const ArrangeCount9 = () => {
             )}
 
             {showFeedback && (
-              <div className="fixed bottom-[33%] right-[25%] z-[100] animate-in slide-in-from-right-4 fade-in duration-300">
+              <div className="fixed top-24 right-6 z-[100] animate-in slide-in-from-right-4 fade-in duration-300">
                 <Card className={`flex items-center gap-4 px-6 py-4 shadow-2xl rounded-2xl border-4 ${showFeedback === 'correct' ? 'bg-green-50 border-green-400' : 'bg-red-50 border-red-400'}`}>
                   <span className="text-4xl">{showFeedback === 'correct' ? '🌟' : '🧐'}</span>
-                  <h4 className={`text-2xl font-fredoka ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
-                    {showFeedback === 'correct' ? 'Correct!' : 'Try Again!'}
-                  </h4>
-                  <Button onClick={showFeedback === 'correct' ? nextStep : () => setShowFeedback(null)} size="sm" className={`ml-2 rounded-xl text-lg px-4 py-2 ${showFeedback === 'correct' ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'}`}>
-                    {showFeedback === 'correct' ? 'Next! ➡️' : 'OK! 👍'}
-                  </Button>
+                  <span className={`text-2xl font-fredoka font-bold ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
+                    {showFeedback === 'correct' ? 'Great!' : 'Try Again!'}
+                  </span>
+                  {showFeedback !== 'correct' && (
+                    <Button onClick={() => setShowFeedback(null)} className="ml-2 px-5 py-3 text-xl font-fredoka rounded-xl border-b-4 bg-red-500 hover:bg-red-600 border-red-700 text-white">
+                      OK 👍
+                    </Button>
+                  )}
                 </Card>
               </div>
             )}

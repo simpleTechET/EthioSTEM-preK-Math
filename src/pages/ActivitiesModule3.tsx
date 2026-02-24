@@ -119,7 +119,7 @@ const ActivitiesModule3 = () => {
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       <header className="bg-primary text-primary-foreground py-4 px-6 shadow-md">
         <div className="max-w-6xl mx-auto flex items-center gap-4">
-          <Link to="/activities" className="hover:opacity-80">
+          <Link to="/activities/module-1" className="hover:opacity-80">
             <ArrowLeft className="h-6 w-6" />
           </Link>
           <div>

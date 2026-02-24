@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -18,12 +18,13 @@ const LinearCount13 = () => {
   const [showGame, setShowGame] = useState(false);
   const [currentStep, setCurrentStep] = useState<'intro' | 'adventure' | 'complete'>('intro');
   const [rockCount, setRockCount] = useState(0);
+  const [showFeedback, setShowFeedback] = useState<'correct' | 'incorrect' | null>(null);
 
   const markLessonComplete = () => {
     const saved = localStorage.getItem("ethio-stem-m3-completed");
     const completed = saved ? JSON.parse(saved) : [];
-    if (!completed.includes("3-linear-count-13")) {
-      completed.push("3-linear-count-13");
+    if (!completed.includes("lesson-13")) {
+      completed.push("lesson-13");
       localStorage.setItem("ethio-stem-m3-completed", JSON.stringify(completed));
     }
   };
@@ -33,31 +34,40 @@ const LinearCount13 = () => {
       const next = rockCount + 1;
       setRockCount(next);
       speakNumber(next);
+      if (next === 8) {
+        setTimeout(() => {
+          setShowFeedback('correct');
+          markLessonComplete();
+        }, 500);
+      }
     }
   };
 
-  useEffect(() => {
-    if (rockCount === 8) {
-      const timer = setTimeout(() => {
-        markLessonComplete();
-        setCurrentStep('complete');
-      }, 1500);
-      return () => clearTimeout(timer);
-    }
-  }, [rockCount]);
+  const nextStep = () => {
+    setShowFeedback(null);
+    setCurrentStep('complete');
+  };
 
   const resetActivity = () => {
     setShowGame(false);
     setCurrentStep('intro');
     setRockCount(0);
+    setShowFeedback(null);
   };
 
+  useEffect(() => {
+    if (showFeedback === 'correct') {
+      const timer = setTimeout(() => { nextStep(); }, 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [showFeedback]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-emerald-50 to-white p-3 font-fredoka overflow-x-hidden">
-      <div className="max-w-3xl mx-auto">
-        <div className="flex items-center gap-3 mb-2">
-          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=3-linear-count-13")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
-            <ArrowLeft className="w-4 h-4 text-emerald-600" />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-emerald-50 to-white p-4 font-fredoka overflow-x-hidden">
+      <div className="max-w-5xl mx-auto">
+        <div className="flex items-center gap-4 mb-8">
+          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=lesson-13")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
+            <ArrowLeft className="w-5 h-5 text-emerald-600" />
           </Button>
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full uppercase tracking-widest font-nunito">Lesson 13</span>
@@ -145,22 +155,42 @@ const LinearCount13 = () => {
                   <Button onClick={resetActivity} className="h-12 flex-1 bg-white/10 hover:bg-white/20 text-white text-lg rounded-2xl border-2 border-white/20">
                     Again! 🔄
                   </Button>
-                  <Button onClick={() => navigate("/activities/module-3?last=3-linear-count-13")} className="h-12 flex-1 bg-white text-emerald-600 hover:bg-emerald-50 text-lg rounded-2xl shadow-2xl">
+                  <Button onClick={() => navigate("/activities/module-3?last=lesson-13")} className="h-24 flex-1 bg-white text-emerald-600 hover:bg-emerald-50 text-3xl rounded-[2rem] shadow-2xl">
                     Yay! ✨
                   </Button>
                 </div>
-              </Card>
+              </Card >
             )}
 
-            {currentStep !== 'complete' && (
-              <Button onClick={() => setShowGame(false)} variant="ghost" className="text-emerald-400 hover:text-emerald-600 w-full py-1 text-sm font-bold font-nunito">
-                ← Back to Instructions
-              </Button>
-            )}
-          </div>
+            {
+              showFeedback && (
+                <div className="fixed top-24 right-6 z-[100] animate-in slide-in-from-right-4 fade-in duration-300">
+                  <Card className={`flex items-center gap-4 px-6 py-4 shadow-2xl rounded-2xl border-4 ${showFeedback === 'correct' ? 'bg-green-50 border-green-400' : 'bg-red-50 border-red-400'}`}>
+                    <span className="text-4xl">{showFeedback === 'correct' ? '🌟' : '🧐'}</span>
+                    <span className={`text-2xl font-fredoka font-bold ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
+                      {showFeedback === 'correct' ? 'Great!' : 'Try Again!'}
+                    </span>
+                    {showFeedback !== 'correct' && (
+                      <Button onClick={() => setShowFeedback(null)} className="ml-2 px-5 py-3 text-xl font-fredoka rounded-xl border-b-4 bg-red-500 hover:bg-red-600 border-red-700 text-white">
+                        OK 👍
+                      </Button>
+                    )}
+                  </Card>
+                </div>
+              )
+            }
+
+            {
+              currentStep !== 'complete' && (
+                <Button onClick={() => setShowGame(false)} variant="ghost" className="text-emerald-400 hover:text-emerald-600 w-full py-1 text-sm font-bold font-nunito">
+                  ← Back to Instructions
+                </Button>
+              )
+            }
+          </div >
         )}
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 

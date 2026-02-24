@@ -136,7 +136,7 @@ const CountingMatching31 = () => {
         <div className="flex items-center justify-between mb-6">
           <Button 
             variant="ghost" 
-            onClick={() => navigate('/activities')}
+            onClick={() => navigate('/activities/module-1')}
             className="flex items-center gap-2"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -583,7 +583,7 @@ const CountingMatching31 = () => {
                 {/* Back to Activities Button */}
                 <div className="flex justify-center pt-4">
                   <Button 
-                    onClick={() => navigate('/activities')}
+                    onClick={() => navigate('/activities/module-1')}
                     className="bg-teal-500 hover:bg-teal-600"
                   >
                     <Home className="w-4 h-4 mr-2" />

@@ -824,7 +824,7 @@ const PartnersActivity = () => {
             Previous
           </Button>
           {currentCard === cards.length - 1 && showFeedback ? (
-            <Link to="/activities">
+            <Link to="/activities/module-1">
               <Button size="lg">
                 Continue Learning
               </Button>

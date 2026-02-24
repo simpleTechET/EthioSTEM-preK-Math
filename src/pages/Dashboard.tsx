@@ -45,7 +45,7 @@ const Dashboard = () => {
             <p className="text-gray-600">Welcome back, {user?.firstName}!</p>
           </div>
           <div className="flex items-center gap-4">
-            <Button variant="outline" onClick={() => navigate("/activities")}>
+            <Button variant="outline" onClick={() => navigate("/activities/module-1")}>
               <BookOpen className="w-4 h-4 mr-2" />
               Continue Learning
             </Button>
@@ -145,7 +145,7 @@ const Dashboard = () => {
                     variant="outline" 
                     size="sm" 
                     className="mt-2"
-                    onClick={() => navigate("/activities")}
+                    onClick={() => navigate("/activities/module-1")}
                   >
                     Start Learning
                   </Button>
@@ -198,7 +198,7 @@ const Dashboard = () => {
                   <p className="text-gray-400 text-sm mb-4">
                     Complete activities to see your scores here
                   </p>
-                  <Button onClick={() => navigate("/activities")}>
+                  <Button onClick={() => navigate("/activities/module-1")}>
                     Start Your First Activity
                   </Button>
                 </div>
@@ -217,7 +217,7 @@ const Dashboard = () => {
                 <Button 
                   variant="outline" 
                   className="h-16 flex-col gap-2"
-                  onClick={() => navigate("/activities")}
+                  onClick={() => navigate("/activities/module-1")}
                 >
                   <BookOpen className="w-6 h-6" />
                   All Activities

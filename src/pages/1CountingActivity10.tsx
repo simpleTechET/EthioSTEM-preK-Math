@@ -175,7 +175,7 @@ const handlePeekabooAnswer = (count: number) => {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <Button variant="outline" size="icon" onClick={() => navigate("/activities")}>
+          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-1")}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
@@ -471,7 +471,7 @@ const handlePeekabooAnswer = (count: number) => {
                   onClick={() => {
                     // ensure it's marked (in case user presses Continue without completion being recorded)
                     if (!completed) markLessonComplete(10);
-                    navigate('/activities');
+                    navigate('/activities/module-1');
                   }}
                    className="bg-green-600 hover:bg-green-700"
                  >

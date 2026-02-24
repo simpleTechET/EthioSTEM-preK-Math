@@ -23,8 +23,8 @@ const NumberBookFortyTwo42 = () => {
     const markComplete = () => {
         const saved = localStorage.getItem("ethio-stem-m3-completed");
         const completed = saved ? JSON.parse(saved) : [];
-        if (!completed.includes("3-number-book-42")) {
-            completed.push("3-number-book-42");
+        if (!completed.includes("lesson-42")) {
+            completed.push("lesson-42");
             localStorage.setItem("ethio-stem-m3-completed", JSON.stringify(completed));
         }
     };
@@ -62,12 +62,20 @@ const NumberBookFortyTwo42 = () => {
 
     const currentData = bookState[currentPage];
 
+    useEffect(() => {
+        if (showFeedback === 'correct') {
+            const timer = setTimeout(() => { nextStep(); }, 1200);
+            return () => clearTimeout(timer);
+        }
+    }, [showFeedback]);
+
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-4 font-nunito overflow-x-hidden">
             <div className="max-w-4xl mx-auto">
                 <div className="flex items-center gap-4 mb-8">
-                    <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=3-number-book-42")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
-                        <ArrowLeft className="w-5 h-5" />
+                    <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=lesson-42")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
+                        <ArrowLeft className="w-5 h-5 text-purple-600" />
                     </Button>
                     <div>
                         <div className="flex items-center gap-2">
@@ -194,14 +202,14 @@ const NumberBookFortyTwo42 = () => {
                                         >
                                             <ArrowLeft className="mr-3 w-8 h-8" /> Back
                                         </Button>
-                        {currentData.added && (
-                            <Button
-                                onClick={nextStep}
-                                className={`px-16 h-20 text-3xl font-fredoka rounded-[2rem] shadow-2xl transition-all hover:scale-105 border-b-8 ${currentPage === bookState.length - 1 ? 'bg-emerald-600 hover:bg-emerald-700 border-emerald-800' : 'bg-indigo-600 hover:bg-indigo-700 border-indigo-800'} text-white`}
-                            >
-                                {currentPage === bookState.length - 1 ? "Finish Book! 🏆" : "Next Page! ➡️"}
-                            </Button>
-                        )}
+                                        {currentData.added && (
+                                            <Button
+                                                onClick={nextStep}
+                                                className={`px-16 h-20 text-3xl font-fredoka rounded-[2rem] shadow-2xl transition-all hover:scale-105 border-b-8 ${currentPage === bookState.length - 1 ? 'bg-emerald-600 hover:bg-emerald-700 border-emerald-800' : 'bg-indigo-600 hover:bg-indigo-700 border-indigo-800'} text-white`}
+                                            >
+                                                {currentPage === bookState.length - 1 ? "Finish Book! 🏆" : "Next Page! ➡️"}
+                                            </Button>
+                                        )}
                                     </div>
                                 </Card>
                             </div>
@@ -232,7 +240,7 @@ const NumberBookFortyTwo42 = () => {
                                     <Button onClick={resetActivity} className="h-28 flex-1 bg-white/10 hover:bg-white/20 text-white text-4xl font-fredoka rounded-[2.5rem] border-4 border-white/20">
                                         Again! 🔄
                                     </Button>
-                                    <Button onClick={() => navigate("/activities/module-3?last=3-number-book-42")} className="h-28 flex-1 bg-white text-indigo-600 hover:bg-indigo-50 text-4xl font-fredoka rounded-[2.5rem] shadow-3xl">
+                                    <Button onClick={() => navigate("/activities/module-3?last=lesson-42")} className="h-28 flex-1 bg-white text-indigo-600 hover:bg-indigo-50 text-4xl font-fredoka rounded-[2.5rem] shadow-3xl">
                                         DONE! 🎉
                                     </Button>
                                 </div>
@@ -240,15 +248,17 @@ const NumberBookFortyTwo42 = () => {
                         )}
 
                         {showFeedback && (
-                            <div className="fixed bottom-[33%] right-[25%] z-[100] animate-in slide-in-from-right-4 fade-in duration-300">
+                            <div className="fixed top-24 right-6 z-[100] animate-in slide-in-from-right-4 fade-in duration-300">
                                 <Card className={`flex items-center gap-4 px-6 py-4 shadow-2xl rounded-2xl border-4 ${showFeedback === 'correct' ? 'bg-green-50 border-green-400' : 'bg-red-50 border-red-400'}`}>
-                                    <span className="text-4xl">{showFeedback === 'correct' ? '📚' : '🤔'}</span>
-                                    <h4 className={`text-2xl font-fredoka ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
-                                        {showFeedback === 'correct' ? 'Beautiful!' : 'Try Again!'}
-                                    </h4>
-                                    <Button onClick={showFeedback === 'correct' ? nextStep : () => setShowFeedback(null)} size="sm" className={`ml-2 rounded-xl text-lg px-4 py-2 ${showFeedback === 'correct' ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'}`}>
-                                        {showFeedback === 'correct' ? 'Next Page! ➡️' : 'OK! 👍'}
-                                    </Button>
+                                    <span className="text-4xl">{showFeedback === 'correct' ? '🌟' : '🧐'}</span>
+                                    <span className={`text-2xl font-fredoka font-bold ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
+                                        {showFeedback === 'correct' ? 'Great!' : 'Try Again!'}
+                                    </span>
+                                    {showFeedback !== 'correct' && (
+                                        <Button onClick={() => setShowFeedback(null)} className="ml-2 px-5 py-3 text-xl font-fredoka rounded-xl border-b-4 bg-red-500 hover:bg-red-600 border-red-700 text-white">
+                                            OK 👍
+                                        </Button>
+                                    )}
                                 </Card>
                             </div>
                         )}

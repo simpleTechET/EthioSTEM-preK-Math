@@ -282,7 +282,7 @@ const Activities = () => {
       <p className="text-muted-foreground">Track student progress and understanding</p>
     </div>
   </div>
-  <Link to="/assessment/mid-module-1">
+  <Link to="/module-1/mid-assessment">
     <Card className="hover:shadow-playful transition-all duration-300 hover:scale-105 cursor-pointer border-2 hover:border-primary">
       <CardHeader>
         <div className="flex items-center justify-between mb-2">
@@ -565,7 +565,7 @@ const Activities = () => {
       <p className="text-muted-foreground">Final evaluation of all Module 1 skills</p>
     </div>
   </div>
-  <Link to="/assessment/end-of-module-1">
+  <Link to="/module-1/end-assessment">
     <Card className="hover:shadow-playful transition-all duration-300 hover:scale-105 cursor-pointer border-2 hover:border-primary">
       <CardHeader>
         <div className="flex items-center justify-between mb-2">
@@ -616,7 +616,7 @@ const matchingLessons = [
     description: "Match objects that are identical",
     icon: "💯",
     duration: "10 min",
-    path: "/activity/matching-1",
+    path: "/module-1/matching-1",
     unlocked: true
   },
   {
@@ -625,7 +625,7 @@ const matchingLessons = [
     description: "Match objects that are similar but different sizes",
     icon: "📏",
     duration: "10 min",
-    path: "/activity/matching-2",
+    path: "/module-1/matching-2",
     unlocked: true
   },
   {
@@ -634,7 +634,7 @@ const matchingLessons = [
     description: "Match fruits that are the same type but different sizes",
     icon: "🍎",
     duration: "10 min",
-    path: "/activity/matching-3",
+    path: "/module-1/matching-3",
     unlocked: true
   },
   {
@@ -643,7 +643,7 @@ const matchingLessons = [
     description: "Match objects that go together",
     icon: "🧩",
     duration: "10 min",
-    path: "/activity/matching-4",
+    path: "/module-1/matching-4",
     unlocked: true
   }
 ];
@@ -655,7 +655,7 @@ const sortingLessons = [
     description: "Create groups with a given attribute",
     icon: "📦",
     duration: "12 min",
-    path: "/activity/sorting-5",
+    path: "/module-1/sorting-5",
     unlocked: true
   },
   {
@@ -664,7 +664,7 @@ const sortingLessons = [
     description: "Divide objects into two groups",
     icon: "⚖️",
     duration: "12 min",
-    path: "/activity/sorting-6",
+    path: "/module-1/sorting-6",
     unlocked: true
   },
   {
@@ -673,7 +673,7 @@ const sortingLessons = [
     description: "Sort the same objects in different ways",
     icon: "🔄",
     duration: "12 min",
-    path: "/activity/sorting-7",
+    path: "/module-1/sorting-7",
     unlocked: true
   }
 ];
@@ -685,7 +685,7 @@ const countingLessons = [
     description: "Touch and count objects up to 3",
     icon: "🐻",
     duration: "15 min",
-    path: "/activity/counting-8",
+    path: "/module-1/counting-8",
     unlocked: true
   },
   {
@@ -694,7 +694,7 @@ const countingLessons = [
     description: "Arrange and count objects in different ways",
     icon: "🔢",
     duration: "15 min",
-    path: "/activity/counting-9",
+    path: "/module-1/counting-9",
     unlocked: true
   },
   {
@@ -703,7 +703,7 @@ const countingLessons = [
     description: "Count objects in different arrangements",
     icon: "👁️",
     duration: "12 min",
-    path: "/activity/counting-10",
+    path: "/module-1/counting-10",
     unlocked: true
   },
   {
@@ -712,7 +712,7 @@ const countingLessons = [
     description: "Play games with counting and moving",
     icon: "🎮",
     duration: "12 min",
-    path: "/activity/counting-11",
+    path: "/module-1/counting-11",
     unlocked: true
   }
 ];
@@ -723,7 +723,7 @@ const topicDLessons = [
     description: "Match numerals to quantities",
     icon: "🔢",
     duration: "12 min",
-    path: "/activity/counting-12",
+    path: "/module-1/counting-12",
     unlocked: true
   },
   {
@@ -732,7 +732,7 @@ const topicDLessons = [
     description: "Create groups and match to numerals 1-3",
     icon: "🎲",
     duration: "12 min",
-    path: "/activity/counting-13",
+    path: "/module-1/counting-13",
     unlocked: true
   },
   {
@@ -741,7 +741,7 @@ const topicDLessons = [
     description: "Count objects to match numerals 1-3",
     icon: "🧊",
     duration: "12 min",
-    path: "/activity/counting-14",
+    path: "/module-1/counting-14",
     unlocked: true
   }
 ];
@@ -753,7 +753,7 @@ const topicELessons = [
     description: "Help the fish play tag and line up to escape the shark!",
     icon: "🐠",
     duration: "15-20 min",
-    path: "/activity/counting-15",
+    path: "/module-1/counting-15",
     unlocked: true
   },
   {
@@ -762,7 +762,7 @@ const topicELessons = [
     description: "Count family members in photos and tell how many!",
     icon: "👨‍👩‍👧‍👦",
     duration: "15-20 min",
-    path: "/activity/counting-16",
+    path: "/module-1/counting-16",
     unlocked: true
   },
   {
@@ -771,7 +771,7 @@ const topicELessons = [
     description: "Play the piano and count your fingers the Math Way!",
     icon: "🎹",
     duration: "15-20 min",
-    path: "/activity/counting-17",
+    path: "/module-1/counting-17",
     unlocked: true
   },
   {
@@ -780,7 +780,7 @@ const topicELessons = [
     description: "Help organize toys in the toy store display!",
     icon: "🧸",
     duration: "15-20 min",
-    path: "/activity/counting-18",
+    path: "/module-1/counting-18",
     unlocked: true
   },
   {
@@ -789,7 +789,7 @@ const topicELessons = [
     description: "Break apart groups to find number partners hiding inside!",
     icon: "🔍",
     duration: "15-20 min", 
-    path: "/activity/counting-19",
+    path: "/module-1/counting-19",
     unlocked: true
   },
       {
@@ -808,7 +808,7 @@ const topicELessons = [
       "Use strategies to mark starting points",
       "Develop accurate counting in tricky configurations"
     ],
-      path: "/activity/counting-20",
+      path: "/module-1/counting-20",
     unlocked: true
   }
 ];
@@ -820,7 +820,7 @@ const topicFLessons = [
   description: "Count up to 4 objects and find the matching numeral!",
   icon: "🔢",
   duration: "15-20 min",
-  path: "/activity/matching-21",
+  path: "/module-1/matching-21",
   unlocked: true,
   standards: ["PK.CC.2", "PK.CC.3ab", "PK.CC.4"],
   objective: "Count up to 4 objects and match the numerals",
@@ -832,7 +832,7 @@ const topicFLessons = [
     description: "Count up to 5 objects and match them with numerals!",
     icon: "5️⃣",
     duration: "15-20 min",
-    path: "/activity/matching-22",
+    path: "/module-1/matching-22",
     unlocked: true
   },
   {
@@ -841,7 +841,7 @@ const topicFLessons = [
   description: "Roll the dice, count the dots, and create matching groups!",
   icon: "🎲",
   duration: "15-20 min",
-  path: "/activity/matching-23",
+  path: "/module-1/matching-23",
   unlocked: true,
   standards: ["PK.CC.2", "PK.CC.3ab", "PK.CC.4"],
   objective: "Make a group of up to 5 objects and match the numeral (concrete to abstract)"
@@ -852,7 +852,7 @@ const topicFLessons = [
   description: "Look at numerals and count out matching groups of objects!",
   icon: "👀",
   duration: "15-20 min",
-  path: "/activity/matching-24", 
+  path: "/module-1/matching-24", 
   unlocked: true,
   standards: ["PK.CC.2", "PK.CC.3ab", "PK.CC.4"],
   objective: "Look at a numeral and count out a group of objects to match (abstract to concrete)"
@@ -863,7 +863,7 @@ const topicFLessons = [
   description: "Create your own number book with objects and pictures for numbers 1-5!",
   icon: "📖",
   duration: "15-20 min",
-  path: "/activity/matching-25",
+  path: "/module-1/matching-25",
   unlocked: true,
   standards: ["PK.CC.2", "PK.CC.3ab", "PK.CC.4"],
   objective: "Represent numbers 1-5 using objects and pictures"
@@ -874,7 +874,7 @@ const topicFLessons = [
   description: "Finish your number book by adding numerals to your object collections!",
   icon: "✏️",
   duration: "15-20 min",
-  path: "/activity/matching-26",
+  path: "/module-1/matching-26",
   unlocked: true,
   standards: ["PK.CC.2", "PK.CC.3ab", "PK.CC.4"],
   objective: "Represent numbers 1-5 using numerals"
@@ -885,7 +885,7 @@ const topicFLessons = [
   description: "Play bingo with numerals and object groups - match and win!",
   icon: "🎯",
   duration: "15-20 min",
-  path: "/activity/matching-27",
+  path: "/module-1/matching-27",
   unlocked: true,
   standards: ["PK.CC.2", "PK.CC.3ab", "PK.CC.4"],
   objective: "Play a game involving numbers to 5"
@@ -899,7 +899,7 @@ const topicGLessons = [
   description: "Count snakes 1-5 as they leave slithery paths in the sand!",
   icon: "🐍",
   duration: "15-20 min",
-  path: "/activity/matching-28",
+  path: "/module-1/matching-28",
   unlocked: true,
   standards: ["PK.CC.3c", "PK.CC.2"],
   objective: "Count 1, 2, 3, 4, 5 objects in sequence with stories"
@@ -910,7 +910,7 @@ const topicGLessons = [
   description: "Toss beanbags into hoops and discover you need 1 more to match the number!",
   icon: "🎯",
   duration: "15-20 min",
-  path: "/activity/matching-29",
+  path: "/module-1/matching-29",
   unlocked: true,
   standards: ["PK.CC.3c", "PK.CC.2"],
   objective: "Find 1 more object needed to match a given numeral"
@@ -921,7 +921,7 @@ const topicGLessons = [
     description: "Build towers by adding 1 more cube at a time!",
     icon: "🧱",
     duration: "15-20 min",
-    path: "/activity/matching-30",
+    path: "/module-1/matching-30",
     unlocked: true,
     standards: ["PK.CC.3c", "PK.CC.5"],
     objective: "Build a tower by putting 1 more cube or block at a time"
@@ -932,7 +932,7 @@ const topicGLessons = [
     description: "Build number stairs showing 1 more with each step!",
     icon: "📶",
     duration: "15-20 min",
-    path: "/activity/matching-31",
+    path: "/module-1/matching-31",
     unlocked: true,
     standards: ["PK.CC.3c", "PK.OA.2", "PK.CC.5"],
     objective: "Build number stairs showing 1 more with cubes"
@@ -943,7 +943,7 @@ const topicGLessons = [
     description: "Count up and discover what number comes after!",
     icon: "⏭️",
     duration: "15-20 min",
-    path: "/activity/matching-32",
+    path: "/module-1/matching-32",
     unlocked: true,
     standards: ["PK.CC.3c", "PK.CC.2"],
     objective: "Count up—What comes after?"
@@ -955,7 +955,7 @@ const topicGLessons = [
     description: "Build step-down stairs with cubes from 5 to 1.",
     icon: "📉",
     duration: "15-20 min",
-    path: "/activity/matching-33",
+    path: "/module-1/matching-33",
     unlocked: true,
     standards: ["PK.CC.3c", "PK.CC.4"],
     objective: "Build descending number stairs at the concrete level"
@@ -966,7 +966,7 @@ const topicGLessons = [
     description: "Match pennies and stickers to numerals 5-4-3-2-1.",
     icon: "🪙",
     duration: "15-20 min",
-    path: "/activity/matching-34",
+    path: "/module-1/matching-34",
     unlocked: true,
     standards: ["PK.CC.3c", "PK.CC.4"],
     objective: "Build descending number stairs at pictorial/abstract levels"
@@ -977,7 +977,7 @@ const topicGLessons = [
     description: "Count down from 5 to 1 as waves wash crabs away!",
     icon: "🦀",
     duration: "15-20 min",
-    path: "/activity/matching-35",
+    path: "/module-1/matching-35",
     unlocked: true,
     standards: ["PK.CC.3c", "PK.OA.2"],
     objective: "Count 5, 4, 3, 2, 1 using a story and fingers"
@@ -988,7 +988,7 @@ const topicGLessons = [
     description: "Count down as Mr. Shark snaps up fish one by one!",
     icon: "🦈",
     duration: "15-20 min",
-    path: "/activity/matching-36",
+    path: "/module-1/matching-36",
     unlocked: true,
     standards: ["PK.CC.3c", "PK.OA.2"],
     objective: "Count 5, 4, 3, 2, 1 using a story and fingers"
@@ -999,7 +999,7 @@ const topicGLessons = [
     description: "Sort objects, count them, and build towers with numerals!",
     icon: "🏆",
     duration: "15-20 min",
-    path: "/activity/matching-37",
+    path: "/module-1/matching-37",
     unlocked: true,
     standards: ["PK.CC.1", "PK.CC.2", "PK.CC.3", "PK.CC.4", "PK.MD.2"],
     objective: "Sort, count, and represent groups with towers and numerals"
@@ -1013,7 +1013,7 @@ const module2TopicALessons = [
     description: "Find and describe circles, rectangles, squares, and triangles without naming them.",
     icon: "🕵️",
     duration: "15-20 min",
-    path: "/activity/shapes-38",
+    path: "/module-2/shapes-38",
     unlocked: true,
     standards: ["PK.G.1", "PK.G.3"],
     objective: "Find and describe 2D shapes using informal language"
@@ -1024,7 +1024,7 @@ const module2TopicALessons = [
     description: "Identify, analyze, sort, compare, and position triangles.",
     icon: "🔺",
     duration: "15-20 min",
-    path: "/activity/shapes-39",
+    path: "/module-2/shapes-39",
     unlocked: true,
     standards: ["PK.G.2", "PK.G.3", "PK.MD.2"],
     objective: "Identify, analyze, sort, compare, and position triangles"
@@ -1035,7 +1035,7 @@ const module2TopicALessons = [
     description: "Identify, analyze, sort, compare, and position rectangles and squares.",
     icon: "🟦",
     duration: "15-20 min",
-    path: "/activity/shapes-40",
+    path: "/module-2/shapes-40",
     unlocked: true,
     standards: ["PK.G.2", "PK.G.3", "PK.MD.2"],
     objective: "Identify, analyze, sort, compare, and position rectangles and squares"
@@ -1046,7 +1046,7 @@ const module2TopicALessons = [
     description: "Identify, analyze, sort, compare, and position circles.",
     icon: "⭕",
     duration: "15-20 min",
-    path: "/activity/shapes-41",
+    path: "/module-2/shapes-41",
     unlocked: true,
     standards: ["PK.G.2", "PK.G.3", "PK.MD.2"],
     objective: "Identify, analyze, sort, compare, and position circles"
@@ -1057,7 +1057,7 @@ const module2TopicALessons = [
     description: "Identify, analyze, sort, compare, and position circles, rectangles, squares, and triangles in a park scene.",
     icon: "🏞️",
     duration: "15-20 min",
-    path: "/activity/shapes-42",
+    path: "/module-2/shapes-42",
     unlocked: true,
     standards: ["PK.G.1", "PK.G.2", "PK.G.3", "PK.MD.2"],
     objective: "Identify, analyze, sort, compare, and position multiple 2D shapes"
@@ -1070,7 +1070,7 @@ const module2TopicBLessons = [
     description: "Use straws and clay to construct a triangle with three sides and three corners.",
     icon: "🔺",
     duration: "15-20 min",
-    path: "/activity/shapes-43",
+    path: "/module-2/shapes-43",
     unlocked: true,
     standards: ["PK.G.4"],
     objective: "Construct a triangle from components"
@@ -1081,7 +1081,7 @@ const module2TopicBLessons = [
     description: "Use materials to construct rectangles and squares with four sides and corners.",
     icon: "⬜",
     duration: "15-20 min",
-    path: "/activity/shapes-44",
+    path: "/module-2/shapes-44",
     unlocked: true,
     standards: ["PK.G.4"],
     objective: "Construct a rectangle and a square"
@@ -1092,7 +1092,7 @@ const module2TopicBLessons = [
     description: "Create a circle using flexible materials to understand its round shape.",
     icon: "🔵",
     duration: "15-20 min",
-    path: "/activity/shapes-45",
+    path: "/module-2/shapes-45",
     unlocked: true,
     standards: ["PK.G.4"],
     objective: "Construct a circle"
@@ -1106,7 +1106,7 @@ const module2TopicBLessons = [
 //     description: "Find and describe solid shapes (3D objects) using informal language.",
 //     icon: "🔎",
 //     duration: "15-20 min",
-//     path: "/activity/shapes-46",
+//     path: "/module-2/shapes-46",
 //     unlocked: true,
 //     standards: ["PK.G.3"],
 //     objective: "Find and describe solid shapes using informal language"
@@ -1117,7 +1117,7 @@ const module2TopicBLessons = [
 //     description: "Match solid shapes to their two-dimensional faces by analyzing footprints.",
 //     icon: "👣",
 //     duration: "15-20 min",
-//     path: "/activity/shapes-47",
+//     path: "/module-2/shapes-47",
 //     unlocked: true,
 //     standards: ["PK.G.3", "PK.MD.2"],
 //     objective: "Match solid shapes to their 2D faces"
@@ -1128,7 +1128,7 @@ const module2TopicBLessons = [
 //     description: "Analyze, sort, compare, and build with solid shapes like cubes, spheres, and cylinders.",
 //     icon: "🧱",
 //     duration: "15-20 min",
-//     path: "/activity/shapes-48",
+//     path: "/module-2/shapes-48",
 //     unlocked: true,
 //     standards: ["PK.G.3", "PK.MD.2"],
 //     objective: "Identify, analyze, sort, compare, and build with solid shapes"
@@ -1139,7 +1139,7 @@ const module2TopicBLessons = [
 //     description: "Position solid shapes to create a model of a familiar place like a classroom or park.",
 //     icon: "🏗️",
 //     duration: "15-20 min",
-//     path: "/activity/shapes-49",
+//     path: "/module-2/shapes-49",
 //     unlocked: true,
 //     standards: ["PK.G.1"],
 //     objective: "Position solid shapes to create a model"

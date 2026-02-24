@@ -91,7 +91,7 @@ const markLessonComplete = (lessonId: number) => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-4">
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center gap-4 mb-8">
-          <Button variant="outline" size="icon" onClick={() => navigate("/activities")}>
+          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-1")}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>

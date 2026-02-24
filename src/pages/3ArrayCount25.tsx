@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -13,6 +13,7 @@ const ArrayCount25 = () => {
   const [showGame, setShowGame] = useState(false);
   const [placed, setPlaced] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
+  const [showFeedback, setShowFeedback] = useState<'correct' | 'incorrect' | null>(null);
 
   const animals = [
     { emoji: '🐭', color: 'bg-stone-200' }, { emoji: '🐭', color: 'bg-stone-200' }, { emoji: '🐭', color: 'bg-stone-200' },
@@ -23,25 +24,44 @@ const ArrayCount25 = () => {
   const markLessonComplete = () => {
     const saved = localStorage.getItem("ethio-stem-m3-completed");
     const completed = saved ? JSON.parse(saved) : [];
-    if (!completed.includes("3-array-count-25")) { completed.push("3-array-count-25"); localStorage.setItem("ethio-stem-m3-completed", JSON.stringify(completed)); }
+    if (!completed.includes("lesson-25")) {
+      completed.push("lesson-25");
+      localStorage.setItem("ethio-stem-m3-completed", JSON.stringify(completed));
+    }
   };
 
   const handleSlotClick = (index: number) => {
-    if (index === placed && placed < 9) { const next = placed + 1; setPlaced(next); speakNumber(next); }
+    if (index === placed && placed < 9) {
+      const next = placed + 1;
+      setPlaced(next);
+      speakNumber(next);
+      if (next === 9) {
+        setTimeout(() => setShowFeedback('correct'), 500);
+      }
+    }
+  };
+
+  const nextStep = () => {
+    setShowFeedback(null);
+    markLessonComplete();
+    setIsComplete(true);
   };
 
   useEffect(() => {
-    if (placed === 9) { const timer = setTimeout(() => { markLessonComplete(); setIsComplete(true); }, 1500); return () => clearTimeout(timer); }
-  }, [placed]);
+    if (showFeedback === 'correct') {
+      const timer = setTimeout(() => { nextStep(); }, 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [showFeedback]);
 
-  const resetActivity = () => { setShowGame(false); setPlaced(0); setIsComplete(false); };
+  const resetActivity = () => { setShowGame(false); setPlaced(0); setIsComplete(false); setShowFeedback(null); };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-violet-50 to-white p-3 font-fredoka overflow-x-hidden">
-      <div className="max-w-3xl mx-auto">
-        <div className="flex items-center gap-3 mb-2">
-          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=3-array-count-25")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
-            <ArrowLeft className="w-4 h-4 text-indigo-600" />
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-violet-50 to-white p-4 font-fredoka overflow-x-hidden">
+      <div className="max-w-4xl mx-auto">
+        <div className="flex items-center gap-4 mb-8">
+          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=lesson-25")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
+            <ArrowLeft className="w-5 h-5 text-indigo-600" />
           </Button>
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded-full uppercase tracking-widest font-nunito">Lesson 25</span>
@@ -70,7 +90,8 @@ const ArrayCount25 = () => {
                       const isNext = i === placed;
                       return (
                         <div key={i} onClick={() => handleSlotClick(i)}
-                          className={`relative w-14 h-14 lg:w-16 lg:h-16 rounded-xl border-2 border-white shadow-xl flex items-center justify-center text-2xl transition-all cursor-pointer ${isPlaced ? `${animals[i].color} ring-3 ring-yellow-300` : isNext ? 'bg-white/80 animate-pulse hover:scale-110 border-dashed border-indigo-300' : 'bg-white/50 opacity-40 border-dashed border-indigo-200'}`}>
+                          className={`w-24 h-24 rounded-3xl border-4 border-white shadow-xl flex items-center justify-center text-5xl transition-all cursor-pointer relative ${isPlaced ? `${animals[i].color} ring-4 ring-yellow-300` : isNext ? 'bg-white/80 animate-pulse hover:scale-110 border-dashed border-indigo-300' : 'bg-white/50 opacity-40 border-dashed border-indigo-200'}`}
+                        >
                           {isPlaced ? animals[i].emoji : isNext ? '👆' : ''}
                           {isPlaced && <span className="absolute -bottom-0.5 -right-0.5 bg-indigo-500 text-white w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-bold border border-white">{i + 1}</span>}
                         </div>
@@ -86,15 +107,35 @@ const ArrayCount25 = () => {
             )}
 
             {isComplete && (
-              <Card className="bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-600 shadow-2xl rounded-2xl overflow-hidden p-6 lg:p-10 text-center text-white space-y-4 animate-in zoom-in-95 duration-700">
-                <div className="text-6xl animate-bounce">🎆</div>
-                <h2 className="text-3xl lg:text-4xl drop-shadow-xl">Array Expert!</h2>
-                <p className="text-base lg:text-lg font-nunito max-w-xl mx-auto leading-relaxed">You made a perfect square of 9! 3 rows × 3 columns.</p>
-                <div className="flex gap-3 w-full pt-2">
-                  <Button onClick={resetActivity} className="h-12 flex-1 bg-white/10 hover:bg-white/20 text-white text-lg rounded-2xl border-2 border-white/20">Again! 🔄</Button>
-                  <Button onClick={() => navigate("/activities/module-3?last=3-array-count-25")} className="h-12 flex-1 bg-white text-indigo-600 hover:bg-rose-50 text-lg rounded-2xl shadow-2xl">Yay! ✨</Button>
+              <Card className="bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-600 shadow-2xl rounded-[4rem] overflow-hidden p-16 text-center text-white space-y-10 animate-in zoom-in-95 duration-700">
+                <div className="text-9xl animate-bounce">🎆</div>
+                <h2 className="text-7xl drop-shadow-xl">Array Expert!</h2>
+                <p className="text-3xl font-nunito max-w-2xl mx-auto leading-relaxed">You made a perfect square of 9!<br />3 rows and 3 columns make 9 animals total.</p>
+                <div className="flex gap-4 w-full pt-8">
+                  <Button onClick={resetActivity} className="h-24 flex-1 bg-white/10 hover:bg-white/20 text-white text-3xl rounded-[2rem] border-4 border-white/20">
+                    Again! 🔄
+                  </Button>
+                  <Button onClick={() => navigate("/activities/module-3?last=lesson-25")} className="h-24 flex-1 bg-white text-indigo-600 hover:bg-rose-50 text-3xl rounded-[2rem] shadow-2xl">
+                    Yay! ✨
+                  </Button>
                 </div>
               </Card>
+            )}
+
+            {showFeedback && (
+              <div className="fixed top-24 right-6 z-[100] animate-in slide-in-from-right-4 fade-in duration-300">
+                <Card className={`flex items-center gap-4 px-6 py-4 shadow-2xl rounded-2xl border-4 ${showFeedback === 'correct' ? 'bg-green-50 border-green-400' : 'bg-red-50 border-red-400'}`}>
+                  <span className="text-4xl">{showFeedback === 'correct' ? '🌟' : '🧐'}</span>
+                  <span className={`text-2xl font-fredoka font-bold ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
+                    {showFeedback === 'correct' ? 'Great!' : 'Try Again!'}
+                  </span>
+                  {showFeedback !== 'correct' && (
+                    <Button onClick={() => setShowFeedback(null)} className="ml-2 px-5 py-3 text-xl font-fredoka rounded-xl border-b-4 bg-red-500 hover:bg-red-600 border-red-700 text-white">
+                      OK 👍
+                    </Button>
+                  )}
+                </Card>
+              </div>
             )}
 
             {!isComplete && (

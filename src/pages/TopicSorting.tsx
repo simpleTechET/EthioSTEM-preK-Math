@@ -12,21 +12,21 @@ const TopicSorting = () => {
       id: 5,
       title: "Lesson 5: Sort into Two Groups",
       description: "Sort objects into two different groups",
-      path: "/activity/sorting-5",
+      path: "/module-1/sorting-5",
       completed: false
     },
     {
       id: 6,
       title: "Lesson 6: Sort by Attribute",
       description: "Sort objects by color, size, or type",
-      path: "/activity/sorting-6",
+      path: "/module-1/sorting-6",
       completed: false
     },
     {
       id: 7,
       title: "Lesson 7: Sort Two Different Ways",
       description: "Sort the same objects in multiple ways",
-      path: "/activity/sorting-7",
+      path: "/module-1/sorting-7",
       completed: false
     }
   ];

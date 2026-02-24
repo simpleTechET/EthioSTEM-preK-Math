@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -16,48 +16,67 @@ const speakNumber = (num: number) => {
 const FingerCount14 = () => {
   const navigate = useNavigate();
   const [showGame, setShowGame] = useState(false);
+  const [currentStep, setCurrentStep] = useState<'hatch5' | 'hatch3' | 'complete'>('hatch5');
   const [hatched, setHatched] = useState(0);
-  const [isComplete, setIsComplete] = useState(false);
+  const [showFeedback, setShowFeedback] = useState<'correct' | 'incorrect' | null>(null);
 
   const markLessonComplete = () => {
     const saved = localStorage.getItem("ethio-stem-m3-completed");
     const completed = saved ? JSON.parse(saved) : [];
-    if (!completed.includes("3-finger-count-14")) {
-      completed.push("3-finger-count-14");
+    if (!completed.includes("lesson-14")) {
+      completed.push("lesson-14");
       localStorage.setItem("ethio-stem-m3-completed", JSON.stringify(completed));
     }
   };
 
   const handleEggClick = (index: number) => {
-    if (index === hatched && hatched < 8) {
+    if (index === hatched) {
       const next = hatched + 1;
       setHatched(next);
       speakNumber(next);
+
+      if (next === 5 && currentStep === 'hatch5') {
+        setTimeout(() => setShowFeedback('correct'), 500);
+      } else if (next === 8 && currentStep === 'hatch3') {
+        setTimeout(() => {
+          setShowFeedback('correct');
+          markLessonComplete();
+        }, 500);
+      }
     }
   };
 
-  useEffect(() => {
-    if (hatched === 8) {
-      const timer = setTimeout(() => {
-        markLessonComplete();
-        setIsComplete(true);
-      }, 1500);
-      return () => clearTimeout(timer);
+  const nextStep = () => {
+    setShowFeedback(null);
+    if (currentStep === 'hatch5') {
+      setCurrentStep('hatch3');
+    } else {
+      setCurrentStep('complete');
     }
-  }, [hatched]);
+  };
 
   const resetActivity = () => {
     setShowGame(false);
     setHatched(0);
-    setIsComplete(false);
+    setCurrentStep('hatch5');
+    setShowFeedback(null);
   };
 
+  useEffect(() => {
+    if (showFeedback === 'correct') {
+      const timer = setTimeout(() => {
+        nextStep();
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [showFeedback]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-orange-50 to-white p-3 font-fredoka overflow-x-hidden">
-      <div className="max-w-3xl mx-auto">
-        <div className="flex items-center gap-3 mb-2">
-          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=3-finger-count-14")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
-            <ArrowLeft className="w-4 h-4 text-amber-600" />
+    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-orange-50 to-white p-4 font-fredoka overflow-x-hidden">
+      <div className="max-w-5xl mx-auto">
+        <div className="flex items-center gap-4 mb-8">
+          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=lesson-14")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
+            <ArrowLeft className="w-5 h-5 text-amber-600" />
           </Button>
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full uppercase tracking-widest font-nunito">Lesson 14</span>
@@ -80,23 +99,23 @@ const FingerCount14 = () => {
             <p className="text-xs text-amber-400 font-bold uppercase tracking-widest font-nunito">Topic C: How Many with 8 Objects</p>
           </Card>
         ) : (
-          <div className="space-y-3">
-            {!isComplete && (
-              <Card className="bg-white/80 border-4 border-white shadow-2xl rounded-2xl p-4 lg:p-6 text-center space-y-3 animate-in slide-in-from-bottom-8">
-                <h3 className="text-lg lg:text-2xl text-amber-700">
-                  {hatched < 5 ? "Hatch Nest 1!" : "Hatch Nest 2!"}
+          <div className="space-y-6">
+            {currentStep !== 'complete' && (
+              <Card className="bg-white/80 border-4 border-white shadow-2xl rounded-[3rem] p-10 text-center space-y-10 animate-in slide-in-from-bottom-8">
+                <h3 className="text-4xl text-amber-700">
+                  {currentStep === 'hatch5' ? "Hatch Nest 1!" : "Hatch Nest 2!"}
                 </h3>
 
                 <div className="flex justify-center gap-6 lg:gap-8 py-3 bg-yellow-100/30 rounded-2xl border-4 border-white shadow-inner max-w-2xl mx-auto items-end px-4 overflow-hidden">
                   {/* Nest 1 */}
-                  <div className={`flex flex-col items-center gap-2 transition-all duration-500 ${hatched >= 5 ? 'opacity-50 scale-90' : ''}`}>
-                    <div className="flex gap-1.5 items-end h-28 lg:h-32">
+                  <div className={`flex flex-col items-center gap-4 transition-all duration-500 ${currentStep === 'hatch3' ? 'opacity-50 scale-90' : 'scale-110'}`}>
+                    <div className="flex gap-3 items-end h-48">
                       {[0, 1, 2, 3, 4].map((i) => {
                         const isHatched = i < hatched;
-                        const isNext = i === hatched && hatched < 5;
+                        const isNext = i === hatched && currentStep === 'hatch5';
                         return (
-                          <div key={i} onClick={() => handleEggClick(i)} className="flex flex-col items-center cursor-pointer">
-                            <div className={`w-10 h-24 lg:w-11 lg:h-28 rounded-t-full border-3 border-white shadow-lg transition-all duration-300 flex flex-col items-center justify-center gap-0.5 ${isHatched ? 'bg-yellow-400' : isNext ? 'bg-yellow-200 animate-pulse hover:scale-110' : 'bg-yellow-200 opacity-40'}`}>
+                          <div key={i} onClick={() => handleEggClick(i)} className={`flex flex-col items-center ${isNext ? 'cursor-pointer' : ''}`}>
+                            <div className={`w-14 h-32 rounded-t-full border-4 border-white shadow-lg transition-all duration-300 flex flex-col items-center justify-center gap-1 ${isHatched ? 'bg-yellow-400' : isNext ? 'bg-yellow-200 animate-pulse hover:scale-110 border-amber-400' : 'bg-yellow-200 opacity-40'}`}>
                               {isHatched ? (
                                 <>
                                   <span className="text-xl animate-bounce">🐥</span>
@@ -115,14 +134,14 @@ const FingerCount14 = () => {
                   </div>
 
                   {/* Nest 2 */}
-                  <div className={`flex flex-col items-center gap-2 transition-all duration-500 ${hatched < 5 ? 'opacity-50 scale-90' : ''}`}>
-                    <div className="flex gap-1.5 items-end h-28 lg:h-32">
+                  <div className={`flex flex-col items-center gap-4 transition-all duration-500 ${currentStep === 'hatch5' ? 'opacity-50 scale-90' : 'scale-110'}`}>
+                    <div className="flex gap-3 items-end h-48">
                       {[5, 6, 7].map((i) => {
                         const isHatched = i < hatched;
-                        const isNext = i === hatched && hatched >= 5;
+                        const isNext = i === hatched && currentStep === 'hatch3';
                         return (
-                          <div key={i} onClick={() => handleEggClick(i)} className="flex flex-col items-center cursor-pointer">
-                            <div className={`w-10 h-24 lg:w-11 lg:h-28 rounded-t-full border-3 border-white shadow-lg transition-all duration-300 flex flex-col items-center justify-center gap-0.5 ${isHatched ? 'bg-orange-400' : isNext ? 'bg-orange-200 animate-pulse hover:scale-110' : 'bg-orange-200 opacity-40'}`}>
+                          <div key={i} onClick={() => handleEggClick(i)} className={`flex flex-col items-center ${isNext ? 'cursor-pointer' : ''}`}>
+                            <div className={`w-14 h-32 rounded-t-full border-4 border-white shadow-lg transition-all duration-300 flex flex-col items-center justify-center gap-1 ${isHatched ? 'bg-orange-400' : isNext ? 'bg-orange-200 animate-pulse hover:scale-110 border-orange-400' : 'bg-orange-200 opacity-40'}`}>
                               {isHatched ? (
                                 <>
                                   <span className="text-xl animate-bounce">🐥</span>
@@ -150,22 +169,46 @@ const FingerCount14 = () => {
               </Card>
             )}
 
-            {isComplete && (
-              <Card className="bg-gradient-to-br from-amber-600 via-orange-600 to-yellow-600 shadow-2xl rounded-2xl overflow-hidden p-6 lg:p-10 text-center text-white space-y-4 animate-in zoom-in-95 duration-700">
-                <div className="text-6xl animate-bounce">🐥</div>
-                <h2 className="text-3xl lg:text-4xl drop-shadow-xl">Finger Star!</h2>
-                <p className="text-base lg:text-lg font-nunito max-w-xl mx-auto leading-relaxed">
-                  You counted all 8 fingers! 5 and 3 more is 8. You are a math genius!
+            {currentStep === 'complete' && (
+              <Card className="bg-gradient-to-br from-amber-600 via-orange-600 to-yellow-600 shadow-2xl rounded-[4rem] overflow-hidden p-16 text-center text-white space-y-10 animate-in zoom-in-95 duration-700">
+                <div className="text-9xl animate-bounce">🐥</div>
+                <h2 className="text-7xl drop-shadow-xl">Finger Star!</h2>
+                <p className="text-3xl font-nunito max-w-2xl mx-auto leading-relaxed">
+                  You counted all 8 fingers!
+                  <br />
+                  5 and 3 more is 8. You are a math genius!
                 </p>
-                <div className="flex gap-3 w-full pt-2">
-                  <Button onClick={resetActivity} className="h-12 flex-1 bg-white/10 hover:bg-white/20 text-white text-lg rounded-2xl border-2 border-white/20">Again! 🔄</Button>
-                  <Button onClick={() => navigate("/activities/module-3?last=3-finger-count-14")} className="h-12 flex-1 bg-white text-amber-600 hover:bg-amber-50 text-lg rounded-2xl shadow-2xl">Yay! ✨</Button>
+                <div className="flex gap-4 w-full pt-8">
+                  <Button onClick={resetActivity} className="h-24 flex-1 bg-white/10 hover:bg-white/20 text-white text-3xl rounded-[2rem] border-4 border-white/20">
+                    Again! 🔄
+                  </Button>
+                  <Button onClick={() => navigate("/activities/module-3?last=lesson-14")} className="h-24 flex-1 bg-white text-amber-600 hover:bg-amber-50 text-3xl rounded-[2rem] shadow-2xl">
+                    Yay! ✨
+                  </Button>
                 </div>
               </Card>
             )}
 
-            {!isComplete && (
-              <Button onClick={() => setShowGame(false)} variant="ghost" className="text-amber-400 hover:text-amber-600 w-full py-1 text-sm font-bold font-nunito">← Back to Instructions</Button>
+            {showFeedback && (
+              <div className="fixed top-24 right-6 z-[100] animate-in slide-in-from-right-4 fade-in duration-300">
+                <Card className={`flex items-center gap-4 px-6 py-4 shadow-2xl rounded-2xl border-4 ${showFeedback === 'correct' ? 'bg-green-50 border-green-400' : 'bg-red-50 border-red-400'}`}>
+                  <span className="text-4xl">{showFeedback === 'correct' ? '🌟' : '🧐'}</span>
+                  <span className={`text-2xl font-fredoka font-bold ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
+                    {showFeedback === 'correct' ? 'Great!' : 'Try Again!'}
+                  </span>
+                  {showFeedback !== 'correct' && (
+                    <Button onClick={() => setShowFeedback(null)} className="ml-2 px-5 py-3 text-xl font-fredoka rounded-xl border-b-4 bg-red-500 hover:bg-red-600 border-red-700 text-white">
+                      OK 👍
+                    </Button>
+                  )}
+                </Card>
+              </div>
+            )}
+
+            {currentStep !== 'complete' && (
+              <Button onClick={() => setShowGame(false)} variant="ghost" className="text-amber-400 hover:text-amber-600 w-full py-2 font-bold font-nunito">
+                ← Back to Instructions
+              </Button>
             )}
           </div>
         )}

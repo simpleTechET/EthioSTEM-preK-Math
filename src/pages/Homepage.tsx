@@ -24,7 +24,7 @@ const Homepage = () => {
               </div>
             </div>
             <div className="flex gap-2">
-              <Link to="/activities">
+              <Link to="/activities/module-1">
                 <Button variant="ghost" size="sm">Activities</Button>
               </Link>
               <Link to="/parent-guide">
@@ -66,7 +66,7 @@ const Homepage = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/activities">
+              <Link to="/activities/module-1">
                 <Button size="lg" className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 shadow-playful">
                   Start Learning
                   <ArrowRight className="w-5 h-5 ml-2" />
@@ -141,7 +141,7 @@ const Homepage = () => {
                     <BookOpen className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
                     <span>Based on Eureka Math curriculum</span>
                   </div>
-                  <Link to="/activities" className="block">
+                  <Link to="/activities/module-1" className="block">
                     <Button className="w-full mt-4 bg-primary hover:bg-primary/90">
                       Start Module 1
                       <ArrowRight className="w-4 h-4 ml-2" />
@@ -304,7 +304,7 @@ const Homepage = () => {
                 Join thousands of Ethiopian families building strong foundations in math
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to="/activities">
+                <Link to="/activities/module-1">
                   <Button size="lg" className="text-lg px-8 py-6 bg-background text-foreground hover:bg-background/90">
                     Begin Module 1
                     <ArrowRight className="w-5 h-5 ml-2" />
@@ -358,7 +358,7 @@ const Homepage = () => {
             <div>
               <h4 className="font-semibold text-foreground mb-4">Quick Links</h4>
               <ul className="space-y-2 text-sm">
-                <li><Link to="/activities" className="hover:text-foreground transition-colors">Activities</Link></li>
+                <li><Link to="/activities/module-1" className="hover:text-foreground transition-colors">Activities</Link></li>
                 <li><Link to="/parent-guide" className="hover:text-foreground transition-colors">Parent Guide</Link></li>
                 <li><a href="#" className="hover:text-foreground transition-colors">About Us</a></li>
                 <li><a href="#" className="hover:text-foreground transition-colors">Contact</a></li>

@@ -12,28 +12,28 @@ const TopicCounting3 = () => {
       id: 8,
       title: "Lesson 8: Count Up to 3",
       description: "Learn to count up to 3 objects",
-      path: "/activity/counting-8",
+      path: "/module-1/counting-8",
       completed: false
     },
     {
       id: 9,
       title: "Lesson 9: Count 3 Objects in Different Arrangements",
       description: "Practice counting 3 objects arranged in various ways",
-      path: "/activity/counting-9",
+      path: "/module-1/counting-9",
       completed: false
     },
     {
       id: 10,
       title: "Lesson 10: Count Objects and Match Quantities",
       description: "Count objects and match with the correct number of items",
-      path: "/activity/counting-10",
+      path: "/module-1/counting-10",
       completed: false
     },
     {
       id: 11,
       title: "Lesson 11: Advanced Counting to 4",
       description: "Learn to count up to 4 objects with games",
-      path: "/activity/counting-11",
+      path: "/module-1/counting-11",
       completed: false
     }
   ];

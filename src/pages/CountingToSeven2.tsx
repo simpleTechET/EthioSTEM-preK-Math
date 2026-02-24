@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -9,12 +9,13 @@ const CountingToSeven2 = () => {
   const [showGame, setShowGame] = useState(false);
   const [count, setCount] = useState(5);
   const [justAdded, setJustAdded] = useState(false);
+  const [showFeedback, setShowFeedback] = useState<'correct' | 'incorrect' | null>(null);
 
   const markLessonComplete = () => {
     const saved = localStorage.getItem("ethio-stem-m3-completed");
     const completed = saved ? JSON.parse(saved) : [];
-    if (!completed.includes("3-crossing-creek-lesson-2")) {
-      completed.push("3-crossing-creek-lesson-2");
+    if (!completed.includes("lesson-2")) {
+      completed.push("lesson-2");
       localStorage.setItem("ethio-stem-m3-completed", JSON.stringify(completed));
     }
   };
@@ -22,11 +23,16 @@ const CountingToSeven2 = () => {
   const addOne = () => {
     if (count < 7) {
       setJustAdded(true);
-      setCount((c) => c + 1);
+      const newCount = count + 1;
+      setCount(newCount);
       setTimeout(() => setJustAdded(false), 1200);
-    }
-    if (count === 6) {
-      markLessonComplete();
+
+      if (newCount === 7) {
+        setTimeout(() => {
+          setShowFeedback('correct');
+          markLessonComplete();
+        }, 1000);
+      }
     }
   };
 
@@ -34,16 +40,17 @@ const CountingToSeven2 = () => {
     setShowGame(false);
     setCount(5);
     setJustAdded(false);
+    setShowFeedback(null);
   };
 
-  const isComplete = count >= 7;
+  const isComplete = count >= 7 && showFeedback === null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-white p-4 font-nunito overflow-x-hidden">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
+          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=lesson-2")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
@@ -82,7 +89,7 @@ const CountingToSeven2 = () => {
               <Button onClick={resetActivity} className="h-20 flex-1 bg-white/10 hover:bg-white/20 text-white text-2xl font-fredoka rounded-[2rem] border-4 border-white/20">
                 Again! 🔄
               </Button>
-              <Button onClick={() => navigate("/activities/module-3")} className="h-20 flex-1 bg-white text-blue-600 hover:bg-blue-50 text-2xl font-fredoka rounded-[2rem] shadow-2xl">
+              <Button onClick={() => navigate("/activities/module-3?last=lesson-2")} className="h-20 flex-1 bg-white text-blue-600 hover:bg-blue-50 text-2xl font-fredoka rounded-[2rem] shadow-2xl">
                 Done! ✨
               </Button>
             </div>
@@ -128,9 +135,17 @@ const CountingToSeven2 = () => {
                 <p className="text-3xl font-fredoka text-blue-800">
                   We have <span className={`text-6xl drop-shadow-sm font-bold transition-all duration-300 ${justAdded ? 'text-yellow-600 scale-110 inline-block' : 'text-blue-600'}`}>{count}</span> stones!
                 </p>
+                <div className="flex gap-4 w-full pt-8">
+                  <Button onClick={resetActivity} className="h-24 flex-1 bg-white/10 hover:bg-white/20 text-white text-3xl font-fredoka rounded-[2rem] border-4 border-white/20">
+                    Again! 🔄
+                  </Button>
+                  <Button onClick={() => navigate("/activities/module-3?last=lesson-2")} className="h-24 flex-1 bg-white text-blue-600 hover:bg-blue-50 text-3xl font-fredoka rounded-[2rem] shadow-2xl">
+                    Yay! ✨
+                  </Button>
+                </div>
               </div>
 
-              <Button onClick={addOne} className="bg-rose-500 hover:bg-rose-600 text-white py-10 px-14 text-3xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-rose-700 transition-all active:scale-95 hover:scale-105">
+              <Button onClick={addOne} disabled={count >= 7} className="bg-rose-500 hover:bg-rose-600 text-white py-10 px-14 text-3xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-rose-700 transition-all active:scale-95 hover:scale-105">
                 Drop 1 More Stone! ➕
               </Button>
             </Card>
@@ -138,6 +153,22 @@ const CountingToSeven2 = () => {
             <Button onClick={() => setShowGame(false)} variant="ghost" className="text-blue-400 hover:text-blue-600 w-full py-2 font-bold font-nunito">
               ← Back to Instructions
             </Button>
+          </div>
+        )}
+
+        {showFeedback && (
+          <div className="fixed top-24 right-6 z-[100] animate-in slide-in-from-right-4 fade-in duration-300">
+            <Card className={`flex items-center gap-4 px-6 py-4 shadow-2xl rounded-2xl border-4 ${showFeedback === 'correct' ? 'bg-green-50 border-green-400' : 'bg-red-50 border-red-400'}`}>
+              <span className="text-4xl">{showFeedback === 'correct' ? '🌟' : '🧐'}</span>
+              <span className={`text-2xl font-fredoka font-bold ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
+                {showFeedback === 'correct' ? 'Great!' : 'Try Again!'}
+              </span>
+              {showFeedback !== 'correct' && (
+                <Button onClick={() => setShowFeedback(null)} className="ml-2 px-5 py-3 text-xl font-fredoka rounded-xl border-b-4 bg-red-500 hover:bg-red-600 border-red-700 text-white">
+                  OK 👍
+                </Button>
+              )}
+            </Card>
           </div>
         )}
       </div>

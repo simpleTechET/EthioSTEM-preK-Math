@@ -159,7 +159,7 @@ const CountingMatching30 = () => {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => navigate("/activities")}
+            onClick={() => navigate("/activities/module-1")}
             className="rounded-full"
           >
             <ArrowLeft className="h-6 w-6" />
@@ -576,7 +576,7 @@ const CountingMatching30 = () => {
             {/* Back Button */}
             <div className="mt-6 text-center">
               <Button
-                onClick={() => navigate("/activities")}
+                onClick={() => navigate("/activities/module-1")}
                 size="lg"
                 className="bg-amber-500 hover:bg-amber-600"
               >

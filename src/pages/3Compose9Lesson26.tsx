@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -52,6 +52,19 @@ const Compose9Lesson26 = () => {
     setBusGroups(0);
     setShowFeedback(null);
   };
+
+  useEffect(() => {
+
+    if (showFeedback === 'correct') {
+
+      const timer = setTimeout(() => { nextStep(); }, 1200);
+
+      return () => clearTimeout(timer);
+
+    }
+
+  }, [showFeedback]);
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-white p-3 font-fredoka overflow-x-hidden">
@@ -146,7 +159,7 @@ const Compose9Lesson26 = () => {
                   <Button onClick={resetActivity} className="h-12 flex-1 bg-white/10 hover:bg-white/20 text-white text-lg rounded-2xl border-2 border-white/20">
                     Again! 🔄
                   </Button>
-                  <Button onClick={() => navigate("/activities/module-3?last=3-compose-9-26")} className="h-12 flex-1 bg-white text-blue-600 hover:bg-rose-50 text-lg rounded-2xl shadow-2xl">
+                  <Button onClick={() => navigate("/activities/module-3?last=lesson-26")} className="h-24 flex-1 bg-white text-blue-600 hover:bg-rose-50 text-3xl rounded-[2rem] shadow-2xl">
                     Yay! ✨
                   </Button>
                 </div>
@@ -154,15 +167,17 @@ const Compose9Lesson26 = () => {
             )}
 
             {showFeedback && (
-              <div className="fixed bottom-[33%] right-[25%] z-[100] animate-in slide-in-from-right-4 fade-in duration-300">
-                <Card className={`flex items-center gap-3 px-4 py-3 shadow-2xl rounded-xl border-2 ${showFeedback === 'correct' ? 'bg-green-50 border-green-400' : 'bg-red-50 border-red-400'}`}>
-                  <span className="text-2xl">{showFeedback === 'correct' ? '🌟' : '🧐'}</span>
-                  <h4 className={`text-lg font-fredoka ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
-                    {showFeedback === 'correct' ? (currentStep === 'flaps' ? '9!' : 'Perfect!') : 'Try Again!'}
-                  </h4>
-                  <Button onClick={nextStep} size="sm" className={`ml-1 rounded-lg text-sm px-3 py-1 ${showFeedback === 'correct' ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'}`}>
-                    {currentStep === 'flaps' ? 'Next! ➡️' : 'Finish! ➡️'}
-                  </Button>
+              <div className="fixed top-24 right-6 z-[100] animate-in slide-in-from-right-4 fade-in duration-300">
+                <Card className={`flex items-center gap-4 px-6 py-4 shadow-2xl rounded-2xl border-4 ${showFeedback === 'correct' ? 'bg-green-50 border-green-400' : 'bg-red-50 border-red-400'}`}>
+                  <span className="text-4xl">{showFeedback === 'correct' ? '🌟' : '🧐'}</span>
+                  <span className={`text-2xl font-fredoka font-bold ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
+                    {showFeedback === 'correct' ? 'Great!' : 'Try Again!'}
+                  </span>
+                  {showFeedback !== 'correct' && (
+                    <Button onClick={() => setShowFeedback(null)} className="ml-2 px-5 py-3 text-xl font-fredoka rounded-xl border-b-4 bg-red-500 hover:bg-red-600 border-red-700 text-white">
+                      OK 👍
+                    </Button>
+                  )}
                 </Card>
               </div>
             )}

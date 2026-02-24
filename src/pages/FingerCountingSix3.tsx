@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -9,12 +9,13 @@ const FingerCountingSix3 = () => {
   const [showGame, setShowGame] = useState(false);
   const [count, setCount] = useState(0);
   const [justAdded, setJustAdded] = useState(false);
+  const [showFeedback, setShowFeedback] = useState<'correct' | 'incorrect' | null>(null);
 
   const markLessonComplete = () => {
     const saved = localStorage.getItem("ethio-stem-m3-completed");
     const completed = saved ? JSON.parse(saved) : [];
-    if (!completed.includes("3-finger-counting-6-lesson-3")) {
-      completed.push("3-finger-counting-6-lesson-3");
+    if (!completed.includes("lesson-3")) {
+      completed.push("lesson-3");
       localStorage.setItem("ethio-stem-m3-completed", JSON.stringify(completed));
     }
   };
@@ -22,11 +23,16 @@ const FingerCountingSix3 = () => {
   const hatchOne = () => {
     if (count < 6) {
       setJustAdded(true);
-      setCount((c) => c + 1);
+      const newCount = count + 1;
+      setCount(newCount);
       setTimeout(() => setJustAdded(false), 1200);
-    }
-    if (count === 5) {
-      markLessonComplete();
+
+      if (newCount === 6) {
+        setTimeout(() => {
+          setShowFeedback('correct');
+          markLessonComplete();
+        }, 1000);
+      }
     }
   };
 
@@ -34,12 +40,10 @@ const FingerCountingSix3 = () => {
     setShowGame(false);
     setCount(0);
     setJustAdded(false);
+    setShowFeedback(null);
   };
 
-  const isComplete = count >= 6;
-
-  // Math Way: left pinky (index 0) to left thumb (4), then right thumb (5)
-  const fingerLabels = ["L pinky", "L ring", "L middle", "L index", "L thumb", "R thumb"];
+  const isComplete = count >= 6 && showFeedback === null; // After 'correct' feedback closes or triggers completion UI
 
   const renderHands = () => {
     const leftCount = Math.min(count, 5);
@@ -102,7 +106,7 @@ const FingerCountingSix3 = () => {
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-yellow-50 to-white p-4 font-nunito overflow-x-hidden">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center gap-4 mb-8">
-          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
+          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=lesson-3")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
@@ -129,7 +133,7 @@ const FingerCountingSix3 = () => {
               Start Hatching! 🐣
             </Button>
           </Card>
-        ) : isComplete ? (
+        ) : count === 6 && showFeedback !== 'correct' ? (
           <Card className="bg-gradient-to-br from-amber-600 via-yellow-600 to-orange-600 shadow-2xl rounded-[4rem] p-16 text-center text-white space-y-10 animate-in zoom-in-95 duration-700">
             <div className="text-9xl animate-bounce">🐣</div>
             <h2 className="text-6xl font-fredoka drop-shadow-xl">Finger Master!</h2>
@@ -141,7 +145,7 @@ const FingerCountingSix3 = () => {
               <Button onClick={resetActivity} className="h-20 flex-1 bg-white/10 hover:bg-white/20 text-white text-2xl font-fredoka rounded-[2rem] border-4 border-white/20">
                 Again! 🔄
               </Button>
-              <Button onClick={() => navigate("/activities/module-3")} className="h-20 flex-1 bg-white text-amber-600 hover:bg-amber-50 text-2xl font-fredoka rounded-[2rem] shadow-2xl">
+              <Button onClick={() => navigate("/activities/module-3?last=lesson-3")} className="h-20 flex-1 bg-white text-amber-600 hover:bg-amber-50 text-2xl font-fredoka rounded-[2rem] shadow-2xl">
                 Done! ✨
               </Button>
             </div>
@@ -179,7 +183,7 @@ const FingerCountingSix3 = () => {
                 </p>
               </div>
 
-              <Button onClick={hatchOne} className="bg-yellow-500 hover:bg-yellow-600 text-white py-10 px-14 text-3xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-yellow-700 transition-all active:scale-95 hover:scale-105">
+              <Button onClick={hatchOne} disabled={count >= 6} className="bg-yellow-500 hover:bg-yellow-600 text-white py-10 px-14 text-3xl font-fredoka rounded-[2rem] shadow-xl border-b-8 border-yellow-700 transition-all active:scale-95 hover:scale-105">
                 {count === 0 ? "Hatch First Chick! 🐣" : "Hatch 1 More! 🐣"}
               </Button>
             </Card>
@@ -187,6 +191,22 @@ const FingerCountingSix3 = () => {
             <Button onClick={() => setShowGame(false)} variant="ghost" className="text-amber-400 hover:text-amber-600 w-full py-2 font-bold font-nunito">
               ← Back to Instructions
             </Button>
+          </div>
+        )}
+
+        {showFeedback && (
+          <div className="fixed top-24 right-6 z-[100] animate-in slide-in-from-right-4 fade-in duration-300">
+            <Card className={`flex items-center gap-4 px-6 py-4 shadow-2xl rounded-2xl border-4 ${showFeedback === 'correct' ? 'bg-green-50 border-green-400' : 'bg-red-50 border-red-400'}`}>
+              <span className="text-4xl">{showFeedback === 'correct' ? '🌟' : '🧐'}</span>
+              <span className={`text-2xl font-fredoka font-bold ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
+                {showFeedback === 'correct' ? 'Great!' : 'Try Again!'}
+              </span>
+              {showFeedback !== 'correct' && (
+                <Button onClick={() => setShowFeedback(null)} className="ml-2 px-5 py-3 text-xl font-fredoka rounded-xl border-b-4 bg-red-500 hover:bg-red-600 border-red-700 text-white">
+                  OK 👍
+                </Button>
+              )}
+            </Card>
           </div>
         )}
       </div>

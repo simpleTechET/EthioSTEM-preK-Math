@@ -24,8 +24,8 @@ const Tally10 = () => {
   const markLessonComplete = () => {
     const saved = localStorage.getItem("ethio-stem-m3-completed");
     const completed = saved ? JSON.parse(saved) : [];
-    if (!completed.includes("3-tally-10")) {
-      completed.push("3-tally-10");
+    if (!completed.includes("lesson-10")) {
+      completed.push("lesson-10");
       localStorage.setItem("ethio-stem-m3-completed", JSON.stringify(completed));
     }
   };
@@ -65,6 +65,8 @@ const Tally10 = () => {
   const renderTallies = (count: number, target: number) => {
     const bundle = count >= 5;
     const remainder = count - 5;
+
+
     return (
       <div
         onClick={handleTallyClick}
@@ -108,11 +110,11 @@ const Tally10 = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-white p-3 font-fredoka overflow-x-hidden">
-      <div className="max-w-3xl mx-auto">
-        <div className="flex items-center gap-3 mb-2">
-          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=3-tally-10")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
-            <ArrowLeft className="w-4 h-4 text-amber-600" />
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-white p-4 font-fredoka overflow-x-hidden">
+      <div className="max-w-4xl mx-auto">
+        <div className="flex items-center gap-4 mb-8">
+          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=lesson-10")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
+            <ArrowLeft className="w-5 h-5 text-amber-600" />
           </Button>
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full uppercase tracking-widest font-nunito">Lesson 10</span>
@@ -177,22 +179,25 @@ const Tally10 = () => {
                   <Button onClick={resetActivity} className="h-12 flex-1 bg-white/10 hover:bg-white/20 text-white text-lg rounded-2xl border-2 border-white/20">
                     Again! 🔄
                   </Button>
-                  <Button onClick={() => navigate("/activities/module-3?last=3-tally-10")} className="h-12 flex-1 bg-white text-amber-600 hover:bg-amber-50 text-lg rounded-2xl shadow-2xl">
+                  <Button onClick={() => navigate("/activities/module-3?last=lesson-10")} className="h-24 flex-1 bg-white text-amber-600 hover:bg-emerald-50 text-3xl rounded-[2rem] shadow-2xl">
                     Yay! ✨
                   </Button>
                 </div>
-              </Card>
+              </Card >
             )}
 
-            {currentStep !== 'complete' && (
-              <Button onClick={() => setShowGame(false)} variant="ghost" className="text-amber-400 hover:text-amber-600 w-full py-1 text-sm font-bold font-nunito">
-                ← Back to Instructions
-              </Button>
-            )}
-          </div>
+
+            {
+              currentStep !== 'complete' && (
+                <Button onClick={() => setShowGame(false)} variant="ghost" className="text-amber-400 hover:text-amber-600 w-full py-1 text-sm font-bold font-nunito">
+                  ← Back to Instructions
+                </Button>
+              )
+            }
+          </div >
         )}
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 

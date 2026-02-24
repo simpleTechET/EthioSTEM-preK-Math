@@ -55,7 +55,7 @@ const MatchingActivity2 = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => navigate("/activities")}
+              onClick={() => navigate("/activities/module-1")}
               className="hover:bg-primary/10"
             >
               <ArrowLeft className="h-5 w-5" />
@@ -178,7 +178,7 @@ const MatchingActivity2 = () => {
                 <Button 
       size="lg" 
       className="text-lg px-8"
-      onClick={() => navigate("/activities")}
+      onClick={() => navigate("/activities/module-1")}
     >
       Continue Learning
     </Button>

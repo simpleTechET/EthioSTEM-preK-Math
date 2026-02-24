@@ -17,7 +17,7 @@ const CountingMatching28 = () => {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => navigate("/activities")}
+            onClick={() => navigate("/activities/module-1")}
             className="text-white hover:bg-white/20"
           >
             <ArrowLeft className="h-6 w-6" />
@@ -674,7 +674,7 @@ const StudentDebrief = () => {
             </div>
 
             <Button 
-              onClick={() => navigate("/activities")}
+              onClick={() => navigate("/activities/module-1")}
               className="bg-green-500 hover:bg-green-600"
             >
               Back to Activities

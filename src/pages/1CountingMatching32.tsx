@@ -193,7 +193,7 @@ const CountingMatching32 = () => {
       {/* Header */}
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Link to="/activities">
+          <Link to="/activities/module-1">
             <Button variant="ghost" size="icon">
               <ArrowLeft className="w-5 h-5" />
             </Button>
@@ -548,7 +548,7 @@ const CountingMatching32 = () => {
 
             {/* Back to Activities */}
             <div className="text-center pt-4">
-              <Link to="/activities">
+              <Link to="/activities/module-1">
                 <Button size="lg" className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600">
                   <ArrowLeft className="w-5 h-5 mr-2" />
                   Back to Activities

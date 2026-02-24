@@ -160,7 +160,7 @@ const CountingMatching29 = () => {
       <div className="max-w-4xl mx-auto">
         <Button
           variant="ghost"
-          onClick={() => navigate("/activities")}
+          onClick={() => navigate("/activities/module-1")}
           className="mb-4 text-rose-700 hover:text-rose-800 hover:bg-rose-200"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -604,7 +604,7 @@ const CountingMatching29 = () => {
 
                 <div className="text-center pt-4">
                   <Button
-                    onClick={() => navigate("/activities")}
+                    onClick={() => navigate("/activities/module-1")}
                     className="bg-rose-500 hover:bg-rose-600 text-white px-8 py-4 text-lg"
                   >
                     <ArrowLeft className="w-5 h-5 mr-2" />

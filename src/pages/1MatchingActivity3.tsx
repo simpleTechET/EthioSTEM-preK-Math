@@ -67,14 +67,14 @@ const markLessonComplete = (lessonId: number) => {
 
   const handleComplete = () => {
     markLessonComplete(3); // Call it here with lesson 3
-    navigate("/activities");
+    navigate("/activities/module-1");
   };
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50 p-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <Button variant="outline" size="icon" onClick={() => navigate("/activities")}>
+          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-1")}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>

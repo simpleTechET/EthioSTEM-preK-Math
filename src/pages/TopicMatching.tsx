@@ -12,28 +12,28 @@ const TopicMatching = () => {
       id: 1,
       title: "Lesson 1: Match Exactly the Same",
       description: "Find objects that are exactly the same",
-      path: "/activity/matching-1",
+      path: "/module-1/matching-1",
       completed: false
     },
     {
       id: 2,
       title: "Lesson 2: Match Objects",
       description: "Match objects that are the same but different in size",
-      path: "/activity/matching-2",
+      path: "/module-1/matching-2",
       completed: false
     },
     {
       id: 3,
       title: "Lesson 3: Match by Color",
       description: "Match objects of the same color",
-      path: "/activity/matching-3",
+      path: "/module-1/matching-3",
       completed: false
     },
     {
       id: 4,
       title: "Lesson 4: Match by Type",
       description: "Match objects of the same type",
-      path: "/activity/matching-4",
+      path: "/module-1/matching-4",
       completed: false
     }
   ];

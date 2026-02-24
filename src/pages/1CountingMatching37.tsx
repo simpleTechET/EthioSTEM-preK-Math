@@ -567,7 +567,7 @@ const CountingMatching37 = () => {
           <RotateCcw className="w-4 h-4" />
           Try Again
         </Button>
-        <Link to="/activities">
+        <Link to="/activities/module-1">
           <Button className="gap-2 bg-green-600 hover:bg-green-700">
             <Sparkles className="w-4 h-4" />
             All Done!
@@ -583,7 +583,7 @@ const CountingMatching37 = () => {
       <header className="bg-card/80 backdrop-blur-sm border-b border-border py-4 px-6 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link to="/activities">
+            <Link to="/activities/module-1">
               <Button variant="outline" size="icon">
                 <ArrowLeft className="w-5 h-5" />
               </Button>

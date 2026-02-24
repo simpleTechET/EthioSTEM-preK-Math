@@ -167,7 +167,7 @@ const CountingActivity11 = () => {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <Button variant="outline" size="icon" onClick={() => navigate("/activities")}>
+          <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-1")}>
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
@@ -548,7 +548,7 @@ const CountingActivity11 = () => {
                 </div>
                 <Button 
                   size="lg"
-                  onClick={() => navigate('/activities')}
+                  onClick={() => navigate('/activities/module-1')}
                   className="bg-amber-600 hover:bg-amber-700"
                 >
                   Continue Learning

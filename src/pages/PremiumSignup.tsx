@@ -563,7 +563,7 @@ const PremiumSignup = () => {
                   In the meantime, enjoy all our free lessons!
                 </p>
                 <div className="flex gap-4 justify-center">
-                  <a href="/activities">
+                  <a href="/activities/module-1">
                     <Button size="lg" className="bg-primary hover:bg-primary/90">
                       Start Learning
                     </Button>

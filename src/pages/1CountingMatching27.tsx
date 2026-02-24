@@ -17,7 +17,7 @@ const CountingActivity27 = () => {
       <header className="border-b border-border bg-card">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <button 
-            onClick={() => navigate("/activities")}
+            onClick={() => navigate("/activities/module-1")}
             className="flex items-center gap-2 text-foreground hover:text-primary transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -621,7 +621,7 @@ const StudentDebrief = ({ navigate }: { navigate: (path: string) => void }) => {
             <p className="text-lg text-green-600 dark:text-green-400 mb-6">
               Great job playing and learning with numbers today!
             </p>
-            <Button size="lg" onClick={() => navigate("/activities")}>
+            <Button size="lg" onClick={() => navigate("/activities/module-1")}>
               Continue Learning
             </Button>
           </div>

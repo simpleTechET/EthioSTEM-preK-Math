@@ -13,7 +13,7 @@ const CountingMatching22 = () => {
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         <div className="mb-6 flex items-center gap-4">
-          <Link to="/activities">
+          <Link to="/activities/module-1">
             <Button variant="outline" size="icon">
               <ArrowLeft className="h-4 w-4" />
             </Button>
@@ -55,7 +55,7 @@ const CountingMatching22 = () => {
         </Tabs>
 
         <div className="mt-8 text-center">
-          <Link to="/activities">
+          <Link to="/activities/module-1">
             <Button size="lg" variant="outline">
               Back to Activities
             </Button>
@@ -802,7 +802,7 @@ const StudentDebrief = () => {
         </div>
 
         <div className="text-center mt-8">
-          <Link to="/activities">
+          <Link to="/activities/module-1">
             <Button size="lg">
               Back to Activities
             </Button>
