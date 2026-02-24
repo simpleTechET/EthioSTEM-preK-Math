@@ -60,64 +60,52 @@ const CountOut11 = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-blue-50 to-white p-4 font-fredoka overflow-x-hidden">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center gap-4 mb-8">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-blue-50 to-white p-3 font-fredoka overflow-x-hidden">
+      <div className="max-w-3xl mx-auto">
+        <div className="flex items-center gap-3 mb-2">
           <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=3-count-out-11")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
-            <ArrowLeft className="w-5 h-5 text-cyan-600" />
+            <ArrowLeft className="w-4 h-4 text-cyan-600" />
           </Button>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-bold text-cyan-600 bg-cyan-100 px-3 py-1 rounded-full uppercase tracking-widest font-nunito">
-                Lesson 11
-              </span>
-              <h1 className="text-2xl font-bold text-cyan-900 uppercase">Count Out!</h1>
-            </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-cyan-600 bg-cyan-100 px-2 py-0.5 rounded-full uppercase tracking-widest font-nunito">Lesson 11</span>
+            <h1 className="text-lg font-bold text-cyan-900 uppercase">Count Out!</h1>
           </div>
         </div>
 
         {!showGame ? (
-          <Card className="border-4 border-white bg-white/60 backdrop-blur-md shadow-2xl rounded-[3rem] overflow-hidden text-center p-10 space-y-8 animate-in fade-in zoom-in duration-700 relative">
-            <div className="mx-auto w-24 h-24 bg-gradient-to-tr from-cyan-500 to-blue-500 rounded-3xl flex items-center justify-center mb-6 rotate-3 shadow-lg">
-              <Fish className="w-12 h-12 text-white" />
+          <Card className="border-4 border-white bg-white/60 backdrop-blur-md shadow-2xl rounded-2xl overflow-hidden text-center p-5 lg:p-8 space-y-4 animate-in fade-in zoom-in duration-700 relative">
+            <div className="mx-auto w-14 h-14 bg-gradient-to-tr from-cyan-500 to-blue-500 rounded-2xl flex items-center justify-center rotate-3 shadow-lg">
+              <Fish className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-5xl text-cyan-900 leading-tight">Feed the Animals!</h2>
-            <p className="text-2xl text-cyan-800 font-nunito leading-relaxed max-w-2xl mx-auto">
-              The dolphins and seals are hungry!
-              <br />
-              Tap each fish to count them out!
+            <h2 className="text-2xl lg:text-3xl text-cyan-900 leading-tight">Feed the Animals!</h2>
+            <p className="text-base lg:text-lg text-cyan-800 font-nunito leading-relaxed max-w-xl mx-auto">
+              The dolphins and seals are hungry! Tap each fish to count them out!
             </p>
             <Button
               onClick={() => setShowGame(true)}
-              className="bg-cyan-600 hover:bg-cyan-700 text-white text-3xl px-16 py-10 rounded-full shadow-2xl transition-all hover:scale-105 active:scale-95 border-b-8 border-cyan-800"
+              className="bg-cyan-600 hover:bg-cyan-700 text-white text-xl px-10 py-5 rounded-full shadow-2xl transition-all hover:scale-105 active:scale-95 border-b-4 border-cyan-800"
             >
               Play! 🐬
             </Button>
-            <p className="text-sm text-cyan-400 font-bold uppercase tracking-widest pt-4 font-nunito">Topic B: Numeral Matching to 7</p>
+            <p className="text-xs text-cyan-400 font-bold uppercase tracking-widest font-nunito">Topic B: Numeral Matching to 7</p>
           </Card>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-3">
             {currentStep !== 'complete' && (
-              <div className="flex justify-center gap-3 mb-4">
+              <div className="flex justify-center gap-2 mb-1">
                 {['feed6', 'feed7'].map((step, idx) => (
-                  <div
-                    key={step}
-                    className={`h-3 rounded-full transition-all ${['feed6', 'feed7'].indexOf(currentStep) >= idx
-                      ? 'bg-cyan-500 w-12 shadow-sm'
-                      : 'bg-cyan-100 w-3'
-                      }`}
-                  />
+                  <div key={step} className={`h-2 rounded-full transition-all ${['feed6', 'feed7'].indexOf(currentStep) >= idx ? 'bg-cyan-500 w-10 shadow-sm' : 'bg-cyan-100 w-2'}`} />
                 ))}
               </div>
             )}
 
             {currentStep !== 'complete' && (
-              <Card className="bg-white/80 border-4 border-white shadow-2xl rounded-[3rem] p-10 text-center space-y-10 animate-in slide-in-from-bottom-8">
-                <h3 className="text-4xl text-cyan-700">
+              <Card className="bg-white/80 border-4 border-white shadow-2xl rounded-2xl p-4 lg:p-6 text-center space-y-3 animate-in slide-in-from-bottom-8">
+                <h3 className="text-lg lg:text-2xl text-cyan-700">
                   {currentStep === 'feed6' ? 'Tap 6 fish for the dolphin! 🐬' : 'Tap 7 fish for the seal! 🦭'}
                 </h3>
 
-                <div className="flex flex-wrap justify-center gap-6 my-8 py-12 bg-cyan-100/30 rounded-[4rem] border-8 border-white shadow-inner relative overflow-hidden max-w-3xl mx-auto">
+                <div className="flex flex-wrap justify-center gap-3 lg:gap-4 py-3 lg:py-4 bg-cyan-100/30 rounded-2xl border-4 border-white shadow-inner relative overflow-hidden max-w-2xl mx-auto">
                   <div className="absolute inset-0 opacity-10 pointer-events-none">
                     <Waves className="w-full h-full text-cyan-400" />
                   </div>
@@ -130,43 +118,41 @@ const CountOut11 = () => {
                         onClick={() => handleFishClick(i)}
                         className={`flex flex-col items-center relative z-10 cursor-pointer transition-all duration-300 ${isClicked ? 'scale-100' : isNext ? 'animate-pulse hover:scale-110' : 'opacity-40 grayscale'}`}
                       >
-                        <div className={`w-24 h-24 rounded-full flex items-center justify-center text-5xl shadow-lg border-4 border-white transform transition-transform ${isClicked ? (i < 5 ? 'bg-blue-500 ring-4 ring-yellow-300' : 'bg-orange-500 ring-4 ring-yellow-300') : 'bg-white'} text-white`}>
-                          <Fish className="w-12 h-12" />
+                        <div className={`w-14 h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center text-3xl shadow-lg border-3 border-white transform transition-transform ${isClicked ? (i < 5 ? 'bg-blue-500 ring-3 ring-yellow-300' : 'bg-orange-500 ring-3 ring-yellow-300') : 'bg-white'} text-white`}>
+                          <Fish className="w-7 h-7 lg:w-8 lg:h-8" />
                         </div>
                         {isClicked && (
-                          <span className="text-3xl font-bold mt-3 text-cyan-900 font-fredoka drop-shadow-sm">{i + 1}</span>
+                          <span className="text-lg font-bold mt-1 text-cyan-900 font-fredoka drop-shadow-sm">{i + 1}</span>
                         )}
                         {isNext && !isClicked && (
-                          <span className="text-xs font-bold mt-2 text-cyan-400 animate-pulse">Tap!</span>
+                          <span className="text-xs font-bold mt-1 text-cyan-400 animate-pulse">Tap!</span>
                         )}
                       </div>
                     );
                   })}
                 </div>
 
-                <div className="bg-cyan-50 p-8 rounded-[2.5rem] border-4 border-white shadow-inner max-w-2xl mx-auto font-nunito">
-                  <p className="text-4xl text-cyan-800 leading-relaxed font-bold">
+                <div className="bg-cyan-50 p-3 lg:p-4 rounded-2xl border-4 border-white shadow-inner max-w-lg mx-auto font-nunito">
+                  <p className="text-lg lg:text-xl text-cyan-800 font-bold">
                     {clickedCount === targetCount ? `You counted ${targetCount}! 🎉` : `Fish counted: ${clickedCount} / ${targetCount}`}
                   </p>
-                  <p className="text-7xl font-fredoka text-cyan-600 drop-shadow-sm mt-4">{clickedCount}</p>
+                  <p className="text-4xl lg:text-5xl font-fredoka text-cyan-600 drop-shadow-sm mt-1">{clickedCount}</p>
                 </div>
               </Card>
             )}
 
             {currentStep === 'complete' && (
-              <Card className="bg-gradient-to-br from-cyan-600 via-blue-600 to-indigo-600 shadow-2xl rounded-[4rem] overflow-hidden p-16 text-center text-white space-y-10 animate-in zoom-in-95 duration-700">
-                <div className="text-9xl animate-bounce">🐬</div>
-                <h2 className="text-7xl drop-shadow-xl">Aquarium Star!</h2>
-                <p className="text-3xl font-nunito max-w-2xl mx-auto leading-relaxed">
-                  You are a great helper!
-                  <br />
-                  You can count out exactly how many objects you need.
+              <Card className="bg-gradient-to-br from-cyan-600 via-blue-600 to-indigo-600 shadow-2xl rounded-2xl overflow-hidden p-6 lg:p-10 text-center text-white space-y-4 animate-in zoom-in-95 duration-700">
+                <div className="text-6xl animate-bounce">🐬</div>
+                <h2 className="text-3xl lg:text-4xl drop-shadow-xl">Aquarium Star!</h2>
+                <p className="text-base lg:text-lg font-nunito max-w-xl mx-auto leading-relaxed">
+                  You are a great helper! You can count out exactly how many objects you need.
                 </p>
-                <div className="flex gap-4 w-full pt-8">
-                  <Button onClick={resetActivity} className="h-24 flex-1 bg-white/10 hover:bg-white/20 text-white text-3xl rounded-[2rem] border-4 border-white/20">
+                <div className="flex gap-3 w-full pt-2">
+                  <Button onClick={resetActivity} className="h-12 flex-1 bg-white/10 hover:bg-white/20 text-white text-lg rounded-2xl border-2 border-white/20">
                     Again! 🔄
                   </Button>
-                  <Button onClick={() => navigate("/activities/module-3?last=3-count-out-11")} className="h-24 flex-1 bg-white text-cyan-600 hover:bg-cyan-50 text-3xl rounded-[2rem] shadow-2xl">
+                  <Button onClick={() => navigate("/activities/module-3?last=3-count-out-11")} className="h-12 flex-1 bg-white text-cyan-600 hover:bg-cyan-50 text-lg rounded-2xl shadow-2xl">
                     Yay! ✨
                   </Button>
                 </div>
@@ -174,7 +160,7 @@ const CountOut11 = () => {
             )}
 
             {currentStep !== 'complete' && (
-              <Button onClick={() => setShowGame(false)} variant="ghost" className="text-cyan-400 hover:text-cyan-600 w-full py-2 font-bold font-nunito">
+              <Button onClick={() => setShowGame(false)} variant="ghost" className="text-cyan-400 hover:text-cyan-600 w-full py-1 text-sm font-bold font-nunito">
                 ← Back to Instructions
               </Button>
             )}
