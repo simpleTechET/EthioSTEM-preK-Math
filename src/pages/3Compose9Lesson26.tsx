@@ -54,67 +54,61 @@ const Compose9Lesson26 = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-white p-4 font-fredoka overflow-x-hidden">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center gap-4 mb-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-white p-3 font-fredoka overflow-x-hidden">
+      <div className="max-w-3xl mx-auto">
+        <div className="flex items-center gap-3 mb-2">
           <Button variant="outline" size="icon" onClick={() => navigate("/activities/module-3?last=3-compose-9-26")} className="rounded-full border-2 border-white bg-white/50 backdrop-blur-sm">
-            <ArrowLeft className="w-5 h-5 text-blue-600" />
+            <ArrowLeft className="w-4 h-4 text-blue-600" />
           </Button>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-bold text-blue-600 bg-blue-100 px-3 py-1 rounded-full uppercase tracking-widest font-nunito">
-                Lesson 26
-              </span>
-              <h1 className="text-2xl font-bold text-blue-900 uppercase">Partners of 9!</h1>
-            </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-0.5 rounded-full uppercase tracking-widest font-nunito">Lesson 26</span>
+            <h1 className="text-lg font-bold text-blue-900 uppercase">Partners of 9!</h1>
           </div>
         </div>
 
         {!showGame ? (
-          <Card className="border-4 border-white bg-white/60 backdrop-blur-md shadow-2xl rounded-[3rem] overflow-hidden text-center p-10 space-y-8 animate-in fade-in zoom-in duration-700 relative">
-            <div className="mx-auto w-24 h-24 bg-gradient-to-tr from-blue-500 to-purple-500 rounded-3xl flex items-center justify-center mb-6 rotate-3 shadow-lg">
-              <Bird className="w-12 h-12 text-white" />
+          <Card className="border-4 border-white bg-white/60 backdrop-blur-md shadow-2xl rounded-2xl overflow-hidden text-center p-5 lg:p-8 space-y-4 animate-in fade-in zoom-in duration-700 relative">
+            <div className="mx-auto w-14 h-14 bg-gradient-to-tr from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center rotate-3 shadow-lg">
+              <Bird className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-5xl text-blue-900 leading-tight">Bird Wings & Bus Rows!</h2>
-            <p className="text-2xl text-blue-800 font-nunito leading-relaxed max-w-2xl mx-auto">
-              Flap like a bird and fill up the bus!
-              <br />
-              We're going to find all the ways to make 9.
+            <h2 className="text-2xl lg:text-3xl text-blue-900 leading-tight">Bird Wings & Bus Rows!</h2>
+            <p className="text-base lg:text-lg text-blue-800 font-nunito leading-relaxed max-w-xl mx-auto">
+              Flap like a bird and fill up the bus! We're going to find all the ways to make 9.
             </p>
             <Button
               onClick={() => setShowGame(true)}
-              className="bg-blue-600 hover:bg-blue-700 text-white text-3xl px-16 py-10 rounded-full shadow-2xl transition-all hover:scale-105 active:scale-95 border-b-8 border-blue-800"
+              className="bg-blue-600 hover:bg-blue-700 text-white text-xl px-10 py-5 rounded-full shadow-2xl transition-all hover:scale-105 active:scale-95 border-b-4 border-blue-800"
             >
               Play! 🐦
             </Button>
-            <p className="text-sm text-blue-400 font-bold uppercase tracking-widest pt-4 font-nunito">Topic F: Matching Numeral to 9</p>
+            <p className="text-xs text-blue-400 font-bold uppercase tracking-widest font-nunito">Topic F: Matching Numeral to 9</p>
           </Card>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-3">
             {currentStep !== 'complete' && (
-              <Card className="bg-white/80 border-4 border-white shadow-2xl rounded-[3rem] p-10 text-center space-y-10 animate-in slide-in-from-bottom-8">
-                <h3 className="text-4xl text-blue-700 uppercase tracking-widest">
+              <Card className="bg-white/80 border-4 border-white shadow-2xl rounded-2xl p-4 lg:p-6 text-center space-y-3 animate-in slide-in-from-bottom-8">
+                <h3 className="text-lg lg:text-2xl text-blue-700 uppercase tracking-wider">
                   {currentStep === 'flaps' ? "Flap your wings 9 times!" : "Invite 3 groups of 3!"}
                 </h3>
 
-                <div className="flex justify-center items-center py-12 bg-blue-100/30 rounded-[3rem] border-8 border-white shadow-inner min-h-[400px] relative overflow-hidden">
+                <div className="flex justify-center items-center py-4 bg-blue-100/30 rounded-2xl border-4 border-white shadow-inner min-h-[180px] lg:min-h-[220px] relative overflow-hidden">
                   {currentStep === 'flaps' ? (
                     <div className="flex flex-col items-center">
-                      <div className={`text-[12rem] transition-all duration-300 ${flaps % 2 === 0 ? '-rotate-12 translate-y-2' : 'rotate-12 -translate-y-2'}`}>🐦</div>
-                      <div className="flex gap-2 mt-8">
+                      <div className={`text-6xl lg:text-8xl transition-all duration-300 ${flaps % 2 === 0 ? '-rotate-12 translate-y-1' : 'rotate-12 -translate-y-1'}`}>🐦</div>
+                      <div className="flex gap-1.5 mt-3">
                         {Array.from({ length: 9 }).map((_, i) => (
-                          <div key={i} className={`w-8 h-8 rounded-full border-2 border-white shadow-sm ${i < flaps ? 'bg-blue-500' : 'bg-white/30'}`} />
+                          <div key={i} className={`w-5 h-5 rounded-full border-2 border-white shadow-sm ${i < flaps ? 'bg-blue-500' : 'bg-white/30'}`} />
                         ))}
                       </div>
                     </div>
                   ) : (
-                    <div className="flex flex-col gap-8 w-full px-12">
-                      <Bus className="w-24 h-24 text-blue-400 mx-auto opacity-30 absolute top-4 left-4" />
-                      <div className="space-y-4">
+                    <div className="flex flex-col gap-3 w-full px-6">
+                      <Bus className="w-12 h-12 text-blue-400 mx-auto opacity-30 absolute top-2 left-2" />
+                      <div className="space-y-2">
                         {Array.from({ length: 3 }).map((_, gi) => (
-                          <div key={gi} className={`flex gap-4 justify-center p-4 rounded-2xl border-4 transition-all ${gi < busGroups ? 'bg-white border-blue-200' : 'bg-white/20 border-dashed border-blue-100 opacity-50'}`}>
+                          <div key={gi} className={`flex gap-3 justify-center p-2 rounded-xl border-2 transition-all ${gi < busGroups ? 'bg-white border-blue-200' : 'bg-white/20 border-dashed border-blue-100 opacity-50'}`}>
                             {Array.from({ length: 3 }).map((_, fi) => (
-                              <div key={fi} className="text-4xl">🧒</div>
+                              <div key={fi} className="text-2xl">🧒</div>
                             ))}
                           </div>
                         ))}
@@ -123,18 +117,18 @@ const Compose9Lesson26 = () => {
                   )}
                 </div>
 
-                <div className="bg-blue-50 p-8 rounded-[2.5rem] border-4 border-white shadow-inner max-w-2xl mx-auto font-nunito">
-                  <p className="text-4xl text-blue-800 leading-relaxed font-bold">
+                <div className="bg-blue-50 p-3 lg:p-4 rounded-2xl border-4 border-white shadow-inner max-w-lg mx-auto font-nunito">
+                  <p className="text-lg lg:text-xl text-blue-800 font-bold">
                     {currentStep === 'flaps' ? `Flaps: ${flaps}` : `Rows of 3: ${busGroups}`}
                   </p>
-                  <p className="text-8xl font-fredoka text-blue-600 mt-4 font-bold drop-shadow-sm">
+                  <p className="text-4xl lg:text-5xl font-fredoka text-blue-600 mt-1 font-bold drop-shadow-sm">
                     {currentStep === 'flaps' ? flaps : busGroups * 3}
                   </p>
                 </div>
 
                 <Button
                   onClick={currentStep === 'flaps' ? handleFlap : handleBusGroup}
-                  className="bg-blue-600 hover:bg-blue-700 text-white py-12 px-16 text-4xl rounded-[2rem] shadow-xl border-b-8 border-blue-800 transition-all active:scale-95"
+                  className="bg-blue-600 hover:bg-blue-700 text-white py-4 px-8 text-xl lg:text-2xl rounded-2xl shadow-xl border-b-4 border-blue-800 transition-all active:scale-95"
                 >
                   {currentStep === 'flaps' ? `Flap! 🐦` : `Next Group! 🧒`}
                 </Button>
@@ -142,19 +136,17 @@ const Compose9Lesson26 = () => {
             )}
 
             {currentStep === 'complete' && (
-              <Card className="bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-600 shadow-2xl rounded-[4rem] overflow-hidden p-16 text-center text-white space-y-10 animate-in zoom-in-95 duration-700">
-                <div className="text-[12rem] font-black animate-bounce leading-none">9</div>
-                <h2 className="text-7xl drop-shadow-xl">Nine Partner!</h2>
-                <p className="text-3xl font-nunito max-w-2xl mx-auto leading-relaxed">
-                  3 groups of 3 make 9 on the bus!
-                  <br />
-                  And 9 flaps take you high in the sky!
+              <Card className="bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-600 shadow-2xl rounded-2xl overflow-hidden p-6 lg:p-10 text-center text-white space-y-4 animate-in zoom-in-95 duration-700">
+                <div className="text-6xl lg:text-7xl font-black animate-bounce leading-none">9</div>
+                <h2 className="text-3xl lg:text-4xl drop-shadow-xl">Nine Partner!</h2>
+                <p className="text-base lg:text-lg font-nunito max-w-xl mx-auto leading-relaxed">
+                  3 groups of 3 make 9 on the bus! And 9 flaps take you high in the sky!
                 </p>
-                <div className="flex gap-4 w-full pt-8">
-                  <Button onClick={resetActivity} className="h-24 flex-1 bg-white/10 hover:bg-white/20 text-white text-3xl rounded-[2rem] border-4 border-white/20">
+                <div className="flex gap-3 w-full pt-2">
+                  <Button onClick={resetActivity} className="h-12 flex-1 bg-white/10 hover:bg-white/20 text-white text-lg rounded-2xl border-2 border-white/20">
                     Again! 🔄
                   </Button>
-                  <Button onClick={() => navigate("/activities/module-3?last=3-compose-9-26")} className="h-24 flex-1 bg-white text-blue-600 hover:bg-rose-50 text-3xl rounded-[2rem] shadow-2xl">
+                  <Button onClick={() => navigate("/activities/module-3?last=3-compose-9-26")} className="h-12 flex-1 bg-white text-blue-600 hover:bg-rose-50 text-lg rounded-2xl shadow-2xl">
                     Yay! ✨
                   </Button>
                 </div>
@@ -163,12 +155,12 @@ const Compose9Lesson26 = () => {
 
             {showFeedback && (
               <div className="fixed bottom-[33%] right-[25%] z-[100] animate-in slide-in-from-right-4 fade-in duration-300">
-                <Card className={`flex items-center gap-4 px-6 py-4 shadow-2xl rounded-2xl border-4 ${showFeedback === 'correct' ? 'bg-green-50 border-green-400' : 'bg-red-50 border-red-400'}`}>
-                  <span className="text-4xl">{showFeedback === 'correct' ? '🌟' : '🧐'}</span>
-                  <h4 className={`text-2xl font-fredoka ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
+                <Card className={`flex items-center gap-3 px-4 py-3 shadow-2xl rounded-xl border-2 ${showFeedback === 'correct' ? 'bg-green-50 border-green-400' : 'bg-red-50 border-red-400'}`}>
+                  <span className="text-2xl">{showFeedback === 'correct' ? '🌟' : '🧐'}</span>
+                  <h4 className={`text-lg font-fredoka ${showFeedback === 'correct' ? 'text-green-700' : 'text-red-700'}`}>
                     {showFeedback === 'correct' ? (currentStep === 'flaps' ? '9!' : 'Perfect!') : 'Try Again!'}
                   </h4>
-                  <Button onClick={nextStep} size="sm" className={`ml-2 rounded-xl text-lg px-4 py-2 ${showFeedback === 'correct' ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'}`}>
+                  <Button onClick={nextStep} size="sm" className={`ml-1 rounded-lg text-sm px-3 py-1 ${showFeedback === 'correct' ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'}`}>
                     {currentStep === 'flaps' ? 'Next! ➡️' : 'Finish! ➡️'}
                   </Button>
                 </Card>
@@ -176,7 +168,7 @@ const Compose9Lesson26 = () => {
             )}
 
             {currentStep !== 'complete' && (
-              <Button onClick={() => setShowGame(false)} variant="ghost" className="text-blue-400 hover:text-blue-600 w-full py-2 font-bold font-nunito">
+              <Button onClick={() => setShowGame(false)} variant="ghost" className="text-blue-400 hover:text-blue-600 w-full py-1 text-sm font-bold font-nunito">
                 ← Back to Instructions
               </Button>
             )}
