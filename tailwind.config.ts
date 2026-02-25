@@ -83,6 +83,21 @@ export default {
           brown: "hsl(var(--nest-brown))",
           light: "hsl(var(--nest-light))",
         },
+        forest: {
+          50: "hsl(var(--forest-50))",
+          400: "hsl(var(--forest-400))",
+          600: "hsl(var(--forest-600))",
+          700: "hsl(var(--forest-700))",
+          900: "hsl(var(--forest-900))",
+        },
+        sunset: {
+          400: "hsl(var(--sunset-400))",
+          500: "hsl(var(--sunset-500))",
+        },
+        earth: {
+          500: "hsl(var(--earth-500))",
+          700: "hsl(var(--earth-700))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

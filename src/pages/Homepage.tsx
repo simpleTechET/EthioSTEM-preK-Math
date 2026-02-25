@@ -186,15 +186,14 @@ const Homepage = () => {
                 </div>
               </CardContent>
             </Card>
-            {/* Module 3 - Coming Soon */}
-            <Card className="border-2 border-border opacity-75">
+            {/* Module 3 - Available */}
+            <Card className="border-2 border-border">
               <CardHeader>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-semibold px-3 py-1 rounded-full">
+                  <span className="text-sm font-semibold px-3 py-1 rounded-full bg-orange-100 text-orange-700">
                     Available Now
                   </span>
                   <CheckCircle2 className="w-6 h-6 text-success" />
-                  {/* <Lock className="w-6 h-6 text-muted-foreground" /> */}
                 </div>
                 <CardTitle className="text-2xl">Pre-K Math: Module 3</CardTitle>
                 <CardDescription>Counting to 10</CardDescription>
@@ -202,20 +201,56 @@ const Homepage = () => {
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex items-start gap-2 text-sm">
-                    <Target className="w-4 h-4 mt-1 flex-shrink-0" />
+                    <Target className="w-4 h-4 mt-1 flex-shrink-0 text-orange-500" />
                     <span>Count and write numbers 6-10</span>
                   </div>
                   <div className="flex items-start gap-2 text-sm">
-                    <Users className="w-4 h-4 mt-1 flex-shrink-0" />
+                    <Users className="w-4 h-4 mt-1 flex-shrink-0 text-orange-500" />
                     <span>Compare quantities and order numbers</span>
                   </div>
                   <div className="flex items-start gap-2 text-sm">
-                    <BookOpen className="w-4 h-4 mt-1 flex-shrink-0" />
+                    <BookOpen className="w-4 h-4 mt-1 flex-shrink-0 text-orange-500" />
                     <span>Build number sense to 10</span>
                   </div>
                   <Link to="/activities/module-3" className="block">
-                    <Button className="w-full mt-4">
+                    <Button className="w-full mt-4 bg-orange-500 hover:bg-orange-600">
                       Start Module 3
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Module 4 - Available */}
+            <Card className="border-2 border-emerald-200 hover:border-emerald-500 hover:shadow-playful transition-all duration-300 hover:scale-105 bg-emerald-50/30">
+              <CardHeader>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-semibold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">
+                    Available Now
+                  </span>
+                  <CheckCircle2 className="w-6 h-6 text-success" />
+                </div>
+                <CardTitle className="text-2xl">Pre-K Math: Module 4</CardTitle>
+                <CardDescription>Comparison & Patterns</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <Target className="w-4 h-4 text-emerald-600 mt-1 flex-shrink-0" />
+                    <span>Compare length, weight, volume, and position</span>
+                  </div>
+                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <Users className="w-4 h-4 text-emerald-600 mt-1 flex-shrink-0" />
+                    <span>Understand patterns and "enough" concepts</span>
+                  </div>
+                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <BookOpen className="w-4 h-4 text-emerald-600 mt-1 flex-shrink-0" />
+                    <span>29 interactive forest-themed lessons</span>
+                  </div>
+                  <Link to="/activities/module-4" className="block">
+                    <Button className="w-full mt-4 bg-emerald-600 hover:bg-emerald-700">
+                      Start Module 4
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   </Link>

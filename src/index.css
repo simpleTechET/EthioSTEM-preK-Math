@@ -182,6 +182,17 @@ All colors MUST be HSL.
     --nest-brown: 25 50% 40%;
     --nest-light: 30 45% 55%;
 
+    /* Module 4: Forest Adventure Palette */
+    --forest-50: 161 72% 98%;
+    --forest-400: 161 72% 50%;
+    --forest-600: 161 72% 30%;
+    --forest-700: 161 72% 20%;
+    --forest-900: 161 72% 10%;
+    --sunset-400: 25 95% 65%;
+    --sunset-500: 25 95% 53%;
+    --earth-500: 26 63% 40%;
+    --earth-700: 26 63% 20%;
+
     /* Shadows */
     --shadow-soft: 0 4px 20px -4px hsl(25 30% 25% / 0.15);
     --shadow-button: 0 6px 0 0 hsl(var(--primary) / 0.3);
@@ -284,6 +295,14 @@ All colors MUST be HSL.
 
   .gradient-grass {
     background: linear-gradient(180deg, hsl(var(--grass-light)) 0%, hsl(var(--grass-dark)) 100%);
+  }
+
+  .gradient-forest {
+    background: linear-gradient(180deg, #ecfdf5 0%, #10b981 100%);
+  }
+
+  .gradient-earth {
+    background: linear-gradient(180deg, hsl(var(--earth-500)) 0%, hsl(var(--earth-700)) 100%);
   }
 }
 

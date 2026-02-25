@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"; // Removed unus
 import { lazy, Suspense } from "react";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { PremiumProvider } from '@/contexts/PremiumContext';
+import { AudioProvider } from "./context/AudioContext";
 // import CountEggs4 from "./pages/3CountEggs4";
 // import CountArrays5 from "./pages/3CountArrays5";
 
@@ -91,6 +92,36 @@ const EndOfModule2Assessment = lazy(() => import("./pages/EndOfModule2Assessment
 
 const Module3Index = lazy(() => import("./pages/Module3Index"));
 const Module4Index = lazy(() => import("./pages/Module4Index"));
+const TallOrShort1 = lazy(() => import("./pages/4TallOrShortLesson1.tsx"));
+const TallerShorter2 = lazy(() => import("./pages/4TallerShorterLesson2.tsx"));
+const LongerShorter3 = lazy(() => import("./pages/4LongerShorterLesson3.tsx"));
+const LinkingCubes4 = lazy(() => import("./pages/4LinkingCubesLesson4.tsx"));
+const AboutSameCubes5 = lazy(() => import("./pages/4AboutSameCubesLesson5.tsx"));
+const HeavyLight6 = lazy(() => import("./pages/4HeavyLightLesson6"));
+const HeavierLighter7 = lazy(() => import("./pages/4HeavierLighterLesson7"));
+const BalanceScales8 = lazy(() => import("./pages/4BalanceScalesLesson8"));
+const FirstLastScattered13 = lazy(() => import("./pages/4FirstLastScatteredLesson13"));
+const FirstLastLinear14 = lazy(() => import("./pages/4FirstLastLinearLesson14"));
+const FirstLastCircular15 = lazy(() => import("./pages/4FirstLastCircularLesson15"));
+const AreThereEnoughMatching16 = lazy(() => import("./pages/4AreThereEnoughMatchingLesson16"));
+const AreThereEnoughCounting17 = lazy(() => import("./pages/4AreThereEnoughCountingLesson17"));
+const OneMore18 = lazy(() => import("./pages/4OneMoreLesson18"));
+const OneLess19 = lazy(() => import("./pages/4OneLessLesson19"));
+const FiveGroupObjects20 = lazy(() => import("./pages/4FiveGroupObjectsLesson20"));
+const FiveGroupDots21 = lazy(() => import("./pages/4FiveGroupDotsLesson21"));
+const HiddenFiveGroup22 = lazy(() => import("./pages/4HiddenFiveGroupLesson22"));
+const ABLinearPatterns23 = lazy(() => import("./pages/4ABLinearPatternsLesson23"));
+const ABScatteredPatterns24 = lazy(() => import("./pages/4ABScatteredPatternsLesson24"));
+const ABCircularPatterns25 = lazy(() => import("./pages/4ABCircularPatternsLesson25"));
+const CreateABPattern26 = lazy(() => import("./pages/4CreateABPatternLesson26"));
+const ExtendABPattern27 = lazy(() => import("./pages/4ExtendABPatternLesson27"));
+const PatternMatch28 = lazy(() => import("./pages/4PatternMatchLesson28"));
+const EndOfModule4Assessment = lazy(() => import("./pages/EndOfModule4Assessment"));
+const ForestFinaleReview29 = lazy(() => import("./pages/4ForestFinaleReviewLesson29"));
+const BigSmallLesson9 = lazy(() => import("./pages/4BigSmallLesson9"));
+const MoreLessLesson10 = lazy(() => import("./pages/4MoreLessLesson10"));
+const SameVolumeLesson11 = lazy(() => import("./pages/4SameVolumeLesson11"));
+const MatchCompareLesson12 = lazy(() => import("./pages/4MatchCompareLesson12"));
 const Introduce6And7Lesson1 = lazy(() => import("./pages/CountingToSeven1"));
 const CrossingCreekLesson2 = lazy(() => import("./pages/CountingToSeven2"));
 const FingerCounting6Lesson3 = lazy(() => import("./pages/FingerCountingSix3"));
@@ -133,133 +164,165 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <AuthProvider>
-        <PremiumProvider>
-          <BrowserRouter basename="/EthioSTEM-preK-Math">
-            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-            </div>}>
-              {/* return ( */}
-              <Routes>
-                <Route path="/" element={<Homepage />} />
-                <Route path="/premium/signup" element={<PremiumSignup />} />
-                <Route path="/activities/module-1" element={<Activities />} />
-                <Route path="/parent-guide" element={<ParentGuide />} />
-                <Route path="/topic/matching" element={<TopicMatching />} />
-                <Route path="/topic/sorting" element={<TopicSorting />} />
-                <Route path="/topic/counting-3" element={<TopicCounting3 />} />
-                <Route path="/topic/numbers-3" element={<TopicNumbers3 />} />
-                <Route path="/module-1/matching-1" element={<MatchingActivity1 />} />
-                <Route path="/module-1/matching-2" element={<MatchingActivity2 />} />
-                <Route path="/module-1/matching-3" element={<MatchingActivity3 />} />
-                <Route path="/module-1/matching-4" element={<MatchingActivity4 />} />
-                <Route path="/module-1/sorting-5" element={<SortingActivity5 />} />
-                <Route path="/module-1/sorting-6" element={<SortingActivity6 />} />
-                <Route path="/module-1/sorting-7" element={<SortingActivity7 />} />
-                <Route path="/module-1/counting-8" element={<CountingActivity8 />} />
-                <Route path="/module-1/counting-9" element={<CountingActivity9 />} />
-                <Route path="/module-1/counting-10" element={<CountingActivity10 />} />
-                <Route path="/module-1/counting-11" element={<CountingActivity11 />} />
-                <Route path="/module-1/counting-12" element={<CountingActivity12 />} />
-                <Route path="/module-1/counting-13" element={<CountingActivity13 />} />
-                <Route path="/module-1/counting-14" element={<CountingActivity14 />} />
-                <Route path="/module-1/mid-assessment" element={<MidModuleAssessment />} />
+    <AudioProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <AuthProvider>
+          <PremiumProvider>
+            <BrowserRouter basename="/EthioSTEM-preK-Math">
+              <Suspense fallback={<div className="flex items-center justify-center min-h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+              </div>}>
+                {/* return ( */}
+                <Routes>
+                  <Route path="/" element={<Homepage />} />
+                  <Route path="/premium/signup" element={<PremiumSignup />} />
+                  <Route path="/activities/module-1" element={<Activities />} />
+                  <Route path="/parent-guide" element={<ParentGuide />} />
+                  <Route path="/topic/matching" element={<TopicMatching />} />
+                  <Route path="/topic/sorting" element={<TopicSorting />} />
+                  <Route path="/topic/counting-3" element={<TopicCounting3 />} />
+                  <Route path="/topic/numbers-3" element={<TopicNumbers3 />} />
+                  <Route path="/module-1/matching-1" element={<MatchingActivity1 />} />
+                  <Route path="/module-1/matching-2" element={<MatchingActivity2 />} />
+                  <Route path="/module-1/matching-3" element={<MatchingActivity3 />} />
+                  <Route path="/module-1/matching-4" element={<MatchingActivity4 />} />
+                  <Route path="/module-1/sorting-5" element={<SortingActivity5 />} />
+                  <Route path="/module-1/sorting-6" element={<SortingActivity6 />} />
+                  <Route path="/module-1/sorting-7" element={<SortingActivity7 />} />
+                  <Route path="/module-1/counting-8" element={<CountingActivity8 />} />
+                  <Route path="/module-1/counting-9" element={<CountingActivity9 />} />
+                  <Route path="/module-1/counting-10" element={<CountingActivity10 />} />
+                  <Route path="/module-1/counting-11" element={<CountingActivity11 />} />
+                  <Route path="/module-1/counting-12" element={<CountingActivity12 />} />
+                  <Route path="/module-1/counting-13" element={<CountingActivity13 />} />
+                  <Route path="/module-1/counting-14" element={<CountingActivity14 />} />
+                  <Route path="/module-1/mid-assessment" element={<MidModuleAssessment />} />
 
-                <Route path="/module-1/counting-15" element={<CountingActivity15 />} />
-                <Route path="/module-1/counting-16" element={<CountingActivity16 />} />
-                <Route path="/module-1/counting-17" element={<CountingActivity17 />} />
-                <Route path="/module-1/counting-18" element={<CountingActivity18 />} />
-                <Route path="/module-1/counting-19" element={<CountingActivity19 />} />
-                <Route path="/module-1/counting-20" element={<CountingActivity20 />} />
+                  <Route path="/module-1/counting-15" element={<CountingActivity15 />} />
+                  <Route path="/module-1/counting-16" element={<CountingActivity16 />} />
+                  <Route path="/module-1/counting-17" element={<CountingActivity17 />} />
+                  <Route path="/module-1/counting-18" element={<CountingActivity18 />} />
+                  <Route path="/module-1/counting-19" element={<CountingActivity19 />} />
+                  <Route path="/module-1/counting-20" element={<CountingActivity20 />} />
 
-                <Route path="/module-1/matching-21" element={<CountingMatching21 />} />
-                <Route path="/module-1/matching-22" element={<CountingMatching22 />} />
-                <Route path="/module-1/matching-23" element={<CountingMatching23 />} />
-                <Route path="/module-1/matching-24" element={<CountingMatching24 />} />
-                <Route path="/module-1/matching-25" element={<CountingMatching25 />} />
-                <Route path="/module-1/matching-26" element={<CountingMatching26 />} />
-                <Route path="/module-1/matching-27" element={<CountingMatching27 />} />
-                <Route path="/module-1/matching-28" element={<CountingMatching28 />} />
-                <Route path="/module-1/matching-29" element={<CountingMatching29 />} />
-                <Route path="/module-1/matching-30" element={<CountingMatching30 />} />
-                <Route path="/module-1/matching-31" element={<CountingMatching31 />} />
-                <Route path="/module-1/matching-32" element={<CountingMatching32 />} />
-                <Route path="/module-1/matching-33" element={<CountingMatching33 />} />
-                <Route path="/module-1/matching-34" element={<CountingMatching34 />} />
-                <Route path="/module-1/matching-35" element={<CountingMatching35 />} />
-                <Route path="/module-1/matching-36" element={<CountingMatching36 />} />
-                <Route path="/module-1/matching-37" element={<CountingMatching37 />} />
-                <Route path="/module-1/end-assessment" element={<EndOfModule1Assessment />} />
+                  <Route path="/module-1/matching-21" element={<CountingMatching21 />} />
+                  <Route path="/module-1/matching-22" element={<CountingMatching22 />} />
+                  <Route path="/module-1/matching-23" element={<CountingMatching23 />} />
+                  <Route path="/module-1/matching-24" element={<CountingMatching24 />} />
+                  <Route path="/module-1/matching-25" element={<CountingMatching25 />} />
+                  <Route path="/module-1/matching-26" element={<CountingMatching26 />} />
+                  <Route path="/module-1/matching-27" element={<CountingMatching27 />} />
+                  <Route path="/module-1/matching-28" element={<CountingMatching28 />} />
+                  <Route path="/module-1/matching-29" element={<CountingMatching29 />} />
+                  <Route path="/module-1/matching-30" element={<CountingMatching30 />} />
+                  <Route path="/module-1/matching-31" element={<CountingMatching31 />} />
+                  <Route path="/module-1/matching-32" element={<CountingMatching32 />} />
+                  <Route path="/module-1/matching-33" element={<CountingMatching33 />} />
+                  <Route path="/module-1/matching-34" element={<CountingMatching34 />} />
+                  <Route path="/module-1/matching-35" element={<CountingMatching35 />} />
+                  <Route path="/module-1/matching-36" element={<CountingMatching36 />} />
+                  <Route path="/module-1/matching-37" element={<CountingMatching37 />} />
+                  <Route path="/module-1/end-assessment" element={<EndOfModule1Assessment />} />
 
-                <Route path="/activities/module-2" element={<ActivitiesModule2 />} />
-                <Route path="/module-2/shapes-1" element={<ShapesTriangles1 />} />
-                <Route path="/module-2/shapes-2" element={<ShapesFindDescribe2 />} />
-                <Route path="/module-2/shapes-3" element={<UnderstandRectangles3 />} />
-                <Route path="/module-2/shapes-4" element={<UnderstandCircles4 />} />
-                <Route path="/module-2/shapes-5" element={<UnderstandShapes5 />} />
-                <Route path="/module-2/shapes-6" element={<BuildTriangle6 />} />
-                <Route path="/module-2/shapes-7" element={<ShapesRectangles7 />} />
-                <Route path="/module-2/shapes-8" element={<ShapesCircles8 />} />
-                <Route path="/module-2/shapes-9" element={<ShapesSolids9 />} />
-                <Route path="/module-2/shapes-10" element={<ShapesFaces10 />} />
-                <Route path="/module-2/shapes-11" element={<ShapesBuild11 />} />
-                <Route path="/module-2/shapes-12" element={<ShapesModel12 />} />
-                <Route path="/module-2/end-assessment" element={<EndOfModule2Assessment />} />
+                  <Route path="/activities/module-2" element={<ActivitiesModule2 />} />
+                  <Route path="/module-2/shapes-1" element={<ShapesTriangles1 />} />
+                  <Route path="/module-2/shapes-2" element={<ShapesFindDescribe2 />} />
+                  <Route path="/module-2/shapes-3" element={<UnderstandRectangles3 />} />
+                  <Route path="/module-2/shapes-4" element={<UnderstandCircles4 />} />
+                  <Route path="/module-2/shapes-5" element={<UnderstandShapes5 />} />
+                  <Route path="/module-2/shapes-6" element={<BuildTriangle6 />} />
+                  <Route path="/module-2/shapes-7" element={<ShapesRectangles7 />} />
+                  <Route path="/module-2/shapes-8" element={<ShapesCircles8 />} />
+                  <Route path="/module-2/shapes-9" element={<ShapesSolids9 />} />
+                  <Route path="/module-2/shapes-10" element={<ShapesFaces10 />} />
+                  <Route path="/module-2/shapes-11" element={<ShapesBuild11 />} />
+                  <Route path="/module-2/shapes-12" element={<ShapesModel12 />} />
+                  <Route path="/module-2/end-assessment" element={<EndOfModule2Assessment />} />
 
-                <Route path="/activities/module-3" element={<Module3Index />} />
-                <Route path="/module-3/lesson-1" element={<Introduce6And7Lesson1 />} />
-                <Route path="/module-3/lesson-2" element={<CrossingCreekLesson2 />} />
-                <Route path="/module-3/lesson-3" element={<FingerCounting6Lesson3 />} />
-                <Route path="/module-3/lesson-4" element={<CountEggs4 />} />
-                <Route path="/module-3/lesson-5" element={<CountArrays5 />} />
-                <Route path="/module-3/lesson-6" element={<ComposeSix6 />} />
-                <Route path="/module-3/lesson-7" element={<ComposeSeven7 />} />
-                <Route path="/module-3/lesson-8" element={<CircleCount8 />} />
-                <Route path="/module-3/lesson-9" element={<ArrangeCount9 />} />
-                <Route path="/module-3/lesson-10" element={<Tally10 />} />
-                <Route path="/module-3/lesson-30" element={<TowersThirty30 />} />
-                <Route path="/module-3/lesson-31" element={<StairsThirtyOne31 />} />
-                <Route path="/module-3/lesson-32" element={<ClimbStairsThirtyTwo32 />} />
-                <Route path="/module-3/lesson-33" element={<DescendingStairsThirtyThree33 />} />
-                <Route path="/module-3/lesson-34" element={<PennyStaircaseThirtyFour34 />} />
-                <Route path="/module-3/lesson-35" element={<LittleCrabsThirtyFive35 />} />
-                <Route path="/module-3/lesson-36" element={<LittleFishiesThirtySix36 />} />
-                <Route path="/module-3/lesson-37" element={<CulminatingThirtySeven37 />} />
-                <Route path="/module-3/lesson-38" element={<CircularTenThirtyEight38 />} />
-                <Route path="/module-3/lesson-39" element={<VariedTenThirtyNine39 />} />
-                <Route path="/module-3/lesson-40" element={<TallyTenForty40 />} />
-                <Route path="/module-3/lesson-41" element={<CountOutTenFortyOne41 />} />
-                <Route path="/module-3/lesson-42" element={<NumberBookFortyTwo42 />} />
-                <Route path="/module-3/lesson-11" element={<CountOut11 />} />
-                <Route path="/module-3/lesson-12" element={<Introduce8Lesson12 />} />
-                <Route path="/module-3/lesson-13" element={<LinearCount13 />} />
-                <Route path="/module-3/lesson-14" element={<FingerCount14 />} />
-                <Route path="/module-3/lesson-15" element={<ArrayCount15 />} />
-                <Route path="/module-3/lesson-16" element={<Compose8Lesson16 />} />
-                <Route path="/module-3/lesson-17" element={<CircularCount17 />} />
-                <Route path="/module-3/lesson-18" element={<ArrangeCount18 />} />
-                <Route path="/module-3/lesson-19" element={<Tally19 />} />
-                <Route path="/module-3/lesson-20" element={<CountOut20 />} />
-                <Route path="/module-3/lesson-21" element={<IntroduceZero21 />} />
-                <Route path="/module-3/lesson-22" element={<Introduce9Lesson22 />} />
-                <Route path="/module-3/lesson-23" element={<LinearCount9Lesson23 />} />
-                <Route path="/module-3/lesson-24" element={<FingerCount24 />} />
-                <Route path="/module-3/lesson-25" element={<ArrayCount25 />} />
-                <Route path="/module-3/lesson-27" element={<CircularCount9Lesson27 />} />
-                <Route path="/module-3/lesson-26" element={<Compose9Lesson26 />} />
-                <Route path="/module-3/lesson-28" element={<ArrangeCount28 />} />
-                <Route path="/module-3/lesson-29" element={<Tally9Lesson29 />} />
-                <Route path="/activities/module-4" element={<Module4Index />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </BrowserRouter>
-        </PremiumProvider>
-      </AuthProvider>
-    </TooltipProvider>
+                  <Route path="/activities/module-3" element={<Module3Index />} />
+                  <Route path="/module-3/lesson-1" element={<Introduce6And7Lesson1 />} />
+                  <Route path="/module-3/lesson-2" element={<CrossingCreekLesson2 />} />
+                  <Route path="/module-3/lesson-3" element={<FingerCounting6Lesson3 />} />
+                  <Route path="/module-3/lesson-4" element={<CountEggs4 />} />
+                  <Route path="/module-3/lesson-5" element={<CountArrays5 />} />
+                  <Route path="/module-3/lesson-6" element={<ComposeSix6 />} />
+                  <Route path="/module-3/lesson-7" element={<ComposeSeven7 />} />
+                  <Route path="/module-3/lesson-8" element={<CircleCount8 />} />
+                  <Route path="/module-3/lesson-9" element={<ArrangeCount9 />} />
+                  <Route path="/module-3/lesson-10" element={<Tally10 />} />
+                  <Route path="/module-3/lesson-30" element={<TowersThirty30 />} />
+                  <Route path="/module-3/lesson-31" element={<StairsThirtyOne31 />} />
+                  <Route path="/module-3/lesson-32" element={<ClimbStairsThirtyTwo32 />} />
+                  <Route path="/module-3/lesson-33" element={<DescendingStairsThirtyThree33 />} />
+                  <Route path="/module-3/lesson-34" element={<PennyStaircaseThirtyFour34 />} />
+                  <Route path="/module-3/lesson-35" element={<LittleCrabsThirtyFive35 />} />
+                  <Route path="/module-3/lesson-36" element={<LittleFishiesThirtySix36 />} />
+                  <Route path="/module-3/lesson-37" element={<CulminatingThirtySeven37 />} />
+                  <Route path="/module-3/lesson-38" element={<CircularTenThirtyEight38 />} />
+                  <Route path="/module-3/lesson-39" element={<VariedTenThirtyNine39 />} />
+                  <Route path="/module-3/lesson-40" element={<TallyTenForty40 />} />
+                  <Route path="/module-3/lesson-41" element={<CountOutTenFortyOne41 />} />
+                  <Route path="/module-3/lesson-42" element={<NumberBookFortyTwo42 />} />
+                  <Route path="/module-3/lesson-11" element={<CountOut11 />} />
+                  <Route path="/module-3/lesson-12" element={<Introduce8Lesson12 />} />
+                  <Route path="/module-3/lesson-13" element={<LinearCount13 />} />
+                  <Route path="/module-3/lesson-14" element={<FingerCount14 />} />
+                  <Route path="/module-3/lesson-15" element={<ArrayCount15 />} />
+                  <Route path="/module-3/lesson-16" element={<Compose8Lesson16 />} />
+                  <Route path="/module-3/lesson-17" element={<CircularCount17 />} />
+                  <Route path="/module-3/lesson-18" element={<ArrangeCount18 />} />
+                  <Route path="/module-3/lesson-19" element={<Tally19 />} />
+                  <Route path="/module-3/lesson-20" element={<CountOut20 />} />
+                  <Route path="/module-3/lesson-21" element={<IntroduceZero21 />} />
+                  <Route path="/module-3/lesson-22" element={<Introduce9Lesson22 />} />
+                  <Route path="/module-3/lesson-23" element={<LinearCount9Lesson23 />} />
+                  <Route path="/module-3/lesson-24" element={<FingerCount24 />} />
+                  <Route path="/module-3/lesson-25" element={<ArrayCount25 />} />
+                  <Route path="/module-3/lesson-27" element={<CircularCount9Lesson27 />} />
+                  <Route path="/module-3/lesson-26" element={<Compose9Lesson26 />} />
+                  <Route path="/module-3/lesson-28" element={<ArrangeCount28 />} />
+                  <Route path="/module-3/lesson-29" element={<Tally9Lesson29 />} />
+                  <Route path="/activities/module-4" element={<Module4Index />} />
+                  <Route path="/module-4/lesson-1" element={<TallOrShort1 />} />
+                  <Route path="/module-4/lesson-2" element={<TallerShorter2 />} />
+                  <Route path="/module-4/lesson-3" element={<LongerShorter3 />} />
+                  <Route path="/module-4/lesson-4" element={<LinkingCubes4 />} />
+                  <Route path="/module-4/lesson-5" element={<AboutSameCubes5 />} />
+                  <Route path="/module-4/lesson-6" element={<HeavyLight6 />} />
+                  <Route path="/module-4/lesson-7" element={<HeavierLighter7 />} />
+                  <Route path="/module-4/lesson-8" element={<BalanceScales8 />} />
+                  <Route path="/module-4/lesson-9" element={<BigSmallLesson9 />} />
+                  <Route path="/module-4/lesson-10" element={<MoreLessLesson10 />} />
+                  <Route path="/module-4/lesson-11" element={<SameVolumeLesson11 />} />
+                  <Route path="/module-4/lesson-12" element={<MatchCompareLesson12 />} />
+                  <Route path="/module-4/lesson-13" element={<FirstLastScattered13 />} />
+                  <Route path="/module-4/lesson-14" element={<FirstLastLinear14 />} />
+                  <Route path="/module-4/lesson-15" element={<FirstLastCircular15 />} />
+                  <Route path="/module-4/lesson-16" element={<AreThereEnoughMatching16 />} />
+                  <Route path="/module-4/lesson-17" element={<AreThereEnoughCounting17 />} />
+                  <Route path="/module-4/lesson-18" element={<OneMore18 />} />
+                  <Route path="/module-4/lesson-19" element={<OneLess19 />} />
+                  <Route path="/module-4/lesson-20" element={<FiveGroupObjects20 />} />
+                  <Route path="/module-4/lesson-21" element={<FiveGroupDots21 />} />
+                  <Route path="/module-4/lesson-22" element={<HiddenFiveGroup22 />} />
+                  <Route path="/module-4/lesson-23" element={<ABLinearPatterns23 />} />
+                  <Route path="/module-4/lesson-24" element={<ABScatteredPatterns24 />} />
+                  <Route path="/module-4/lesson-25" element={<ABCircularPatterns25 />} />
+                  <Route path="/module-4/lesson-26" element={<CreateABPattern26 />} />
+                  <Route path="/module-4/lesson-27" element={<ExtendABPattern27 />} />
+                  <Route path="/module-4/lesson-28" element={<PatternMatch28 />} />
+                  <Route path="/module-4/lesson-29" element={<ForestFinaleReview29 />} />
+                  <Route path="/module-4/assessment" element={<EndOfModule4Assessment />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
+            </BrowserRouter>
+          </PremiumProvider>
+        </AuthProvider>
+      </TooltipProvider>
+    </AudioProvider>
   </QueryClientProvider>
 );
 
