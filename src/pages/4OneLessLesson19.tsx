@@ -25,8 +25,8 @@ const OneLess19 = () => {
     const markLessonComplete = () => {
         const saved = localStorage.getItem("ethio-stem-m4-completed");
         const completed = saved ? JSON.parse(saved) : [];
-        if (!completed.includes("19")) {
-            completed.push("19");
+        if (!completed.includes("lesson-19")) {
+            completed.push("lesson-19");
             localStorage.setItem("ethio-stem-m4-completed", JSON.stringify(completed));
         }
     };
@@ -78,7 +78,7 @@ const OneLess19 = () => {
                         <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => navigate("/activities/module-4")}
+                            onClick={() => navigate("/activities/module-4?last=lesson-19")}
                             className="text-white hover:bg-white/20 rounded-full"
                         >
                             <ArrowLeft className="w-8 h-8" />

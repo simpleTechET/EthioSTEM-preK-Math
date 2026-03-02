@@ -17,8 +17,8 @@ const FiveGroupDots21 = () => {
     const markLessonComplete = () => {
         const saved = localStorage.getItem("ethio-stem-m4-completed");
         const completed = saved ? JSON.parse(saved) : [];
-        if (!completed.includes("21")) {
-            completed.push("21");
+        if (!completed.includes("lesson-21")) {
+            completed.push("lesson-21");
             localStorage.setItem("ethio-stem-m4-completed", JSON.stringify(completed));
         }
     };
@@ -65,7 +65,7 @@ const FiveGroupDots21 = () => {
                         <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => navigate("/activities/module-4")}
+                            onClick={() => navigate("/activities/module-4?last=lesson-21")}
                             className="text-white hover:bg-white/20 rounded-full"
                         >
                             <ArrowLeft className="w-8 h-8" />

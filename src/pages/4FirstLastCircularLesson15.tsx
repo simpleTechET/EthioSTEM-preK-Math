@@ -16,8 +16,8 @@ const FirstLastCircular15 = () => {
     const markLessonComplete = () => {
         const saved = localStorage.getItem("ethio-stem-m4-completed");
         const completed = saved ? JSON.parse(saved) : [];
-        if (!completed.includes("15")) {
-            completed.push("15");
+        if (!completed.includes("lesson-15")) {
+            completed.push("lesson-15");
             localStorage.setItem("ethio-stem-m4-completed", JSON.stringify(completed));
         }
     };
@@ -68,7 +68,7 @@ const FirstLastCircular15 = () => {
                         <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => navigate("/activities/module-4")}
+                            onClick={() => navigate("/activities/module-4?last=lesson-15")}
                             className="text-white hover:bg-white/20 rounded-full"
                         >
                             <ArrowLeft className="w-8 h-8" />

@@ -19,8 +19,8 @@ const CreateABPattern26 = () => {
     const markLessonComplete = () => {
         const saved = localStorage.getItem("ethio-stem-m4-completed");
         const completed = saved ? JSON.parse(saved) : [];
-        if (!completed.includes("26")) {
-            completed.push("26");
+        if (!completed.includes("lesson-26")) {
+            completed.push("lesson-26");
             localStorage.setItem("ethio-stem-m4-completed", JSON.stringify(completed));
         }
     };
@@ -82,7 +82,7 @@ const CreateABPattern26 = () => {
                         <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => navigate("/activities/module-4")}
+                            onClick={() => navigate("/activities/module-4?last=lesson-26")}
                             className="text-white hover:bg-white/20 rounded-full"
                         >
                             <ArrowLeft className="w-8 h-8" />

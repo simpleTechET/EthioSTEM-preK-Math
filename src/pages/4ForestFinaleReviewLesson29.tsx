@@ -116,8 +116,8 @@ const ForestFinaleReview29 = () => {
         setCompleted(true);
         speak("Amazing job! You've completed your Forest Adventure! You are ready for the next module.");
         const completedLessons = JSON.parse(localStorage.getItem("ethio-stem-m4-completed") || "[]");
-        if (!completedLessons.includes(29)) {
-            localStorage.setItem("ethio-stem-m4-completed", JSON.stringify([...completedLessons, 29]));
+        if (!completedLessons.includes("lesson-29")) {
+            localStorage.setItem("ethio-stem-m4-completed", JSON.stringify([...completedLessons, "lesson-29"]));
         }
     };
 
