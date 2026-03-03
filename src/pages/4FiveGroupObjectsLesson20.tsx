@@ -156,9 +156,9 @@ const FiveGroupObjects20 = () => {
                                 </div>
 
                                 {showFeedback && (
-                                    <div className="absolute inset-0 z-20 flex items-center justify-center bg-white/40 backdrop-blur-sm rounded-3xl animate-in fade-in duration-500">
-                                        <div className="bg-white p-10 rounded-full shadow-2xl border-8 border-purple-400 rotate-12">
-                                            <span className="text-9xl">🌟</span>
+                                    <div className="absolute bottom-4 right-4 z-20 animate-in zoom-in duration-300">
+                                        <div className="bg-white p-3 rounded-2xl shadow-lg border-4 border-purple-400">
+                                            <span className="text-4xl">🌟</span>
                                         </div>
                                     </div>
                                 )}

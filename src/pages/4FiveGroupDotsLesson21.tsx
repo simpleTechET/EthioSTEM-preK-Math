@@ -113,7 +113,7 @@ const FiveGroupDots21 = () => {
                             <h2 className="text-4xl font-extrabold text-green-800 italic">Circular Success!</h2>
                             <p className="text-xl text-green-700 font-medium">You found the 5-group circle!</p>
                             <Button
-                                onClick={() => navigate("/activities/module-4")}
+                                onClick={() => navigate("/activities/module-4?last=lesson-21")}
                                 className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white text-2xl px-12 py-8 rounded-full shadow-xl hover:scale-110 active:scale-95 transition-all duration-300 border-b-4 border-green-800 font-bold"
                             >
                                 BACK TO FOREST
@@ -157,9 +157,9 @@ const FiveGroupDots21 = () => {
                                 })}
 
                                 {showFeedback && (
-                                    <div className="absolute z-30 animate-in zoom-in spin-in duration-500">
-                                        <div className="bg-white p-12 rounded-full shadow-2xl border-8 border-pink-400">
-                                            <span className="text-8xl">👑</span>
+                                    <div className="absolute top-4 right-4 z-30 animate-in zoom-in duration-300">
+                                        <div className="bg-white p-3 rounded-2xl shadow-lg border-4 border-pink-400">
+                                            <span className="text-4xl">👑</span>
                                         </div>
                                     </div>
                                 )}

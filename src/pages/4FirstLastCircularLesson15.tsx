@@ -118,7 +118,7 @@ const FirstLastCircular15 = () => {
                             <h2 className="text-4xl font-extrabold text-green-800 italic">Amazing Work!</h2>
                             <p className="text-xl text-green-700 font-medium">You matched everyone in the circle!</p>
                             <Button
-                                onClick={() => navigate("/activities/module-4")}
+                                onClick={() => navigate("/activities/module-4?last=lesson-15")}
                                 className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white text-2xl px-12 py-8 rounded-full shadow-xl hover:scale-110 active:scale-95 transition-all duration-300 border-b-4 border-green-800 font-bold"
                             >
                                 BACK TO FOREST
@@ -199,8 +199,7 @@ const FirstLastCircular15 = () => {
                                 </div>
 
                                 {showFeedback && (
-                                    <div className={`absolute z-30 text-8xl transition-all duration-300 animate-in zoom-in ${showFeedback === 'correct' ? 'scale-150' : 'rotate-12'
-                                        }`}>
+                                    <div className={`absolute top-4 right-4 z-30 text-3xl p-2 rounded-full bg-white/90 shadow-md animate-in zoom-in duration-300`}>
                                         {showFeedback === 'correct' ? '🍎' : '❌'}
                                     </div>
                                 )}

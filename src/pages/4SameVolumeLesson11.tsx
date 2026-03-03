@@ -100,7 +100,7 @@ const SameVolumeLesson11 = () => {
                             <Button onClick={() => { setCurrentStep(0); setIsComplete(false); speak("Show me more magic!"); }} className="h-20 px-12 bg-white/10 hover:bg-white/20 text-white text-2xl font-fredoka rounded-[2rem] border-4 border-white/20 uppercase tracking-tighter">
                                 Play Again 🔄
                             </Button>
-                            <Button onClick={() => navigate("/activities/module-4")} className="h-20 px-12 bg-white text-indigo-800 hover:bg-indigo-50 text-2xl font-fredoka rounded-[2rem] shadow-2xl uppercase tracking-tighter">
+                            <Button onClick={() => navigate("/activities/module-4?last=lesson-11")} className="h-20 px-12 bg-white text-indigo-800 hover:bg-indigo-50 text-2xl font-fredoka rounded-[2rem] shadow-2xl uppercase tracking-tighter">
                                 Next Trick! ✨
                             </Button>
                         </div>

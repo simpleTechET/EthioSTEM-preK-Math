@@ -120,7 +120,7 @@ const BalanceScales8 = () => {
                             <Button onClick={() => { setCurrentStep(0); setIsComplete(false); speak("Let's scale again!"); }} className="h-20 px-12 bg-white/10 hover:bg-white/20 text-white text-2xl font-fredoka rounded-[2rem] border-4 border-white/20 uppercase tracking-tighter">
                                 Play Again 🔄
                             </Button>
-                            <Button onClick={() => navigate("/activities/module-4")} className="h-20 px-12 bg-white text-forest-700 hover:bg-forest-50 text-2xl font-fredoka rounded-[2rem] shadow-2xl uppercase tracking-tighter">
+                            <Button onClick={() => navigate("/activities/module-4?last=lesson-8")} className="h-20 px-12 bg-white text-forest-700 hover:bg-forest-50 text-2xl font-fredoka rounded-[2rem] shadow-2xl uppercase tracking-tighter">
                                 Module Hub ✨
                             </Button>
                         </div>

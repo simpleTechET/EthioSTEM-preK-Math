@@ -128,7 +128,7 @@ const TallOrShort1 = () => {
                             <Button onClick={() => { setCurrentStep(0); setIsComplete(false); speak("Let's explore again!"); }} className="h-20 px-12 bg-white/10 hover:bg-white/20 text-white text-2xl font-fredoka rounded-[2rem] border-4 border-white/20">
                                 Play Again! 🔄
                             </Button>
-                            <Button onClick={() => navigate("/activities/module-4")} className="h-20 px-12 bg-white text-forest-700 hover:bg-forest-50 text-2xl font-fredoka rounded-[2rem] shadow-2xl">
+                            <Button onClick={() => navigate("/activities/module-4?last=lesson-1")} className="h-20 px-12 bg-white text-forest-700 hover:bg-forest-50 text-2xl font-fredoka rounded-[2rem] shadow-2xl">
                                 I'm Done! ✨
                             </Button>
                         </div>

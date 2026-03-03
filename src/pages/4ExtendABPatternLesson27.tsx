@@ -120,7 +120,7 @@ const ExtendABPattern27 = () => {
                             <h2 className="text-4xl font-extrabold text-green-800 italic">Pattern Vision!</h2>
                             <p className="text-xl text-green-700 font-medium">You saw exactly what was coming next!</p>
                             <Button
-                                onClick={() => navigate("/activities/module-4")}
+                                onClick={() => navigate("/activities/module-4?last=lesson-27")}
                                 className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white text-2xl px-12 py-8 rounded-full shadow-xl hover:scale-110 active:scale-95 transition-all duration-300 border-b-4 border-green-800 font-bold"
                             >
                                 BACK TO FOREST
@@ -159,9 +159,9 @@ const ExtendABPattern27 = () => {
                             </div>
 
                             {showFeedback && (
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 animate-in zoom-in duration-300">
-                                    <div className="bg-white p-10 rounded-full shadow-2xl border-8 border-green-400 animate-bounce">
-                                        <span className="text-9xl">⭐</span>
+                                <div className="absolute bottom-4 right-4 z-50 animate-in zoom-in duration-300">
+                                    <div className="bg-white p-3 rounded-2xl shadow-lg border-4 border-green-400">
+                                        <span className="text-4xl">⭐</span>
                                     </div>
                                 </div>
                             )}

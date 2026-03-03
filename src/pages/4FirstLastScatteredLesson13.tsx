@@ -116,7 +116,7 @@ const FirstLastScattered13 = () => {
                             <h2 className="text-4xl font-extrabold text-green-800 italic">Fantastic!</h2>
                             <p className="text-xl text-green-700 font-medium">You know who is first and last!</p>
                             <Button
-                                onClick={() => navigate("/activities/module-4")}
+                                onClick={() => navigate("/activities/module-4?last=lesson-13")}
                                 className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white text-2xl px-12 py-8 rounded-full shadow-xl hover:scale-110 active:scale-95 transition-all duration-300 border-b-4 border-green-800 font-bold"
                             >
                                 BACK TO FOREST
@@ -171,7 +171,7 @@ const FirstLastScattered13 = () => {
                                 </div>
 
                                 {showFeedback && (
-                                    <div className={`absolute top-4 right-4 text-4xl p-4 rounded-full animate-in zoom-in duration-300 shadow-lg border-2 ${showFeedback === 'correct' ? 'bg-green-100 border-green-500' : 'bg-red-100 border-red-500'
+                                    <div className={`absolute top-4 right-4 text-2xl p-2 rounded-full animate-in zoom-in duration-300 shadow-md border-2 ${showFeedback === 'correct' ? 'bg-green-100 border-green-500' : 'bg-red-100 border-red-500'
                                         }`}>
                                         {showFeedback === 'correct' ? '✅' : '❌'}
                                     </div>

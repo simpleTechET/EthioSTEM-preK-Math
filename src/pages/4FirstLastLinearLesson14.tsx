@@ -115,7 +115,7 @@ const FirstLastLinear14 = () => {
                             <h2 className="text-4xl font-extrabold text-green-800 italic">Well Done!</h2>
                             <p className="text-xl text-green-700 font-medium">You found everyone in line!</p>
                             <Button
-                                onClick={() => navigate("/activities/module-4")}
+                                onClick={() => navigate("/activities/module-4?last=lesson-14")}
                                 className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white text-2xl px-12 py-8 rounded-full shadow-xl hover:scale-110 active:scale-95 transition-all duration-300 border-b-4 border-green-800 font-bold"
                             >
                                 BACK TO FOREST
@@ -173,7 +173,7 @@ const FirstLastLinear14 = () => {
                                 </div>
 
                                 {showFeedback && (
-                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-8xl p-8 rounded-full animate-in zoom-in duration-300 shadow-2xl z-20">
+                                    <div className="absolute top-4 right-4 text-3xl p-2 rounded-full animate-in zoom-in duration-300 shadow-md z-20 bg-white/90">
                                         {showFeedback === 'correct' ? '🌟' : '❌'}
                                     </div>
                                 )}

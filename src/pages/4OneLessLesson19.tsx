@@ -126,7 +126,7 @@ const OneLess19 = () => {
                             <h2 className="text-4xl font-extrabold text-green-800 italic">Subtraction Star!</h2>
                             <p className="text-xl text-green-700 font-medium">You noticed the group got smaller!</p>
                             <Button
-                                onClick={() => navigate("/activities/module-4")}
+                                onClick={() => navigate("/activities/module-4?last=lesson-19")}
                                 className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white text-2xl px-12 py-8 rounded-full shadow-xl hover:scale-110 active:scale-95 transition-all duration-300 border-b-4 border-green-800 font-bold"
                             >
                                 BACK TO FOREST
@@ -163,9 +163,9 @@ const OneLess19 = () => {
                                 </div>
 
                                 {showFeedback && (
-                                    <div className="absolute inset-0 bg-white/20 backdrop-blur-[1px] rounded-3xl flex items-center justify-center animate-in fade-in duration-300">
-                                        <div className="bg-white p-12 rounded-full shadow-2xl border-8 border-amber-400 animate-bounce">
-                                            <span className="text-9xl font-black text-amber-600">{expectedCount}</span>
+                                    <div className="absolute bottom-4 right-4 z-20 animate-in zoom-in duration-300">
+                                        <div className="bg-white p-4 rounded-2xl shadow-lg border-4 border-amber-400">
+                                            <span className="text-5xl font-black text-amber-600">{expectedCount}</span>
                                         </div>
                                     </div>
                                 )}
