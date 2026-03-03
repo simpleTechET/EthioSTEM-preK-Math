@@ -126,7 +126,7 @@ const AreThereEnoughCounting17 = () => {
                             <h2 className="text-4xl font-extrabold text-green-800 italic">Expert Counter!</h2>
                             <p className="text-xl text-green-700 font-medium">You identified all the groups!</p>
                             <Button
-                                onClick={() => navigate("/activities/module-4")}
+                                onClick={() => navigate("/activities/module-4?last=lesson-17")}
                                 className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white text-2xl px-12 py-8 rounded-full shadow-xl hover:scale-110 active:scale-95 transition-all duration-300 border-b-4 border-green-800 font-bold"
                             >
                                 BACK TO FOREST
@@ -227,9 +227,9 @@ const AreThereEnoughCounting17 = () => {
                             </div>
 
                             {showFeedback && (
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 animate-in zoom-in duration-300">
-                                    <div className={`p-8 rounded-full shadow-2xl ${showFeedback === 'correct' ? 'bg-green-100 border-4 border-green-500' : 'bg-red-100 border-4 border-red-500'}`}>
-                                        <span className="text-8xl">{showFeedback === 'correct' ? '🌟' : '🧐'}</span>
+                            <div className="absolute bottom-4 right-4 z-50 animate-in zoom-in duration-300">
+                                    <div className={`p-3 rounded-2xl shadow-md ${showFeedback === 'correct' ? 'bg-green-100 border-2 border-green-500' : 'bg-red-100 border-2 border-red-500'}`}>
+                                        <span className="text-4xl">{showFeedback === 'correct' ? '🌟' : '🧐'}</span>
                                     </div>
                                 </div>
                             )}
