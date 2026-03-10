@@ -257,6 +257,41 @@ const Homepage = () => {
                 </div>
               </CardContent>
             </Card>
+            {/* Module 5 - Available */}
+            <Card className="border-2 border-violet-200 hover:border-violet-500 hover:shadow-playful transition-all duration-300 hover:scale-105 bg-violet-50/30">
+              <CardHeader>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-semibold text-violet-700 bg-violet-100 px-3 py-1 rounded-full">
+                    Available Now
+                  </span>
+                  <CheckCircle2 className="w-6 h-6 text-success" />
+                </div>
+                <CardTitle className="text-2xl">Pre-K Math: Module 5</CardTitle>
+                <CardDescription>Addition & Subtraction Stories</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <Target className="w-4 h-4 text-violet-600 mt-1 flex-shrink-0" />
+                    <span>Addition and subtraction stories with numbers 0–5</span>
+                  </div>
+                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <Users className="w-4 h-4 text-violet-600 mt-1 flex-shrink-0" />
+                    <span>Write numerals, use fingers, objects, and drawings</span>
+                  </div>
+                  <div className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <BookOpen className="w-4 h-4 text-violet-600 mt-1 flex-shrink-0" />
+                    <span>28 storybook-themed interactive lessons</span>
+                  </div>
+                  <Link to="/activities/module-5" className="block">
+                    <Button className="w-full mt-4 bg-violet-600 hover:bg-violet-700">
+                      Start Module 5
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>

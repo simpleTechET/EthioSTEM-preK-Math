@@ -1,0 +1,359 @@
+import { useState, useEffect, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { ArrowLeft, CheckCircle, RefreshCw, ArrowRight, BookOpen } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { MuteButton } from "@/components/MuteButton";
+
+interface Lesson {
+  path: string;
+  lessonNumber: number;
+  title: string;
+  description: string;
+  emoji: string;
+}
+
+interface Topic {
+  id: string;
+  title: string;
+  subtitle: string;
+  standards: string;
+  color: string;
+  borderColor: string;
+  gradientFrom: string;
+  gradientTo: string;
+  icon: string;
+  waveFill: string;
+  lessons: Lesson[];
+}
+
+const topics: Topic[] = [
+  {
+    id: "A",
+    title: "Topic A",
+    subtitle: "Writing Numerals 0 to 5",
+    standards: "PK.CC.2",
+    color: "bg-amber-50",
+    borderColor: "border-amber-400",
+    gradientFrom: "from-amber-400",
+    gradientTo: "to-orange-500",
+    icon: "✏️",
+    waveFill: "#fffbeb",
+    lessons: [
+      { path: "/module-5/lesson-1", lessonNumber: 1, title: "Write 0 and 1", description: "Learn to write numerals 0 and 1 with rhymes", emoji: "1️⃣" },
+      { path: "/module-5/lesson-2", lessonNumber: 2, title: "Write 2", description: "Practice writing the numeral 2", emoji: "✌️" },
+      { path: "/module-5/lesson-3", lessonNumber: 3, title: "Write 3", description: "Practice writing the numeral 3", emoji: "3️⃣" },
+      { path: "/module-5/lesson-4", lessonNumber: 4, title: "Write 4", description: "Practice writing the numeral 4", emoji: "4️⃣" },
+      { path: "/module-5/lesson-5", lessonNumber: 5, title: "Write 5", description: "Practice writing the numeral 5", emoji: "🖐️" },
+    ],
+  },
+  {
+    id: "B",
+    title: "Topic B",
+    subtitle: "Addition Stories",
+    standards: "PK.OA.1, PK.CC.2–4",
+    color: "bg-sky-50",
+    borderColor: "border-sky-400",
+    gradientFrom: "from-sky-400",
+    gradientTo: "to-blue-500",
+    icon: "➕",
+    waveFill: "#f0f9ff",
+    lessons: [
+      { path: "/module-5/lesson-6", lessonNumber: 6, title: "Act Out Addition", description: "Act out add-to stories with result unknown", emoji: "🎭" },
+      { path: "/module-5/lesson-7", lessonNumber: 7, title: "Addition with Objects", description: "Solve add-to stories using objects from the story", emoji: "🧸" },
+      { path: "/module-5/lesson-8", lessonNumber: 8, title: "Number Sentences +", description: "Represent add-to stories with number sentences", emoji: "📝" },
+      { path: "/module-5/lesson-9", lessonNumber: 9, title: "Put Together Stories", description: "Solve put-together stories with objects and drawings", emoji: "🎨" },
+      { path: "/module-5/lesson-10", lessonNumber: 10, title: "Create Addition Stories", description: "Create and solve addition stories using drawings", emoji: "📖" },
+    ],
+  },
+  {
+    id: "C",
+    title: "Topic C",
+    subtitle: "Subtraction Stories",
+    standards: "PK.OA.1, PK.CC.2–4",
+    color: "bg-rose-50",
+    borderColor: "border-rose-400",
+    gradientFrom: "from-rose-400",
+    gradientTo: "to-red-500",
+    icon: "➖",
+    waveFill: "#fff1f2",
+    lessons: [
+      { path: "/module-5/lesson-11", lessonNumber: 11, title: "Act Out Subtraction", description: "Act out take-from stories with result unknown", emoji: "🐻" },
+      { path: "/module-5/lesson-12", lessonNumber: 12, title: "Subtraction with Objects", description: "Solve take-from stories using objects from the story", emoji: "🪆" },
+      { path: "/module-5/lesson-13", lessonNumber: 13, title: "Number Sentences −", description: "Represent take-from stories with number sentences", emoji: "✍️" },
+      { path: "/module-5/lesson-14", lessonNumber: 14, title: "Subtract with Drawings", description: "Solve take-from stories with objects and drawings", emoji: "✂️" },
+      { path: "/module-5/lesson-15", lessonNumber: 15, title: "Create Subtraction Stories", description: "Create and solve subtraction stories by drawing", emoji: "🖍️" },
+    ],
+  },
+  {
+    id: "D",
+    title: "Topic D",
+    subtitle: "Addition with Fingers & Drawings",
+    standards: "PK.OA.1, PK.CC.2",
+    color: "bg-violet-50",
+    borderColor: "border-violet-400",
+    gradientFrom: "from-violet-400",
+    gradientTo: "to-purple-500",
+    icon: "🖐️",
+    waveFill: "#f5f3ff",
+    lessons: [
+      { path: "/module-5/lesson-16", lessonNumber: 16, title: "Addition with Fingers I", description: "Solve addition stories using fingers", emoji: "👆" },
+      { path: "/module-5/lesson-17", lessonNumber: 17, title: "Addition with Fingers II", description: "More addition stories using fingers", emoji: "✌️" },
+      { path: "/module-5/lesson-18", lessonNumber: 18, title: "Addition with Cubes", description: "Solve addition stories with representative objects", emoji: "🧱" },
+      { path: "/module-5/lesson-19", lessonNumber: 19, title: "Addition with Drawings", description: "Solve addition stories with representative drawings", emoji: "⭕" },
+    ],
+  },
+  {
+    id: "E",
+    title: "Topic E",
+    subtitle: "Subtraction with Fingers & Drawings",
+    standards: "PK.OA.1, PK.CC.2",
+    color: "bg-teal-50",
+    borderColor: "border-teal-400",
+    gradientFrom: "from-teal-400",
+    gradientTo: "to-cyan-500",
+    icon: "🤲",
+    waveFill: "#f0fdfa",
+    lessons: [
+      { path: "/module-5/lesson-20", lessonNumber: 20, title: "Subtraction with Fingers I", description: "Solve subtraction stories using fingers", emoji: "👇" },
+      { path: "/module-5/lesson-21", lessonNumber: 21, title: "Subtraction with Fingers II", description: "More subtraction stories using fingers", emoji: "🤏" },
+      { path: "/module-5/lesson-22", lessonNumber: 22, title: "Subtraction with Cubes", description: "Solve subtraction stories with representative objects", emoji: "🧊" },
+      { path: "/module-5/lesson-23", lessonNumber: 23, title: "Subtraction with Drawings", description: "Solve subtraction stories with representative drawings", emoji: "❌" },
+    ],
+  },
+  {
+    id: "F",
+    title: "Topic F",
+    subtitle: "Duplicating & Extending Patterns",
+    standards: "PK.OA.2, PK.CC.1",
+    color: "bg-fuchsia-50",
+    borderColor: "border-fuchsia-400",
+    gradientFrom: "from-fuchsia-400",
+    gradientTo: "to-pink-500",
+    icon: "🔁",
+    waveFill: "#fdf4ff",
+    lessons: [
+      { path: "/module-5/lesson-24", lessonNumber: 24, title: "Identify Patterns", description: "Identify patterns using objects", emoji: "🔍" },
+      { path: "/module-5/lesson-25", lessonNumber: 25, title: "Sound & Movement Patterns", description: "Identify and duplicate patterns using sounds and movement", emoji: "🥁" },
+      { path: "/module-5/lesson-26", lessonNumber: 26, title: "Extend Patterns", description: "Duplicate and extend patterns with movement and objects", emoji: "🔗" },
+      { path: "/module-5/lesson-27", lessonNumber: 27, title: "Growth Patterns", description: "Identify a growth pattern using objects", emoji: "📈" },
+      { path: "/module-5/lesson-28", lessonNumber: 28, title: "Math Theater", description: "Create a story problem and act it out!", emoji: "🎪" },
+    ],
+  },
+];
+
+const Module5Index = () => {
+  const location = useLocation();
+  const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+  const lessonRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
+
+  useEffect(() => {
+    const saved = localStorage.getItem("ethio-stem-m5-completed");
+    if (saved) setCompletedLessons(JSON.parse(saved));
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const lastId = params.get("last");
+    if (lastId && lessonRefs.current[lastId]) {
+      setTimeout(() => {
+        lessonRefs.current[lastId]?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 500);
+    }
+  }, [location]);
+
+  const resetProgress = () => {
+    if (confirm("Reset all your storybook progress? 📖")) {
+      setCompletedLessons([]);
+      localStorage.removeItem("ethio-stem-m5-completed");
+    }
+  };
+
+  const totalLessons = topics.reduce((acc, t) => acc + t.lessons.length, 0);
+  const completedCount = completedLessons.length;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-amber-50 via-orange-50/30 to-rose-50/20 overflow-hidden relative">
+      {/* Storybook decorations */}
+      <div className="absolute top-10 left-8 w-28 h-28 bg-amber-300/15 rounded-full blur-2xl animate-pulse" />
+      <div className="absolute top-48 right-16 w-36 h-36 bg-rose-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+      <div className="absolute bottom-32 left-1/3 w-44 h-44 bg-violet-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "0.5s" }} />
+
+      {/* Stars scattered */}
+      {[...Array(8)].map((_, i) => (
+        <div
+          key={i}
+          className="absolute text-amber-300/40 animate-pulse"
+          style={{
+            top: `${10 + (i * 12) % 80}%`,
+            left: `${5 + (i * 17) % 90}%`,
+            animationDelay: `${i * 0.4}s`,
+            fontSize: `${12 + (i % 3) * 6}px`,
+          }}
+        >
+          ✦
+        </div>
+      ))}
+
+      <div className="container mx-auto px-4 py-12 relative z-10 pb-24">
+        {/* Header */}
+        <header className="text-center mb-12 relative">
+          <Link to="/" className="absolute left-0 top-0">
+            <Button variant="ghost" size="icon" className="rounded-full bg-white/60 hover:bg-white border-2 border-amber-200/50">
+              <ArrowLeft className="w-6 h-6" />
+            </Button>
+          </Link>
+          <div className="inline-flex items-center gap-4 mb-4">
+            <span className="text-5xl">📖</span>
+            <h1 className="font-fredoka text-4xl md:text-5xl text-foreground text-shadow-playful">
+              Storybook Adventure
+            </h1>
+            <span className="text-5xl">✨</span>
+          </div>
+          <p className="font-nunito text-xl text-foreground/80">
+            Module 5: Addition & Subtraction Stories
+          </p>
+
+          {/* Progress bar */}
+          <div className="max-w-md mx-auto mt-4">
+            <div className="flex justify-between text-sm font-nunito text-foreground/60 mb-1">
+              <span>{completedCount} / {totalLessons} lessons</span>
+              <span>{Math.round((completedCount / totalLessons) * 100)}%</span>
+            </div>
+            <div className="h-3 bg-white/60 rounded-full border border-amber-200/50 overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-amber-400 to-orange-400 rounded-full transition-all duration-700"
+                style={{ width: `${(completedCount / totalLessons) * 100}%` }}
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-center items-center gap-3 mt-4">
+            <Button
+              onClick={resetProgress}
+              variant="outline"
+              size="sm"
+              className="rounded-full bg-white/30 border-amber-200/50 hover:bg-white/80 text-xs gap-2"
+            >
+              <RefreshCw className="w-3 h-3" /> Reset
+            </Button>
+            <MuteButton className="h-8 w-8" />
+          </div>
+        </header>
+
+        {/* Topics */}
+        <div className="max-w-3xl mx-auto space-y-8">
+          {topics.map((topic, topicIdx) => (
+            <div
+              key={topic.id}
+              className={`${topic.color} rounded-[3rem] shadow-xl overflow-hidden border-4 ${topic.borderColor} transform transition-all hover:scale-[1.01]`}
+            >
+              {/* Topic header */}
+              <div className={`relative p-6 bg-gradient-to-r ${topic.gradientFrom} ${topic.gradientTo} overflow-hidden`}>
+                <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full blur-lg" />
+                <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-white/5 rounded-full blur-lg" />
+
+                <div className="relative flex items-center gap-6">
+                  <div className="w-20 h-20 rounded-[2rem] bg-white/20 backdrop-blur-md flex items-center justify-center shadow-xl transform -rotate-3 hover:rotate-3 transition-transform border-4 border-white/30">
+                    <span className="text-5xl">{topic.icon}</span>
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="bg-white/30 text-white text-xs font-black px-3 py-1 rounded-full font-nunito tracking-wider">
+                        CHAPTER {topic.id}
+                      </span>
+                    </div>
+                    <h2 className="font-fredoka text-2xl md:text-3xl text-white drop-shadow-md mt-1">
+                      {topic.subtitle}
+                    </h2>
+                    <p className="font-nunito text-sm text-white/90 mt-1 font-medium">
+                      📚 {topic.standards} • Story Guide
+                    </p>
+                  </div>
+                </div>
+
+                <svg className="absolute bottom-0 left-0 right-0 h-4" viewBox="0 0 100 10" preserveAspectRatio="none">
+                  <path d="M0 10 Q 10 0, 20 6 T 40 6 T 60 6 T 80 6 T 100 6 L 100 10 Z" style={{ fill: topic.waveFill }} />
+                </svg>
+              </div>
+
+              {/* Lessons */}
+              <div className="p-6">
+                <div className="grid gap-4">
+                  {topic.lessons.map((lesson) => {
+                    const lessonId = `lesson-${lesson.lessonNumber}`;
+                    const isCompleted = completedLessons.includes(lessonId);
+                    return (
+                      <Link
+                        key={lesson.path}
+                        to={lesson.path}
+                        ref={(el) => { if (lessonId) lessonRefs.current[lessonId] = el; }}
+                      >
+                        <div className="bg-white/90 rounded-3xl p-5 hover:scale-[1.02] transition-all cursor-pointer shadow-md flex items-center gap-5 hover:bg-white group relative border-2 border-transparent hover:border-amber-300">
+                          <div className="w-16 h-16 rounded-2xl bg-amber-50 flex items-center justify-center text-4xl group-hover:scale-110 transition-transform">
+                            {lesson.emoji}
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="font-fredoka text-xl text-foreground group-hover:text-amber-700 transition-colors">
+                              Lesson {lesson.lessonNumber}: {lesson.title}
+                            </h3>
+                            <p className="font-nunito text-sm text-muted-foreground">{lesson.description}</p>
+                          </div>
+                          <div className="flex flex-col items-center gap-1">
+                            {isCompleted ? (
+                              <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-600 animate-in zoom-in duration-300">
+                                <CheckCircle className="w-8 h-8" />
+                              </div>
+                            ) : (
+                              <div className="w-12 h-12 bg-amber-50 rounded-full flex items-center justify-center text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <ArrowRight className="w-6 h-6" />
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {/* Mid-Module Assessment */}
+          <div className="bg-amber-800/90 backdrop-blur-md rounded-[2.5rem] p-8 border-4 border-amber-600 shadow-2xl hover:scale-[1.02] transition-all group flex items-center justify-between overflow-hidden relative">
+            <div className="absolute -right-10 -top-10 w-40 h-40 bg-amber-400/20 rounded-full blur-3xl group-hover:bg-amber-300/40 transition-colors" />
+            <div className="flex items-center gap-6 relative z-10">
+              <div className="w-20 h-20 bg-white/10 rounded-[1.5rem] flex items-center justify-center text-5xl">📋</div>
+              <div>
+                <h2 className="text-2xl font-fredoka text-white">Mid-Module Assessment</h2>
+                <p className="text-amber-300 font-nunito font-bold italic">Topics A–C • Interview Rubric</p>
+              </div>
+            </div>
+            <BookOpen className="w-12 h-12 text-white/30" />
+          </div>
+
+          {/* End-of-Module Assessment */}
+          <div className="bg-rose-800/90 backdrop-blur-md rounded-[2.5rem] p-8 border-4 border-rose-600 shadow-2xl hover:scale-[1.02] transition-all group flex items-center justify-between overflow-hidden relative">
+            <div className="absolute -right-10 -top-10 w-40 h-40 bg-rose-400/20 rounded-full blur-3xl group-hover:bg-rose-300/40 transition-colors" />
+            <div className="flex items-center gap-6 relative z-10">
+              <div className="w-20 h-20 bg-white/10 rounded-[1.5rem] flex items-center justify-center text-5xl">🏆</div>
+              <div>
+                <h2 className="text-2xl font-fredoka text-white">End-of-Module Assessment</h2>
+                <p className="text-rose-300 font-nunito font-bold italic">Topics D–F • Interview Rubric</p>
+              </div>
+            </div>
+            <BookOpen className="w-12 h-12 text-white/30" />
+          </div>
+        </div>
+
+        <p className="text-center font-nunito text-foreground/60 text-sm bg-white/30 backdrop-blur-sm inline-block px-6 py-2 rounded-full border border-amber-200/30 w-full mt-8">
+          📖 Module 5: Addition & Subtraction Stories and Counting to 20
+        </p>
+      </div>
+
+      {/* Bottom gradient */}
+      <div className="fixed bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-amber-100/50 to-transparent z-0 pointer-events-none" />
+    </div>
+  );
+};
+
+export default Module5Index;

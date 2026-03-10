@@ -92,6 +92,7 @@ const EndOfModule2Assessment = lazy(() => import("./pages/EndOfModule2Assessment
 
 const Module3Index = lazy(() => import("./pages/Module3Index"));
 const Module4Index = lazy(() => import("./pages/Module4Index"));
+const Module5Index = lazy(() => import("./pages/Module5Index"));
 const TallOrShort1 = lazy(() => import("./pages/4TallOrShortLesson1.tsx"));
 const TallerShorter2 = lazy(() => import("./pages/4TallerShorterLesson2.tsx"));
 const LongerShorter3 = lazy(() => import("./pages/4LongerShorterLesson3.tsx"));
