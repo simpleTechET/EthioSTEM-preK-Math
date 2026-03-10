@@ -15,20 +15,26 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@lovable_dev" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-    <link rel="icon" type="image/png" href="/logo_notxt.png" />
-  </head>
- <script>
-      // Handle redirect from 404.html
+    <link rel="icon" type="image/png" href="/EthioSTEM-preK-Math/logo_notxt.png" />
+
+    <script>
+      // Restore the intended URL after 404.html redirect
       (function() {
-        const redirect = sessionStorage.redirect;
-        delete sessionStorage.redirect;
-        if (redirect && redirect !== window.location.href) {
-          history.replaceState(null, null, redirect);
+        var redirect = sessionStorage.getItem('spa-redirect');
+        if (redirect) {
+          sessionStorage.removeItem('spa-redirect');
+          // Strip the base path prefix so React Router gets the right path
+          var base = '/EthioSTEM-preK-Math';
+          var route = redirect.startsWith(base) ? redirect.slice(base.length) : redirect;
+          if (route && route !== '/') {
+            window.history.replaceState(null, null, base + route);
+          }
         }
       })();
     </script>
+  </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="/EthioSTEM-preK-Math/src/main.tsx"></script>
   </body>
 </html>
