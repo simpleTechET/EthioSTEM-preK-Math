@@ -2,17 +2,13 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Redirecting...</title>
-    <link rel="icon" href="/ESTEM-preK-Math/favicon.ico">
+    <title>EthioSTEM - Redirecting...</title>
+    <link rel="icon" href="/EthioSTEM-preK-Math/logo_notxt.png">
     <script>
-      // Single Page Apps for GitHub Pages
-      // MIT License
-      // https://github.com/rafgraph/spa-github-pages
-      const pathSegments = window.location.pathname.split('/');
-      const basePath = pathSegments.slice(0, pathSegments.length - 1).join('/');
-      const redirectTo = basePath + '/index.html';
-      sessionStorage.redirect = window.location.pathname + window.location.search;
-      window.location.replace(redirectTo);
+      // SPA redirect for GitHub Pages
+      // Store the full intended URL in sessionStorage, then redirect to root index.html
+      sessionStorage.setItem('spa-redirect', window.location.pathname + window.location.search + window.location.hash);
+      window.location.replace('/EthioSTEM-preK-Math/');
     </script>
   </head>
   <body>
