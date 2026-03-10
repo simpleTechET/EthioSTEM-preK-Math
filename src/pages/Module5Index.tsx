@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { ArrowLeft, CheckCircle, RefreshCw, ArrowRight, BookOpen } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ArrowLeft, CheckCircle, RefreshCw, ArrowRight, Sparkles, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MuteButton } from "@/components/MuteButton";
 
@@ -12,32 +12,28 @@ interface Lesson {
   emoji: string;
 }
 
-interface Topic {
+interface Chapter {
   id: string;
-  title: string;
+  label: string;
   subtitle: string;
   standards: string;
-  color: string;
-  borderColor: string;
-  gradientFrom: string;
-  gradientTo: string;
+  accent: string;
+  accentDark: string;
+  bgPattern: string;
   icon: string;
-  waveFill: string;
   lessons: Lesson[];
 }
 
-const topics: Topic[] = [
+const chapters: Chapter[] = [
   {
     id: "A",
-    title: "Topic A",
+    label: "Chapter 1",
     subtitle: "Writing Numerals 0 to 5",
     standards: "PK.CC.2",
-    color: "bg-amber-50",
-    borderColor: "border-amber-400",
-    gradientFrom: "from-amber-400",
-    gradientTo: "to-orange-500",
+    accent: "#f59e0b",
+    accentDark: "#d97706",
+    bgPattern: "📝",
     icon: "✏️",
-    waveFill: "#fffbeb",
     lessons: [
       { path: "/module-5/lesson-1", lessonNumber: 1, title: "Write 0 and 1", description: "Learn to write numerals 0 and 1 with rhymes", emoji: "1️⃣" },
       { path: "/module-5/lesson-2", lessonNumber: 2, title: "Write 2", description: "Practice writing the numeral 2", emoji: "✌️" },
@@ -48,15 +44,13 @@ const topics: Topic[] = [
   },
   {
     id: "B",
-    title: "Topic B",
+    label: "Chapter 2",
     subtitle: "Addition Stories",
     standards: "PK.OA.1, PK.CC.2–4",
-    color: "bg-sky-50",
-    borderColor: "border-sky-400",
-    gradientFrom: "from-sky-400",
-    gradientTo: "to-blue-500",
-    icon: "➕",
-    waveFill: "#f0f9ff",
+    accent: "#3b82f6",
+    accentDark: "#2563eb",
+    bgPattern: "➕",
+    icon: "📖",
     lessons: [
       { path: "/module-5/lesson-6", lessonNumber: 6, title: "Act Out Addition", description: "Act out add-to stories with result unknown", emoji: "🎭" },
       { path: "/module-5/lesson-7", lessonNumber: 7, title: "Addition with Objects", description: "Solve add-to stories using objects from the story", emoji: "🧸" },
@@ -67,15 +61,13 @@ const topics: Topic[] = [
   },
   {
     id: "C",
-    title: "Topic C",
+    label: "Chapter 3",
     subtitle: "Subtraction Stories",
     standards: "PK.OA.1, PK.CC.2–4",
-    color: "bg-rose-50",
-    borderColor: "border-rose-400",
-    gradientFrom: "from-rose-400",
-    gradientTo: "to-red-500",
-    icon: "➖",
-    waveFill: "#fff1f2",
+    accent: "#ef4444",
+    accentDark: "#dc2626",
+    bgPattern: "➖",
+    icon: "🐻",
     lessons: [
       { path: "/module-5/lesson-11", lessonNumber: 11, title: "Act Out Subtraction", description: "Act out take-from stories with result unknown", emoji: "🐻" },
       { path: "/module-5/lesson-12", lessonNumber: 12, title: "Subtraction with Objects", description: "Solve take-from stories using objects from the story", emoji: "🪆" },
@@ -86,15 +78,13 @@ const topics: Topic[] = [
   },
   {
     id: "D",
-    title: "Topic D",
+    label: "Chapter 4",
     subtitle: "Addition with Fingers & Drawings",
     standards: "PK.OA.1, PK.CC.2",
-    color: "bg-violet-50",
-    borderColor: "border-violet-400",
-    gradientFrom: "from-violet-400",
-    gradientTo: "to-purple-500",
+    accent: "#8b5cf6",
+    accentDark: "#7c3aed",
+    bgPattern: "🖐️",
     icon: "🖐️",
-    waveFill: "#f5f3ff",
     lessons: [
       { path: "/module-5/lesson-16", lessonNumber: 16, title: "Addition with Fingers I", description: "Solve addition stories using fingers", emoji: "👆" },
       { path: "/module-5/lesson-17", lessonNumber: 17, title: "Addition with Fingers II", description: "More addition stories using fingers", emoji: "✌️" },
@@ -104,15 +94,13 @@ const topics: Topic[] = [
   },
   {
     id: "E",
-    title: "Topic E",
+    label: "Chapter 5",
     subtitle: "Subtraction with Fingers & Drawings",
     standards: "PK.OA.1, PK.CC.2",
-    color: "bg-teal-50",
-    borderColor: "border-teal-400",
-    gradientFrom: "from-teal-400",
-    gradientTo: "to-cyan-500",
+    accent: "#14b8a6",
+    accentDark: "#0d9488",
+    bgPattern: "🤲",
     icon: "🤲",
-    waveFill: "#f0fdfa",
     lessons: [
       { path: "/module-5/lesson-20", lessonNumber: 20, title: "Subtraction with Fingers I", description: "Solve subtraction stories using fingers", emoji: "👇" },
       { path: "/module-5/lesson-21", lessonNumber: 21, title: "Subtraction with Fingers II", description: "More subtraction stories using fingers", emoji: "🤏" },
@@ -122,15 +110,13 @@ const topics: Topic[] = [
   },
   {
     id: "F",
-    title: "Topic F",
+    label: "Chapter 6",
     subtitle: "Duplicating & Extending Patterns",
     standards: "PK.OA.2, PK.CC.1",
-    color: "bg-fuchsia-50",
-    borderColor: "border-fuchsia-400",
-    gradientFrom: "from-fuchsia-400",
-    gradientTo: "to-pink-500",
-    icon: "🔁",
-    waveFill: "#fdf4ff",
+    accent: "#ec4899",
+    accentDark: "#db2777",
+    bgPattern: "🔁",
+    icon: "🎪",
     lessons: [
       { path: "/module-5/lesson-24", lessonNumber: 24, title: "Identify Patterns", description: "Identify patterns using objects", emoji: "🔍" },
       { path: "/module-5/lesson-25", lessonNumber: 25, title: "Sound & Movement Patterns", description: "Identify and duplicate patterns using sounds and movement", emoji: "🥁" },
@@ -143,7 +129,9 @@ const topics: Topic[] = [
 
 const Module5Index = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+  const [openChapter, setOpenChapter] = useState<string | null>("A");
   const lessonRefs = useRef<{ [key: string]: HTMLAnchorElement | null }>({});
 
   useEffect(() => {
@@ -168,190 +156,273 @@ const Module5Index = () => {
     }
   };
 
-  const totalLessons = topics.reduce((acc, t) => acc + t.lessons.length, 0);
+  const totalLessons = chapters.reduce((acc, c) => acc + c.lessons.length, 0);
   const completedCount = completedLessons.length;
+  const pct = Math.round((completedCount / totalLessons) * 100);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 via-orange-50/30 to-rose-50/20 overflow-hidden relative">
-      {/* Storybook decorations */}
-      <div className="absolute top-10 left-8 w-28 h-28 bg-amber-300/15 rounded-full blur-2xl animate-pulse" />
-      <div className="absolute top-48 right-16 w-36 h-36 bg-rose-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
-      <div className="absolute bottom-32 left-1/3 w-44 h-44 bg-violet-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "0.5s" }} />
-
-      {/* Stars scattered */}
-      {[...Array(8)].map((_, i) => (
+    <div className="min-h-screen relative" style={{ background: "linear-gradient(180deg, #fef3c7 0%, #fde68a 15%, #fbbf24 30%, #f9a825 50%, #ff8a65 75%, #ef5350 100%)" }}>
+      {/* Floating book pages */}
+      {[...Array(6)].map((_, i) => (
         <div
           key={i}
-          className="absolute text-amber-300/40 animate-pulse"
+          className="absolute pointer-events-none select-none opacity-[0.07] font-fredoka font-bold"
           style={{
-            top: `${10 + (i * 12) % 80}%`,
-            left: `${5 + (i * 17) % 90}%`,
-            animationDelay: `${i * 0.4}s`,
-            fontSize: `${12 + (i % 3) * 6}px`,
+            top: `${8 + i * 15}%`,
+            left: i % 2 === 0 ? `${3 + i * 4}%` : undefined,
+            right: i % 2 !== 0 ? `${3 + i * 3}%` : undefined,
+            fontSize: `${60 + i * 10}px`,
+            transform: `rotate(${i % 2 === 0 ? -15 : 15}deg)`,
           }}
         >
-          ✦
+          {["📖", "✨", "🌟", "📚", "🎭", "🔢"][i]}
         </div>
       ))}
 
-      <div className="container mx-auto px-4 py-12 relative z-10 pb-24">
-        {/* Header */}
-        <header className="text-center mb-12 relative">
-          <Link to="/" className="absolute left-0 top-0">
-            <Button variant="ghost" size="icon" className="rounded-full bg-white/60 hover:bg-white border-2 border-amber-200/50">
-              <ArrowLeft className="w-6 h-6" />
+      <div className="container mx-auto px-4 py-8 relative z-10 max-w-2xl pb-24">
+        {/* Top bar */}
+        <div className="flex items-center justify-between mb-6">
+          <Link to="/">
+            <Button variant="ghost" size="icon" className="rounded-full bg-white/40 hover:bg-white/70 backdrop-blur-sm shadow-md">
+              <ArrowLeft className="w-5 h-5" />
             </Button>
           </Link>
-          <div className="inline-flex items-center gap-4 mb-4">
-            <span className="text-5xl">📖</span>
-            <h1 className="font-fredoka text-4xl md:text-5xl text-foreground text-shadow-playful">
-              Storybook Adventure
-            </h1>
-            <span className="text-5xl">✨</span>
-          </div>
-          <p className="font-nunito text-xl text-foreground/80">
-            Module 5: Addition & Subtraction Stories
-          </p>
-
-          {/* Progress bar */}
-          <div className="max-w-md mx-auto mt-4">
-            <div className="flex justify-between text-sm font-nunito text-foreground/60 mb-1">
-              <span>{completedCount} / {totalLessons} lessons</span>
-              <span>{Math.round((completedCount / totalLessons) * 100)}%</span>
-            </div>
-            <div className="h-3 bg-white/60 rounded-full border border-amber-200/50 overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-amber-400 to-orange-400 rounded-full transition-all duration-700"
-                style={{ width: `${(completedCount / totalLessons) * 100}%` }}
-              />
-            </div>
-          </div>
-
-          <div className="flex justify-center items-center gap-3 mt-4">
+          <div className="flex items-center gap-2">
             <Button
               onClick={resetProgress}
-              variant="outline"
-              size="sm"
-              className="rounded-full bg-white/30 border-amber-200/50 hover:bg-white/80 text-xs gap-2"
+              variant="ghost"
+              size="icon"
+              className="rounded-full bg-white/40 hover:bg-white/70 backdrop-blur-sm shadow-md"
             >
-              <RefreshCw className="w-3 h-3" /> Reset
+              <RefreshCw className="w-4 h-4" />
             </Button>
-            <MuteButton className="h-8 w-8" />
-          </div>
-        </header>
-
-        {/* Topics */}
-        <div className="max-w-3xl mx-auto space-y-8">
-          {topics.map((topic, topicIdx) => (
-            <div
-              key={topic.id}
-              className={`${topic.color} rounded-[3rem] shadow-xl overflow-hidden border-4 ${topic.borderColor} transform transition-all hover:scale-[1.01]`}
-            >
-              {/* Topic header */}
-              <div className={`relative p-6 bg-gradient-to-r ${topic.gradientFrom} ${topic.gradientTo} overflow-hidden`}>
-                <div className="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full blur-lg" />
-                <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-white/5 rounded-full blur-lg" />
-
-                <div className="relative flex items-center gap-6">
-                  <div className="w-20 h-20 rounded-[2rem] bg-white/20 backdrop-blur-md flex items-center justify-center shadow-xl transform -rotate-3 hover:rotate-3 transition-transform border-4 border-white/30">
-                    <span className="text-5xl">{topic.icon}</span>
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="bg-white/30 text-white text-xs font-black px-3 py-1 rounded-full font-nunito tracking-wider">
-                        CHAPTER {topic.id}
-                      </span>
-                    </div>
-                    <h2 className="font-fredoka text-2xl md:text-3xl text-white drop-shadow-md mt-1">
-                      {topic.subtitle}
-                    </h2>
-                    <p className="font-nunito text-sm text-white/90 mt-1 font-medium">
-                      📚 {topic.standards} • Story Guide
-                    </p>
-                  </div>
-                </div>
-
-                <svg className="absolute bottom-0 left-0 right-0 h-4" viewBox="0 0 100 10" preserveAspectRatio="none">
-                  <path d="M0 10 Q 10 0, 20 6 T 40 6 T 60 6 T 80 6 T 100 6 L 100 10 Z" style={{ fill: topic.waveFill }} />
-                </svg>
-              </div>
-
-              {/* Lessons */}
-              <div className="p-6">
-                <div className="grid gap-4">
-                  {topic.lessons.map((lesson) => {
-                    const lessonId = `lesson-${lesson.lessonNumber}`;
-                    const isCompleted = completedLessons.includes(lessonId);
-                    return (
-                      <Link
-                        key={lesson.path}
-                        to={lesson.path}
-                        ref={(el) => { if (lessonId) lessonRefs.current[lessonId] = el; }}
-                      >
-                        <div className="bg-white/90 rounded-3xl p-5 hover:scale-[1.02] transition-all cursor-pointer shadow-md flex items-center gap-5 hover:bg-white group relative border-2 border-transparent hover:border-amber-300">
-                          <div className="w-16 h-16 rounded-2xl bg-amber-50 flex items-center justify-center text-4xl group-hover:scale-110 transition-transform">
-                            {lesson.emoji}
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="font-fredoka text-xl text-foreground group-hover:text-amber-700 transition-colors">
-                              Lesson {lesson.lessonNumber}: {lesson.title}
-                            </h3>
-                            <p className="font-nunito text-sm text-muted-foreground">{lesson.description}</p>
-                          </div>
-                          <div className="flex flex-col items-center gap-1">
-                            {isCompleted ? (
-                              <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-600 animate-in zoom-in duration-300">
-                                <CheckCircle className="w-8 h-8" />
-                              </div>
-                            ) : (
-                              <div className="w-12 h-12 bg-amber-50 rounded-full flex items-center justify-center text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <ArrowRight className="w-6 h-6" />
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          ))}
-
-          {/* Mid-Module Assessment */}
-          <div className="bg-amber-800/90 backdrop-blur-md rounded-[2.5rem] p-8 border-4 border-amber-600 shadow-2xl hover:scale-[1.02] transition-all group flex items-center justify-between overflow-hidden relative">
-            <div className="absolute -right-10 -top-10 w-40 h-40 bg-amber-400/20 rounded-full blur-3xl group-hover:bg-amber-300/40 transition-colors" />
-            <div className="flex items-center gap-6 relative z-10">
-              <div className="w-20 h-20 bg-white/10 rounded-[1.5rem] flex items-center justify-center text-5xl">📋</div>
-              <div>
-                <h2 className="text-2xl font-fredoka text-white">Mid-Module Assessment</h2>
-                <p className="text-amber-300 font-nunito font-bold italic">Topics A–C • Interview Rubric</p>
-              </div>
-            </div>
-            <BookOpen className="w-12 h-12 text-white/30" />
-          </div>
-
-          {/* End-of-Module Assessment */}
-          <div className="bg-rose-800/90 backdrop-blur-md rounded-[2.5rem] p-8 border-4 border-rose-600 shadow-2xl hover:scale-[1.02] transition-all group flex items-center justify-between overflow-hidden relative">
-            <div className="absolute -right-10 -top-10 w-40 h-40 bg-rose-400/20 rounded-full blur-3xl group-hover:bg-rose-300/40 transition-colors" />
-            <div className="flex items-center gap-6 relative z-10">
-              <div className="w-20 h-20 bg-white/10 rounded-[1.5rem] flex items-center justify-center text-5xl">🏆</div>
-              <div>
-                <h2 className="text-2xl font-fredoka text-white">End-of-Module Assessment</h2>
-                <p className="text-rose-300 font-nunito font-bold italic">Topics D–F • Interview Rubric</p>
-              </div>
-            </div>
-            <BookOpen className="w-12 h-12 text-white/30" />
+            <MuteButton className="h-9 w-9 rounded-full bg-white/40 hover:bg-white/70 backdrop-blur-sm shadow-md" />
           </div>
         </div>
 
-        <p className="text-center font-nunito text-foreground/60 text-sm bg-white/30 backdrop-blur-sm inline-block px-6 py-2 rounded-full border border-amber-200/30 w-full mt-8">
+        {/* Book cover hero */}
+        <div className="relative mx-auto mb-8">
+          <div
+            className="rounded-[2rem] p-8 text-center relative overflow-hidden shadow-2xl"
+            style={{
+              background: "linear-gradient(145deg, #5b21b6 0%, #7c3aed 40%, #a855f7 100%)",
+              boxShadow: "0 20px 60px rgba(91, 33, 182, 0.4), inset 0 1px 0 rgba(255,255,255,0.2)",
+            }}
+          >
+            {/* Book spine effect */}
+            <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/20 to-transparent" />
+            <div className="absolute left-3 top-0 bottom-0 w-[1px] bg-white/10" />
+
+            {/* Stars */}
+            <div className="absolute top-3 right-4 text-yellow-300 animate-pulse text-xl">✦</div>
+            <div className="absolute top-8 right-12 text-yellow-200 animate-pulse text-sm" style={{ animationDelay: "0.5s" }}>✦</div>
+            <div className="absolute bottom-6 left-8 text-yellow-300 animate-pulse text-base" style={{ animationDelay: "1s" }}>✦</div>
+
+            <div className="text-6xl mb-3 drop-shadow-lg">📖</div>
+            <h1 className="font-fredoka text-3xl md:text-4xl text-white drop-shadow-lg mb-1">
+              Storybook Adventure
+            </h1>
+            <p className="font-nunito text-white/80 text-base mb-5">
+              Module 5 · Addition & Subtraction Stories
+            </p>
+
+            {/* Progress as a bookmark ribbon */}
+            <div className="inline-flex items-center gap-3 bg-white/15 backdrop-blur-sm rounded-full px-5 py-2.5 border border-white/20">
+              <div className="flex items-center gap-1.5">
+                <Star className="w-4 h-4 text-yellow-300 fill-yellow-300" />
+                <span className="font-fredoka text-white text-sm">{completedCount}/{totalLessons}</span>
+              </div>
+              <div className="w-24 h-2 bg-white/20 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-yellow-300 rounded-full transition-all duration-700"
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
+              <span className="font-nunito text-white/70 text-xs">{pct}%</span>
+            </div>
+          </div>
+
+          {/* Page curl decoration */}
+          <div
+            className="absolute -bottom-2 right-4 w-12 h-12 rounded-bl-2xl"
+            style={{
+              background: "linear-gradient(135deg, transparent 50%, #e9d5ff 50%, #f3e8ff 100%)",
+              boxShadow: "-2px 2px 4px rgba(0,0,0,0.1)",
+            }}
+          />
+        </div>
+
+        {/* Chapter accordion */}
+        <div className="space-y-3">
+          {chapters.map((chapter, ci) => {
+            const isOpen = openChapter === chapter.id;
+            const chapterCompleted = chapter.lessons.filter(l =>
+              completedLessons.includes(`lesson-${l.lessonNumber}`)
+            ).length;
+            const allDone = chapterCompleted === chapter.lessons.length;
+
+            return (
+              <div key={chapter.id} className="relative">
+                {/* Connector line between chapters */}
+                {ci < chapters.length - 1 && (
+                  <div className="absolute left-8 -bottom-3 w-[2px] h-6 bg-white/30 z-0" />
+                )}
+
+                {/* Chapter card */}
+                <div
+                  className="rounded-2xl overflow-hidden shadow-lg transition-all duration-300 relative"
+                  style={{
+                    background: isOpen ? "white" : "rgba(255,255,255,0.85)",
+                    backdropFilter: "blur(12px)",
+                    border: isOpen ? `3px solid ${chapter.accent}` : "3px solid transparent",
+                    transform: isOpen ? "scale(1.02)" : "scale(1)",
+                  }}
+                >
+                  {/* Chapter header - clickable */}
+                  <button
+                    onClick={() => setOpenChapter(isOpen ? null : chapter.id)}
+                    className="w-full flex items-center gap-4 p-4 text-left group transition-all"
+                  >
+                    {/* Chapter number badge */}
+                    <div
+                      className="w-14 h-14 rounded-xl flex items-center justify-center text-3xl shrink-0 shadow-md transition-transform group-hover:scale-110 group-hover:rotate-3"
+                      style={{ background: `linear-gradient(135deg, ${chapter.accent}, ${chapter.accentDark})` }}
+                    >
+                      {chapter.icon}
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="font-fredoka text-xs font-bold uppercase tracking-widest px-2 py-0.5 rounded-md text-white"
+                          style={{ background: chapter.accent }}
+                        >
+                          {chapter.label}
+                        </span>
+                        {allDone && (
+                          <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-nunito font-bold">
+                            ✓ Done!
+                          </span>
+                        )}
+                      </div>
+                      <h2 className="font-fredoka text-lg text-foreground mt-0.5 truncate">
+                        {chapter.subtitle}
+                      </h2>
+                      <div className="flex items-center gap-2 mt-1">
+                        <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden max-w-[120px]">
+                          <div
+                            className="h-full rounded-full transition-all duration-500"
+                            style={{ width: `${(chapterCompleted / chapter.lessons.length) * 100}%`, background: chapter.accent }}
+                          />
+                        </div>
+                        <span className="font-nunito text-xs text-muted-foreground">
+                          {chapterCompleted}/{chapter.lessons.length}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div
+                      className="w-8 h-8 rounded-full flex items-center justify-center transition-transform duration-300 shrink-0"
+                      style={{
+                        background: `${chapter.accent}15`,
+                        transform: isOpen ? "rotate(90deg)" : "rotate(0deg)",
+                      }}
+                    >
+                      <ArrowRight className="w-4 h-4" style={{ color: chapter.accent }} />
+                    </div>
+                  </button>
+
+                  {/* Expandable lesson list */}
+                  <div
+                    className="overflow-hidden transition-all duration-400"
+                    style={{
+                      maxHeight: isOpen ? `${chapter.lessons.length * 80 + 16}px` : "0px",
+                      opacity: isOpen ? 1 : 0,
+                    }}
+                  >
+                    <div className="px-4 pb-4 space-y-2">
+                      {chapter.lessons.map((lesson, li) => {
+                        const lessonId = `lesson-${lesson.lessonNumber}`;
+                        const done = completedLessons.includes(lessonId);
+                        return (
+                          <Link
+                            key={lesson.path}
+                            to={lesson.path}
+                            ref={(el) => { lessonRefs.current[lessonId] = el; }}
+                            className="flex items-center gap-3 p-3 rounded-xl group/lesson transition-all hover:shadow-md relative"
+                            style={{
+                              background: done ? `${chapter.accent}10` : "#f9fafb",
+                              border: `1.5px solid ${done ? chapter.accent + "40" : "transparent"}`,
+                            }}
+                          >
+                            {/* Lesson number dot */}
+                            <div
+                              className="w-10 h-10 rounded-lg flex items-center justify-center text-2xl shrink-0 transition-transform group-hover/lesson:scale-110"
+                              style={{ background: `${chapter.accent}15` }}
+                            >
+                              {lesson.emoji}
+                            </div>
+
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-fredoka text-sm text-foreground truncate">
+                                <span className="text-muted-foreground">L{lesson.lessonNumber}.</span> {lesson.title}
+                              </h3>
+                              <p className="font-nunito text-xs text-muted-foreground truncate">{lesson.description}</p>
+                            </div>
+
+                            {done ? (
+                              <CheckCircle className="w-5 h-5 shrink-0" style={{ color: chapter.accent }} />
+                            ) : (
+                              <ArrowRight className="w-4 h-4 shrink-0 text-muted-foreground/40 opacity-0 group-hover/lesson:opacity-100 transition-opacity" />
+                            )}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+
+          {/* Assessment cards */}
+          <div className="mt-6 space-y-3">
+            <div
+              className="rounded-2xl p-5 flex items-center gap-4 shadow-lg hover:scale-[1.02] transition-transform cursor-default"
+              style={{
+                background: "linear-gradient(135deg, #92400e, #b45309)",
+                boxShadow: "0 8px 30px rgba(146, 64, 14, 0.3)",
+              }}
+            >
+              <span className="text-4xl">📋</span>
+              <div className="flex-1">
+                <h3 className="font-fredoka text-lg text-white">Mid-Module Assessment</h3>
+                <p className="font-nunito text-sm text-amber-200 italic">Topics A–C · Interview Rubric</p>
+              </div>
+              <Sparkles className="w-6 h-6 text-amber-300/40" />
+            </div>
+
+            <div
+              className="rounded-2xl p-5 flex items-center gap-4 shadow-lg hover:scale-[1.02] transition-transform cursor-default"
+              style={{
+                background: "linear-gradient(135deg, #9f1239, #e11d48)",
+                boxShadow: "0 8px 30px rgba(159, 18, 57, 0.3)",
+              }}
+            >
+              <span className="text-4xl">🏆</span>
+              <div className="flex-1">
+                <h3 className="font-fredoka text-lg text-white">End-of-Module Assessment</h3>
+                <p className="font-nunito text-sm text-rose-200 italic">Topics D–F · Interview Rubric</p>
+              </div>
+              <Sparkles className="w-6 h-6 text-rose-300/40" />
+            </div>
+          </div>
+        </div>
+
+        <p className="text-center font-nunito text-white/60 text-xs mt-8">
           📖 Module 5: Addition & Subtraction Stories and Counting to 20
         </p>
       </div>
-
-      {/* Bottom gradient */}
-      <div className="fixed bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-amber-100/50 to-transparent z-0 pointer-events-none" />
     </div>
   );
 };
