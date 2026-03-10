@@ -16,21 +16,27 @@
     <meta name="twitter:site" content="@lovable_dev" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
     <link rel="icon" type="image/png" href="/EthioSTEM-preK-Math/logo_notxt.png" />
+
+    <script>
+      // Restore the intended URL after 404.html redirect
+      (function() {
+        var redirect = sessionStorage.getItem('spa-redirect');
+        if (redirect) {
+          sessionStorage.removeItem('spa-redirect');
+          // Strip the base path prefix so React Router gets the right path
+          var base = '/EthioSTEM-preK-Math';
+          var route = redirect.startsWith(base) ? redirect.slice(base.length) : redirect;
+          if (route && route !== '/') {
+            window.history.replaceState(null, null, base + route);
+          }
+        }
+      })();
+    </script>
     <script type="module" crossorigin src="/EthioSTEM-preK-Math/assets/index-oLxQn2Vi.js"></script>
     <link rel="modulepreload" crossorigin href="/EthioSTEM-preK-Math/assets/react-vendor-X0Zsz5kA.js">
     <link rel="modulepreload" crossorigin href="/EthioSTEM-preK-Math/assets/ui-vendor-D4wbF8Bg.js">
     <link rel="stylesheet" crossorigin href="/EthioSTEM-preK-Math/assets/index-CH50EgX3.css">
   </head>
- <script>
-      // Handle redirect from 404.html
-      (function() {
-        const redirect = sessionStorage.redirect;
-        delete sessionStorage.redirect;
-        if (redirect && redirect !== window.location.href) {
-          history.replaceState(null, null, redirect);
-        }
-      })();
-    </script>
   <body>
     <div id="root"></div>
   </body>
