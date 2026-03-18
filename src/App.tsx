@@ -97,6 +97,7 @@ const WriteZeroOne1 = lazy(() => import("./pages/5WriteZeroOne1"));
 const WriteTwo2 = lazy(() => import("./pages/5WriteTwo2"));
 const WriteThree3 = lazy(() => import("./pages/5WriteThree3"));
 const WriteFour4 = lazy(() => import("./pages/5WriteFour4"));
+const WriteFive5 = lazy(() => import("./pages/5WriteFive5"));
 const TallOrShort1 = lazy(() => import("./pages/4TallOrShortLesson1.tsx"));
 const TallerShorter2 = lazy(() => import("./pages/4TallerShorterLesson2.tsx"));
 const LongerShorter3 = lazy(() => import("./pages/4LongerShorterLesson3.tsx"));
