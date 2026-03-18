@@ -294,6 +294,7 @@ const App = () => (
                   <Route path="/module-5/lesson-1" element={<WriteZeroOne1 />} />
                   <Route path="/module-5/lesson-2" element={<WriteTwo2 />} />
                   <Route path="/module-5/lesson-3" element={<WriteThree3 />} />
+                  <Route path="/module-5/lesson-4" element={<WriteFour4 />} />
                   <Route path="/module-4/lesson-1" element={<TallOrShort1 />} />
                   <Route path="/module-4/lesson-2" element={<TallerShorter2 />} />
                   <Route path="/module-4/lesson-3" element={<LongerShorter3 />} />
