@@ -511,7 +511,7 @@ const ComposeSixLesson = () => {
         {step !== "intro" && step !== "complete" && (
           <div className="flex justify-center gap-2 mb-6">
             {steps.slice(1).map((s, i) => (
-              <div key={s.key} className={`h-2 rounded-full transition-all ${stepIdx > i + 1 || step === "complete" ? "bg-indigo-500 w-8" : stepIdx === i + 1 ? "bg-indigo-400 w-10" : "bg-indigo-100 w-4"}`} />
+              <div key={s.key} className={`h-2 rounded-full transition-all ${stepIdx > i + 1 ? "bg-indigo-500 w-8" : stepIdx === i + 1 ? "bg-indigo-400 w-10" : "bg-indigo-100 w-4"}`} />
             ))}
           </div>
         )}
